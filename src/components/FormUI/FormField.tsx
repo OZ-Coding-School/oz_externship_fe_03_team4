@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { AdminFormClassName } from '../../utils/AdminFormClassName'
+import { cn } from '../../utils/cn'
 
 type Props = {
   id: string
@@ -19,7 +19,7 @@ export const FormField = ({
   children,
 }: Props) => {
   return (
-    <div className={AdminFormClassName('w-full space-y-1.5', className)}>
+    <div className={cn('w-full space-y-1.5', className)}>
       {label && (
         <label
           htmlFor={id}
