@@ -1,83 +1,51 @@
-// src/App.tsx
+/**
+ * ButtonTestPage
+ *
+ * Buttons.tsx의 프리셋/커스텀 색상, 아이콘(Lucide), customHeight/Width,
+ * 상태(loading/disabled/fullWidth) 조합을 한 화면에서 시각적으로 검증합니다.
+ * - Section/Cell: 미니 레이아웃 헬퍼
+ * - Legend: 색상 스펙 요약
+ */
 import * as React from 'react'
-import { Button } from '../components/buttons/Buttons'
+import { Button } from '../../components/buttons/Buttons'
+import { ArrowDownToLine, Share2, Bolt, Trash2, X } from 'lucide-react'
 
-// ---- Demo icons (16~20px 권장) ----
-const IconSearch = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" {...props}>
-    <path
-      d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const IconArrowRight = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" {...props}>
-    <path
-      d="M5 12h14M13 5l7 7-7 7"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const IconHeart = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" {...props}>
-    <path
-      d="M12 21s-7-4.534-9-8.5S5.5 3 8.5 6.5L12 10l3.5-3.5C18.5 3 23 6.5 21 12.5S12 21 12 21Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-// ---- Layout helpers ----
+/** 데모 섹션 카드 래퍼. title/desc와 children 영역을 제공합니다. */
 const Section: React.FC<
   React.PropsWithChildren<{ title: string; desc?: string }>
 > = ({ title, desc, children }) => (
-  <section className="border-other-200 bg-secondary rounded-2xl border p-4 md:p-6">
+  <section className="rounded-2xl border border-gray-200 bg-white p-4 md:p-6">
     <h2 className="mb-1 text-lg font-semibold">{title}</h2>
-    {desc && <p className="text-other-600 mb-4 text-sm">{desc}</p>}
+    {desc && <p className="mb-4 text-sm text-gray-600">{desc}</p>}
     {children}
   </section>
 )
 
+/** 라벨 캡션이 있는 셀. 버튼 아래에 조합 정보를 표시합니다. */
 const Cell: React.FC<React.PropsWithChildren<{ label?: string }>> = ({
   label,
   children,
 }) => (
   <div className="flex flex-col items-start gap-2">
     {children}
-    {label && <span className="text-other-500 text-xs">{label}</span>}
+    {label && <span className="text-xs text-gray-500">{label}</span>}
   </div>
 )
 
-// ---- Demo Page ----
+/**
+ * Buttons Playground (시각 테스트 페이지)
+ * - Base, Icon+Text, IconOnly, States 섹션으로 구성
+ * - 클릭 이벤트는 콘솔 로깅으로 대체(handleClick)
+ */
 export default function ButtonTestPage() {
-  const handleClick = (name: string) => () => {
-    // demo onClick
-    // eslint-disable-next-line no-console
-    console.log(`[clicked] ${name}`)
-  }
-
   return (
-    <main className="bg-other-50 text-other-900 min-h-screen">
+    <main className="min-h-screen bg-gray-50 text-gray-900">
       <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 md:py-12">
         <header className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Buttons Playground</h1>
-            <p className="text-other-600 text-sm">
-              Tailwind + TSX · size/variant/state 조합을 한 화면에서
+            <p className="text-sm text-gray-600">
+              프리셋/커스텀 색상, 아이콘, 높이·너비 커스터마이징을 한 화면에서
               테스트합니다.
             </p>
           </div>
@@ -85,29 +53,22 @@ export default function ButtonTestPage() {
         </header>
 
         {/* 1) Base Buttons */}
+        {/* Base: preset + size 조합 확인 (secondary는 텍스트/보더 예외 규칙) */}
         <Section
           title="1) Base Buttons (텍스트만)"
-          desc="각 size × color 조합. secondary는 글자 #374151 + 1px #D1D5DB 보더 규칙."
+          desc="size × color 조합. secondary는 글자 #374151 + 1px #D1D5DB 보더."
         >
           <div className="space-y-6">
             <div>
               <h3 className="mb-2 font-medium">small (12px, h-24, r-4)</h3>
               <Grid>
                 <Cell label="small / primary">
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={handleClick('small/primary')}
-                  >
+                  <Button size="small" color="primary">
                     small / primary
                   </Button>
                 </Cell>
                 <Cell label="small / secondary">
-                  <Button
-                    size="small"
-                    color="secondary"
-                    onClick={handleClick('small/secondary')}
-                  >
+                  <Button size="small" color="secondary">
                     small / secondary
                   </Button>
                 </Cell>
@@ -209,143 +170,111 @@ export default function ButtonTestPage() {
         </Section>
 
         {/* 2) Icon + Text */}
+        {/* Icon + Text: Lucide는 currentColor 상속 → 버튼 text 색에 동기화됨 */}
         <Section
           title="2) Icon + Text"
-          desc="아이콘과 텍스트 사이 간격 8px(gap-2), 기본 규격은 h-[38px], px-4 py-2, r-8, text-sm."
+          desc="간격 8px(gap-2). 기본 규격: h-[38px], px-4 py-2, r-8, text-sm."
         >
           <div className="space-y-6">
             <Grid>
-              <Cell label="medium / primary / leftIcon">
-                <Button color="primary" leftIcon={<IconSearch />}>
-                  검색
-                </Button>
-              </Cell>
-              <Cell label="medium / secondary / rightIcon">
-                <Button color="secondary" rightIcon={<IconArrowRight />}>
-                  다음 단계
-                </Button>
-              </Cell>
-              <Cell label="medium / other / bothIcons">
-                <Button
-                  color="other"
-                  leftIcon={<IconSearch />}
-                  rightIcon={<IconArrowRight />}
-                >
-                  검색 진행
-                </Button>
-              </Cell>
-            </Grid>
-
-            <Grid>
-              <Cell label="small / success / leftIcon">
-                <Button size="small" color="success" leftIcon={<IconSearch />}>
-                  등록
-                </Button>
-              </Cell>
-              <Cell label="large / danger / rightIcon">
-                <Button
-                  size="large"
-                  color="danger"
-                  rightIcon={<IconArrowRight />}
-                >
-                  삭제 진행
-                </Button>
-              </Cell>
-              <Cell label="large / warning / leftIcon">
-                <Button size="large" color="warning" leftIcon={<IconSearch />}>
-                  확인
-                </Button>
-              </Cell>
-            </Grid>
-          </div>
-
-          {/* --- Right Icon --- */}
-          <div>
-            <h3 className="mb-2 font-medium">Right Icon</h3>
-            <Grid>
-              <Cell label="medium / primary / rightIcon">
-                <Button color="primary" rightIcon={<IconArrowRight />}>
-                  다음 단계
-                </Button>
-              </Cell>
-              <Cell label="medium / secondary / rightIcon">
-                <Button color="secondary" rightIcon={<IconArrowRight />}>
-                  다음 단계
-                </Button>
-              </Cell>
-              <Cell label="medium / other / rightIcon">
-                <Button color="other" rightIcon={<IconArrowRight />}>
-                  다음 단계
-                </Button>
-              </Cell>
-            </Grid>
-          </div>
-
-          {/* --- Both Icons --- */}
-          <div>
-            <h3 className="mb-2 font-medium">Left + Right Icon</h3>
-            <Grid>
-              <Cell label="medium / primary / both">
+              <Cell label="primary / leftIcon (Share2)">
                 <Button
                   color="primary"
-                  leftIcon={<IconSearch />}
-                  rightIcon={<IconArrowRight />}
+                  leftIcon={<Share2 className="h-5 w-5" />}
                 >
-                  검색 진행
+                  공유
                 </Button>
               </Cell>
-              <Cell label="medium / secondary / both">
+              <Cell label="secondary / rightIcon (ArrowDownToLine)">
                 <Button
                   color="secondary"
-                  leftIcon={<IconSearch />}
-                  rightIcon={<IconArrowRight />}
+                  rightIcon={<ArrowDownToLine className="h-5 w-5" />}
                 >
-                  검색 진행
+                  다운로드
                 </Button>
               </Cell>
-              <Cell label="medium / other / both">
+              <Cell label="other / both (Bolt + ArrowDownToLine)">
                 <Button
                   color="other"
-                  leftIcon={<IconSearch />}
-                  rightIcon={<IconArrowRight />}
+                  leftIcon={<Bolt className="h-5 w-5" />}
+                  rightIcon={<ArrowDownToLine className="h-5 w-5" />}
                 >
-                  검색 진행
+                  실행 후 저장
                 </Button>
               </Cell>
             </Grid>
+
+            {/* customHeight/Width: Tailwind h-* 대신 inline-style로 치수 결정 */}
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">customHeight/Width 예시</p>
+              <Button color="primary" customHeight={44}>
+                높이 44px
+              </Button>
+              <Button color="secondary" customHeight={40} customWidth={240}>
+                높이 40px / 너비 240px
+              </Button>
+            </div>
           </div>
         </Section>
 
         {/* 3) Icon Only */}
         <Section
           title="3) Icon Only"
-          desc="정사각 38×38, p-2, r-8. 반드시 aria-label 제공."
+          desc="정사각 38×38 기본. customHeight로 정사각 크기도 변경 가능."
         >
           <Grid>
-            <Cell label="iconOnly / primary">
+            <Cell label="iconOnly / primary (Share2)">
               <Button
                 iconOnly
                 color="primary"
-                leftIcon={<IconHeart />}
-                aria-label="좋아요"
+                leftIcon={<Share2 className="h-5 w-5" />}
+                aria-label="공유"
               />
             </Cell>
-            <Cell label="iconOnly / secondary">
+            <Cell label="iconOnly / secondary (ArrowDownToLine)">
               <Button
                 iconOnly
                 color="secondary"
-                leftIcon={<IconSearch />}
-                aria-label="검색"
+                leftIcon={<ArrowDownToLine className="h-5 w-5" />}
+                aria-label="다운로드"
               />
             </Cell>
-            <Cell label="iconOnly / other">
+            <Cell label="iconOnly / other (X)">
               <Button
                 iconOnly
                 color="other"
-                leftIcon={<IconArrowRight />}
-                aria-label="다음"
+                leftIcon={<X className="h-5 w-5" />}
+                aria-label="닫기"
               />
             </Cell>
+
+            {/* 🔻 디자이너 커스텀 팔레트 */}
+            {/* 커스텀 팔레트: #FEE2E2, #F3F4F6 적용. 대비 확보 위해 border/링 지정 */}
+            <Cell label="iconOnly / custom #FEE2E2 (Trash2)">
+              <Button
+                iconOnly
+                customHeight={42} // → 42×42 정사각
+                customBgColor="#FEE2E2" // 연한 레드
+                customTextColor="#DC2626" // 아이콘(스트로크) 색
+                customBorderColor="#FECACA" // 부드러운 테두리
+                customRingColor="focus-visible:ring-red-200"
+                leftIcon={<Trash2 className="h-5 w-5" />}
+                aria-label="삭제(커스텀)"
+              />
+            </Cell>
+            <Cell label="iconOnly / custom #F3F4F6 (Bolt)">
+              <Button
+                iconOnly
+                customHeight="44px" // 문자열도 가능
+                customBgColor="#F3F4F6" // 연한 회색
+                customTextColor="#374151" // 딥그레이
+                customBorderColor="#E5E7EB" // gray-200 수준
+                customRingColor="focus-visible:ring-gray-300"
+                leftIcon={<Bolt className="h-5 w-5" />}
+                aria-label="실행(커스텀)"
+              />
+            </Cell>
+            {/* 🔺 커스텀 팔레트 끝 */}
           </Grid>
         </Section>
 
@@ -366,13 +295,13 @@ export default function ButtonTestPage() {
                   비활성화
                 </Button>
               </Cell>
-              <Cell label="disabled / iconOnly">
+              <Cell label="disabled / iconOnly (Trash2)">
                 <Button
                   iconOnly
                   disabled
                   color="other"
-                  leftIcon={<IconHeart />}
-                  aria-label="좋아요"
+                  leftIcon={<Trash2 className="h-5 w-5" />}
+                  aria-label="삭제"
                 />
               </Cell>
             </Grid>
@@ -388,66 +317,38 @@ export default function ButtonTestPage() {
                   처리 중…
                 </Button>
               </Cell>
-              <Cell label="loading / iconOnly">
+              <Cell label="loading / iconOnly (Bolt)">
                 <Button
                   iconOnly
                   loading
                   color="success"
-                  leftIcon={<IconSearch />}
-                  aria-label="검색 중"
+                  leftIcon={<Bolt className="h-5 w-5" />}
+                  aria-label="실행 중"
                 />
               </Cell>
             </Grid>
 
             <div className="space-y-2">
-              <p className="text-other-600 text-sm">fullWidth 예시</p>
-              <Button
-                fullWidth
-                color="primary"
-                onClick={handleClick('fullWidth/primary')}
-              >
+              <p className="text-sm text-gray-600">fullWidth 예시</p>
+              <Button fullWidth color="primary">
                 가로 100% 버튼
               </Button>
-              <Button
-                fullWidth
-                color="secondary"
-                onClick={handleClick('fullWidth/secondary')}
-              >
+              <Button fullWidth color="secondary">
                 가로 100% 버튼 (secondary)
               </Button>
             </div>
           </div>
         </Section>
 
-        {/* 5) Edge Cases */}
-        <Section
-          title="5) Edge Cases"
-          desc="긴 텍스트, 이모지/한글/영문 혼용, onClick 동작, 키보드 포커스 등."
-        >
-          <Grid>
-            <Cell label="긴 텍스트 (primary)">
-              <Button color="primary" onClick={handleClick('long-text')}>
-                정말로아주매우길게붙여쓴텍스트입니다줄바꿈없이길게가더라도버튼이깨지면안돼요
-              </Button>
-            </Cell>
-            <Cell label="혼용 텍스트 (secondary)">
-              <Button color="secondary">확인 ✅ Okay 👍 완료</Button>
-            </Cell>
-            <Cell label="Enter/Space 활성화 확인 (other)">
-              <Button color="other">포커스 후 Enter/Space</Button>
-            </Cell>
-          </Grid>
-        </Section>
-
-        <footer className="text-other-500 pt-4 text-center text-xs">
-          Roboto는 전역에서 font-medium로 로딩되어 있다고 가정합니다.
+        <footer className="pt-4 text-center text-xs text-gray-500">
+          Lucide 아이콘은 currentColor를 상속합니다. 버튼 텍스트 색상 변경 시
+          아이콘도 함께 변합니다.
         </footer>
       </div>
     </main>
   )
 }
 
-// grid helper
 function Grid({ children }: React.PropsWithChildren) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -456,15 +357,16 @@ function Grid({ children }: React.PropsWithChildren) {
   )
 }
 
-// legend
+/** 데모 팔레트 범주(legend). preset + custom swatch를 시각화합니다. */
+
 function Legend() {
   return (
-    <div className="text-other-600 hidden items-center gap-3 text-xs md:flex">
+    <div className="hidden items-center gap-3 text-xs text-gray-600 md:flex">
       <span className="inline-flex items-center gap-1">
         <i className="inline-block h-3 w-3 rounded-sm bg-[#2563EB]" /> primary
       </span>
       <span className="inline-flex items-center gap-1">
-        <i className="bg-secondary inline-block h-3 w-3 rounded-sm border border-[#D1D5DB]" />{' '}
+        <i className="inline-block h-3 w-3 rounded-sm border border-[#D1D5DB] bg-white" />{' '}
         secondary
       </span>
       <span className="inline-flex items-center gap-1">
@@ -478,6 +380,14 @@ function Legend() {
       </span>
       <span className="inline-flex items-center gap-1">
         <i className="inline-block h-3 w-3 rounded-sm bg-[#6B7280]" /> other
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <i className="inline-block h-3 w-3 rounded-sm border border-[#FECACA] bg-[#FEE2E2]" />{' '}
+        custom:#FEE2E2
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <i className="inline-block h-3 w-3 rounded-sm border border-[#E5E7EB] bg-[#F3F4F6]" />{' '}
+        custom:#F3F4F6
       </span>
     </div>
   )
