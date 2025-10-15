@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import type { InputHTMLAttributes } from 'react'
-import { AdminFormClassName } from '../../utils/AdminFormClassName'
+import { cn } from '../../utils/cn'
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   showValue?: boolean
@@ -12,7 +12,7 @@ export const Slider = forwardRef<HTMLInputElement, Props>(
       <input
         ref={ref}
         type="range"
-        className={AdminFormClassName(
+        className={cn(
           'h-2 w-full appearance-none rounded-full bg-neutral-200 outline-none',
           '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none',
           '[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-500',

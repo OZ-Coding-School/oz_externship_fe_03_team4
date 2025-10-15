@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import type { InputHTMLAttributes, ReactNode } from 'react'
-import { AdminFormClassName } from '../../utils/AdminFormClassName'
+import { cn } from '../../utils/cn'
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   label?: ReactNode
@@ -16,7 +16,7 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>(
         id={id}
         ref={ref}
         type="checkbox"
-        className={AdminFormClassName(
+        className={cn(
           'h-4 w-4 rounded border-neutral-300 text-amber-600 focus:ring-amber-200',
           className
         )}
