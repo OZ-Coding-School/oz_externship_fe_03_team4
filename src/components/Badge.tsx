@@ -6,12 +6,12 @@ interface BadgeProps {
 
 const Badge = ({ className = '', variant = 'default', label }: BadgeProps) => {
   const variantStyles = {
-    default: 'bg-gray-200 text-gray-800',
-    primary: 'bg-blue-200 text-blue-800',
-    success: 'bg-green-200 text-green-800',
-    warning: 'bg-yellow-200 text-yellow-800',
-    danger: 'bg-red-200 text-red-800',
-    info: 'bg-purple-200 text-purple-800',
+    default: 'bg-[#f3f4f6 ]text-[#1F2937]',
+    primary: 'bg-[#DBEAFE] text-[#1E40AF]]',
+    success: 'bg-[#DCFCE7]] text-[#166534]',
+    warning: 'bg-[#FEF9C3] text-[#854D0E]',
+    danger: 'bg-[#FEE2E2] text-[#991B1B]',
+    info: 'bg-[#F3E8FF] text-[#6B21A8]',
   }
 
   return (
@@ -27,19 +27,13 @@ const Badge = ({ className = '', variant = 'default', label }: BadgeProps) => {
 // 사용 테스트
 const BadgeTest = () => {
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="mb-8 text-2xl font-bold">Badge Component Demo</h1>
-
-        <div className="mb-12 flex flex-wrap gap-4">
-          <Badge variant="default" label="Default" />
-          <Badge variant="primary" label="Primary" />
-          <Badge variant="success" label="Success" />
-          <Badge variant="warning" label="Warning" />
-          <Badge variant="danger" label="Danger" />
-          <Badge variant="info" label="Info" />
-        </div>
-      </div>
+    <div className="mb-12 flex flex-wrap gap-4">
+      <Badge variant="default" label="Default" />
+      <Badge variant="primary" label="Primary" />
+      <Badge variant="success" label="Success" />
+      <Badge variant="warning" label="Warning" />
+      <Badge variant="danger" label="Danger" />
+      <Badge variant="info" label="Info" />
     </div>
   )
 }
