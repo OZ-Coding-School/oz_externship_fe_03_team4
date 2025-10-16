@@ -1,16 +1,20 @@
-import { BrowserRouter as Router } from "react-router";
-import Sidebar from "./components/sidebar";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router'
+import './App.css'
+import Layout from './components/Layout'
+import ButtonTestPage from './pages/tests/ButtonTestPage'
 
 function App() {
   return (
     <Router>
-      <div className="flex min-h-screen">
-        {/* 사이드바 */}
-        <Sidebar />
-      </div>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<ButtonTestPage />} />
+          {/* <Route index element={<ButtonTestPage />} /> 
+            아래 부분에 이렇게 계속 라우팅 추가해주시면 됩니다. */}
+        </Route>
+      </Routes>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
