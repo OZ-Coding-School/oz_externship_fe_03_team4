@@ -37,11 +37,7 @@ export type ButtonSize = 'small' | 'medium' | 'large'
 /**
  * Button Props
  *
- * 프리셋이 충분하지 않은 경우, custom*로 자유롭게 덮어쓸 수 있습니다.
- * - customBgColor: 임의 배경색 (예: "#FF69B4" | "rgb(...)" | "hsl(...)")
- * - customTextColor: 임의 텍스트(아이콘 stroke) 색 — Lucide는 currentColor 상속
- * - customBorderColor: 임의 테두리색 — 지정 시 1px solid 자동 적용
- * - customRingColor: 포커스 링 클래스 직접 지정 (예: "focus-visible:ring-pink-300")
+ * - custom + BgColor/TextColor/BorderColor/RingColor (커스텀 배경색/텍스트/테두리/포커스 링)
  *
  * 사이즈/치수:
  * - size: 패딩/라운드/폰트 결정
@@ -117,7 +113,6 @@ const resolveDimensionStyle = (opts: {
  * Button
  * - preset 또는 custom 스타일을 적용하여 다양한 디자인을 수용
  * - size(패딩/라운드/폰트) + compoundVariants(높이) + iconOnly 레이아웃
- * - customHeight가 있으면 noHeight=true로 h-클래스를 제거
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
@@ -147,7 +142,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     } = props
 
     const isDisabled = disabled || loading
-    const noHeight = customHeight !== undefined && customHeight !== null
 
     // 커스텀 색상: inline-style 우선 적용
     const customColorStyle: CSSProperties | undefined =
@@ -179,7 +173,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         color,
         size: size ?? 'default',
         iconOnly,
-        noHeight,
         fullWidth,
         disabled: !!isDisabled,
       }),
