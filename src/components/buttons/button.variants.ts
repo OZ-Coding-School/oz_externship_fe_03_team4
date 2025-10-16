@@ -5,7 +5,6 @@
  * - color: 프리셋(링 클래스까지 포함)
  * - size: 패딩/라운드/폰트 (높이는 compoundVariants로 붙임)
  * - iconOnly: 아이콘 전용 레이아웃
- * - noHeight: true면 h-클래스 제거(= customHeight 사용 시)
  * - fullWidth/disabled: 상태 클래스
  */
 import { cva, type VariantProps } from 'class-variance-authority'
@@ -53,36 +52,30 @@ export const buttonVariants = cva(
         true: '', // 높이/너비는 compoundVariants에서 제어
         false: '',
       },
-      /** customHeight가 있으면 true → h-클래스 제거 */
-      noHeight: {
-        true: '',
-        false: '',
-      },
       /** 보조 상태 */
       fullWidth: { true: 'w-full', false: '' },
       disabled: { true: 'opacity-50 pointer-events-none', false: '' },
     },
     compoundVariants: [
-      // 높이 부여 (noHeight=false일 때만)
-      { size: 'small', noHeight: false, class: 'h-6' },
-      { size: 'medium', noHeight: false, class: 'h-9' },
-      { size: 'large', noHeight: false, class: 'h-12' },
-      { size: 'default', noHeight: false, class: 'h-[38px]' },
+      // 높이 부여
+      { size: 'small', class: 'h-6' },
+      { size: 'medium', class: 'h-9' },
+      { size: 'large', class: 'h-12' },
+      { size: 'default', class: 'h-[38px]' },
 
-      // 아이콘 전용: 기본 정사각 38×38 (noHeight=false)
+      // 아이콘 전용: 기본 정사각 38×38
       {
         iconOnly: true,
-        noHeight: false,
         class: 'w-[38px] h-[38px] p-2 rounded-lg',
       },
       // 아이콘 전용 + customHeight: w/h 고정 제거 (정사각은 컴포넌트에서 style로 보장)
-      { iconOnly: true, noHeight: true, class: 'p-2 rounded-lg' },
+      { iconOnly: true, class: 'p-2 rounded-lg' },
     ],
     defaultVariants: {
       color: 'primary',
       size: 'default',
       iconOnly: false,
-      noHeight: false,
+
       fullWidth: false,
       disabled: false,
     },
