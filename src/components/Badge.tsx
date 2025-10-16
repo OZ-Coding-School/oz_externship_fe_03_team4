@@ -1,6 +1,6 @@
 interface BadgeProps {
   className?: string
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
   label: string
 }
 
