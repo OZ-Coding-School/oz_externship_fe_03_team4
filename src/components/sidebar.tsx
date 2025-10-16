@@ -10,7 +10,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-// 메뉴 데이터 타입 정의
+//메뉴 데이터 타입 정의
 interface MenuItem {
   to: string;
   icon: React.ReactNode;
@@ -22,7 +22,7 @@ interface MenuSection {
   items: MenuItem[];
 }
 
-// 📦 메뉴 리스트 컴포넌트 (각 섹션 안에서 사용)
+//메뉴 리스트 컴포넌트 (각 섹션 안에서 사용)
 const SidebarLinks = ({ items }: { items: MenuItem[] }) => {
   return (
     <ul className="flex flex-col gap-1">
@@ -48,19 +48,19 @@ const SidebarLinks = ({ items }: { items: MenuItem[] }) => {
 };
 
 const Sidebar = () => {
-  // 각 섹션 열림 상태
+  //각 섹션 열림 상태
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     user: true,
     study: true,
     post: true,
   });
 
-  // 섹션 토글 핸들러
+  //섹션 토글 핸들러
   const toggleSection = (key: string) => {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // 📚 메뉴 구성 데이터 (여기만 수정하면 메뉴 추가 가능)
+  //메뉴 구성 데이터 (여기만 수정하면 메뉴 추가 가능)
   const menuSections: Record<string, MenuSection> = {
     user: {
       title: "회원 관리",
