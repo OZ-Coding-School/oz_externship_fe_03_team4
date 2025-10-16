@@ -1,7 +1,16 @@
-import './App.css'
+import { BrowserRouter as Router } from "react-router";
+import Sidebar from "./components/sidebar";
+import "./App.css";
 
 function App() {
-  return <div>template</div>
+  return (
+    <Router>
+      <div className="flex min-h-screen">
+        {/* 사이드바 */}
+        <Sidebar />
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
