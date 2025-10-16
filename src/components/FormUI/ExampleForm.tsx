@@ -9,7 +9,7 @@ import {
   Select,
   Slider,
   Switch,
-} from '.' // 경로는 여러분의 위치에 맞춰서 임포트 해주시면 됩니당 ㅎ
+} from '.' // 경로는 여러분이 작업하신 위치에 맞춰서 임포트 해주시면 됩니당 ㅎ
 
 export default function ExampleForm() {
   const [volume, setVolume] = useState(50)
@@ -18,9 +18,15 @@ export default function ExampleForm() {
   return (
     <form className="mx-auto mt-6 max-w-md space-y-6 rounded-xl bg-white p-6 shadow">
       {/* 텍스트 입력 */}
-      {/* FormField 필수값 : id, children(실제입력필드, 예:텍스트필드,셀렉트 박스 등등) */}
+      {/* FormField 
+          필수값 : id, children(실제입력필드, 예:텍스트필드,셀렉트 박스 등등) 
+          필수x : label,hint(에러 없을때 표시되는 문구),error(유효성검사 실패 출력문구), className(추가스타일 tailwind 적용가능)
+      */}
       <FormField id="email" label="이메일" hint="회사 이메일을 입력하세요">
-        {/* TextField 필수값 : id | 그 외의 값(type,placeholder,은 필수 요소 아님 */}
+        {/* TextField 
+            필수값 : id
+            필수x :  type 기본값 "text", placeholder, value, onChange, liftIcon, rightSlot, required 
+        */}
         <TextField
           id="email" // 필수
           type="email" // 타입 기본값은 "text"
@@ -31,11 +37,23 @@ export default function ExampleForm() {
 
       {/* 멀티라인 입력 */}
       <FormField id="desc" label="소개" hint="200자 이내로 작성해주세요">
-        <TextArea id="desc" rows={5} placeholder="자기소개를 입력하세요" />
+        {/* TextArea 
+            필수값 : id
+            필수x : rows,placeholder,value,onChange,required와 같은 기본속성
+        */}
+        <TextArea
+          id="desc"
+          rows={5} // rows 기본값 : 4, 지정하고 싶을 경우 이렇게 해주시면 됩니다.!
+          placeholder="자기소개를 입력하세요"
+        />
       </FormField>
 
       {/* 셀렉트 박스 */}
       <FormField id="plan" label="팀 선택">
+        {/* Select
+          필수값 : children(선택시 옵션들) | 
+          필수x : defaultValue:초기선택값, onChange, 기본셀렉트 속성 
+        */}
         <Select defaultValue="">
           <option value="" disabled>
             선택하세요
@@ -48,12 +66,20 @@ export default function ExampleForm() {
       {/* 라디오 버튼 */}
       <FormField id="gender" label="성별">
         <div className="flex gap-4">
+          {/* Radio 
+            필수값 : id, name 
+            필수x : label, value, checked, onChange
+          */}
           <Radio id="male" name="gender" label="남성" />
           <Radio id="female" name="gender" label="여성" />
         </div>
       </FormField>
 
       {/* 체크박스 */}
+      {/* Radio 
+          필수값 : id
+          필수x : label, checked, onChange. required 
+        */}
       <Checkbox id="agree" label="약관에 동의합니다" required />
 
       {/* 스위치 */}
@@ -61,16 +87,24 @@ export default function ExampleForm() {
         <span className="text-sm font-medium text-neutral-800">
           알림 수신 여부
         </span>
+        {/* Switch
+          필수값 : checked(현재 상태), onClick(상태 전환 핸들러) | 
+          필수x : className
+        */}
         <Switch checked={isActive} onClick={() => setIsActive(!isActive)} />
       </div>
 
       {/* 슬라이더 */}
       <FormField id="volume" label="수량 조절">
+        {/* Slider 
+          필수값 : value(현재 슬라이더 값), onChange(값 변경 핸들러) 
+          필수x : min,max,step,showValue 
+        */}
         <Slider
-          min={0}
-          max={100}
-          step={5}
-          showValue
+          min={0} // 최소값 기본 : 0
+          max={100} // 최대값 기본 : 100
+          step={5} // 이동단위 기본 : 1
+          showValue // true일 경우 아래에 값 표시
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}
         />
