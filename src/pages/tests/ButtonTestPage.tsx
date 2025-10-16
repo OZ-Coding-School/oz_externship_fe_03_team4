@@ -6,14 +6,20 @@
  * - Section/Cell: 미니 레이아웃 헬퍼
  * - Legend: 색상 스펙 요약
  */
-import * as React from 'react'
 import { Button } from '../../components/buttons/Buttons'
 import { ArrowDownToLine, Share2, Bolt, Trash2, X } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 /** 데모 섹션 카드 래퍼. title/desc와 children 영역을 제공합니다. */
-const Section: React.FC<
-  React.PropsWithChildren<{ title: string; desc?: string }>
-> = ({ title, desc, children }) => (
+const Section = ({
+  title,
+  desc,
+  children,
+}: {
+  title: string
+  desc?: string
+  children: ReactNode
+}) => (
   <section className="rounded-2xl border border-gray-200 bg-white p-4 md:p-6">
     <h2 className="mb-1 text-lg font-semibold">{title}</h2>
     {desc && <p className="mb-4 text-sm text-gray-600">{desc}</p>}
@@ -22,10 +28,7 @@ const Section: React.FC<
 )
 
 /** 라벨 캡션이 있는 셀. 버튼 아래에 조합 정보를 표시합니다. */
-const Cell: React.FC<React.PropsWithChildren<{ label?: string }>> = ({
-  label,
-  children,
-}) => (
+const Cell = ({ label, children }: { label?: string; children: ReactNode }) => (
   <div className="flex flex-col items-start gap-2">
     {children}
     {label && <span className="text-xs text-gray-500">{label}</span>}
@@ -35,9 +38,9 @@ const Cell: React.FC<React.PropsWithChildren<{ label?: string }>> = ({
 /**
  * Buttons Playground (시각 테스트 페이지)
  * - Base, Icon+Text, IconOnly, States 섹션으로 구성
- * - 클릭 이벤트는 콘솔 로깅으로 대체(handleClick)
+ * - Cell 태그 안의 버튼을 가져다 쓰시면 신속한 개발에 도움이 됩니다.
  */
-export default function ButtonTestPage() {
+const ButtonTestPage = () => {
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900">
       <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 md:py-12">
@@ -48,6 +51,7 @@ export default function ButtonTestPage() {
               프리셋/커스텀 색상, 아이콘, 높이·너비 커스터마이징을 한 화면에서
               테스트합니다.
             </p>
+            <p className="text-sm text-gray-600">폰트 - Roboto</p>
           </div>
           <Legend />
         </header>
@@ -60,7 +64,9 @@ export default function ButtonTestPage() {
         >
           <div className="space-y-6">
             <div>
-              <h3 className="mb-2 font-medium">small (12px, h-24, r-4)</h3>
+              <h3 className="mb-2 font-medium">
+                small (폰트 크기 12px, 높이 24px, 모서리(border-radius) 4px)
+              </h3>
               <Grid>
                 <Cell label="small / primary">
                   <Button size="small" color="primary">
@@ -87,16 +93,18 @@ export default function ButtonTestPage() {
                     small / warning
                   </Button>
                 </Cell>
-                <Cell label="small / other">
-                  <Button size="small" color="other">
-                    small / other
+                <Cell label="small / info">
+                  <Button size="small" color="info">
+                    small / info
                   </Button>
                 </Cell>
               </Grid>
             </div>
 
             <div>
-              <h3 className="mb-2 font-medium">medium (14px, h-36, r-8)</h3>
+              <h3 className="mb-2 font-medium">
+                medium (폰트 크기 14px, 높이 36px, 모서리(border-radius) 8px)
+              </h3>
               <Grid>
                 <Cell label="medium / primary">
                   <Button size="medium" color="primary">
@@ -123,16 +131,18 @@ export default function ButtonTestPage() {
                     medium / warning
                   </Button>
                 </Cell>
-                <Cell label="medium / other">
-                  <Button size="medium" color="other">
-                    medium / other
+                <Cell label="medium / info">
+                  <Button size="medium" color="info">
+                    medium / info
                   </Button>
                 </Cell>
               </Grid>
             </div>
 
             <div>
-              <h3 className="mb-2 font-medium">large (16px, h-48, r-8)</h3>
+              <h3 className="mb-2 font-medium">
+                large (폰트 크기 16px, 높이 48px, 모서리(border-radius) 8px)
+              </h3>
               <Grid>
                 <Cell label="large / primary">
                   <Button size="large" color="primary">
@@ -159,9 +169,9 @@ export default function ButtonTestPage() {
                     large / warning
                   </Button>
                 </Cell>
-                <Cell label="large / other">
-                  <Button size="large" color="other">
-                    large / other
+                <Cell label="large / info">
+                  <Button size="large" color="info">
+                    large / info
                   </Button>
                 </Cell>
               </Grid>
@@ -173,7 +183,7 @@ export default function ButtonTestPage() {
         {/* Icon + Text: Lucide는 currentColor 상속 → 버튼 text 색에 동기화됨 */}
         <Section
           title="2) Icon + Text"
-          desc="간격 8px(gap-2). 기본 규격: h-[38px], px-4 py-2, r-8, text-sm."
+          desc="아이콘-글자 간격 8px(gap-2). 기본 규격: 높이 38px(h-[38px]), 좌우 패딩 16px(px-4), 상하 패딩 8px(py-2), 모서리(border-radius) 8px(r-8), 폰트 크기 14px(text-sm)."
         >
           <div className="space-y-6">
             <Grid>
@@ -193,9 +203,9 @@ export default function ButtonTestPage() {
                   다운로드
                 </Button>
               </Cell>
-              <Cell label="other / both (Bolt + ArrowDownToLine)">
+              <Cell label="info / both (Bolt + ArrowDownToLine)">
                 <Button
-                  color="other"
+                  color="info"
                   leftIcon={<Bolt className="h-5 w-5" />}
                   rightIcon={<ArrowDownToLine className="h-5 w-5" />}
                 >
@@ -220,7 +230,7 @@ export default function ButtonTestPage() {
         {/* 3) Icon Only */}
         <Section
           title="3) Icon Only"
-          desc="정사각 38×38 기본. customHeight로 정사각 크기도 변경 가능."
+          desc="정사각 38px × 38px 기본. customHeight로 정사각 크기도 변경 가능."
         >
           <Grid>
             <Cell label="iconOnly / primary (Share2)">
@@ -239,10 +249,10 @@ export default function ButtonTestPage() {
                 aria-label="다운로드"
               />
             </Cell>
-            <Cell label="iconOnly / other (X)">
+            <Cell label="iconOnly / info (X)">
               <Button
                 iconOnly
-                color="other"
+                color="info"
                 leftIcon={<X className="h-5 w-5" />}
                 aria-label="닫기"
               />
@@ -250,7 +260,7 @@ export default function ButtonTestPage() {
 
             {/* 🔻 디자이너 커스텀 팔레트 */}
             {/* 커스텀 팔레트: #FEE2E2, #F3F4F6 적용. 대비 확보 위해 border/링 지정 */}
-            <Cell label="iconOnly / custom #FEE2E2 (Trash2)">
+            <Cell label="iconOnly / custom #FEE2E2 (Trash2) / 42px x 42px">
               <Button
                 iconOnly
                 customHeight={42} // → 42×42 정사각
@@ -262,7 +272,7 @@ export default function ButtonTestPage() {
                 aria-label="삭제(커스텀)"
               />
             </Cell>
-            <Cell label="iconOnly / custom #F3F4F6 (Bolt)">
+            <Cell label="iconOnly / custom #F3F4F6 (Bolt) / 44px x 44px">
               <Button
                 iconOnly
                 customHeight="44px" // 문자열도 가능
@@ -299,7 +309,7 @@ export default function ButtonTestPage() {
                 <Button
                   iconOnly
                   disabled
-                  color="other"
+                  color="info"
                   leftIcon={<Trash2 className="h-5 w-5" />}
                   aria-label="삭제"
                 />
@@ -349,46 +359,43 @@ export default function ButtonTestPage() {
   )
 }
 
-function Grid({ children }: React.PropsWithChildren) {
-  return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {children}
-    </div>
-  )
-}
+const Grid = ({ children }: { children: ReactNode }) => (
+  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+    {children}
+  </div>
+)
 
 /** 데모 팔레트 범주(legend). preset + custom swatch를 시각화합니다. */
+const Legend = () => (
+  <div className="hidden items-center gap-3 text-xs text-gray-600 md:flex">
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm bg-[#2563EB]" /> primary
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm border border-[#D1D5DB] bg-white" />{' '}
+      secondary
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm bg-[#16A34A]" /> success
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm bg-[#DC2626]" /> danger
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm bg-[#EAB308]" /> warning
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm bg-[#6B7280]" /> info
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm border border-[#FECACA] bg-[#FEE2E2]" />{' '}
+      custom:#FEE2E2
+    </span>
+    <span className="inline-flex items-center gap-1">
+      <i className="inline-block h-3 w-3 rounded-sm border border-[#E5E7EB] bg-[#F3F4F6]" />{' '}
+      custom:#F3F4F6
+    </span>
+  </div>
+)
 
-function Legend() {
-  return (
-    <div className="hidden items-center gap-3 text-xs text-gray-600 md:flex">
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm bg-[#2563EB]" /> primary
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm border border-[#D1D5DB] bg-white" />{' '}
-        secondary
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm bg-[#16A34A]" /> success
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm bg-[#DC2626]" /> danger
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm bg-[#EAB308]" /> warning
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm bg-[#6B7280]" /> other
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm border border-[#FECACA] bg-[#FEE2E2]" />{' '}
-        custom:#FEE2E2
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <i className="inline-block h-3 w-3 rounded-sm border border-[#E5E7EB] bg-[#F3F4F6]" />{' '}
-        custom:#F3F4F6
-      </span>
-    </div>
-  )
-}
+export default ButtonTestPage
