@@ -1,6 +1,11 @@
 import { create } from 'zustand'
-import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import {
+  Info,
+  Check,
+  AlertTriangle,
+  XCircle,
+  type LucideIcon,
+} from 'lucide-react'
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'error'
 
@@ -8,7 +13,6 @@ export interface ToastProps {
   icon: LucideIcon
   title: string
   message: string
-  className?: string
   variant: ToastVariant
 }
 
@@ -23,30 +27,30 @@ export const toastVariantStyle: Record<
   }
 > = {
   info: {
-    container: 'bg-[#EFF6FF] border border-[#BFDBFE]',
-    title: 'text-[#1E40AF] font-medium text-[14px]',
-    message: 'text-[#1D4ED8] text-[14px]',
+    container: 'bg-[#EFF6FF] border border-[#BFDBFE] rounded-[8px]',
+    title: 'text-[#1E40AF] font-semibold text-[12px]',
+    message: 'text-[#1D4ED8] text-[12px]',
     icon: Info,
     iconColor: 'text-[#2563EB]',
   },
   success: {
-    container: 'bg-[#F0FDF4] border border-[#BBF7D0]',
-    title: 'text-[#166534] font-medium text-[14px]',
-    message: 'text-[#15803D] text-[14px]',
-    icon: CheckCircle,
+    container: 'bg-[#F0FDF4] border border-[#BBF7D0] rounded-[8px]',
+    title: 'text-[#166534] font-semibold text-[12px]',
+    message: 'text-[#15803D] text-[12px]',
+    icon: Check,
     iconColor: 'text-[#16A34A]',
   },
   warning: {
-    container: 'bg-[#FEFCE8] border border-[#FEF08A]',
-    title: 'text-[#854D0E] font-medium text-[14px]',
-    message: 'text-[#A16207] text-[14px]',
+    container: 'bg-[#FEFCE8] border border-[#FEF08A] rounded-[8px]',
+    title: 'text-[#854D0E] font-semibold text-[12px]',
+    message: 'text-[#A16207] text-[12px]',
     icon: AlertTriangle,
     iconColor: 'text-[#CA8A04]',
   },
   error: {
-    container: 'bg-[#FEF2F2] border border-[#FECACA]',
-    title: 'text-[#991B1B] font-medium text-[14px]',
-    message: 'text-[#B91C1C] text-[14px]',
+    container: 'bg-[#FEF2F2] border border-[#FECACA] rounded-[8px]',
+    title: 'text-[#991B1B] font-semibold text-[12px]',
+    message: 'text-[#B91C1C] text-[12px]',
     icon: XCircle,
     iconColor: 'text-[#DC2626]',
   },
