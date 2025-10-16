@@ -149,7 +149,7 @@ jobs:
             "djskyt") AUTHOR_MENTION="<@394097966782349324>" ;;
             "paul8729621") AUTHOR_MENTION="<@532428722301829121>" ;;
             "danbi-seo") AUTHOR_MENTION="<@919306224242163733>" ;;
-            "Justin-SJ-Hong") AUTHOR_MENTION="<@9064836383995412582>" ;;
+            "Justin-SJ-Hong") AUTHOR_MENTION="<@906483638399541258>" ;;
             *) AUTHOR_MENTION="@${{ github.event.pull_request.user.login }}" ;;
           esac
 
@@ -182,7 +182,7 @@ jobs:
             "djskyt") AUTHOR_MENTION="<@394097966782349324>" ;;
             "paul8729621") AUTHOR_MENTION="<@532428722301829121>" ;;
             "danbi-seo") AUTHOR_MENTION="<@919306224242163733>" ;;
-            "Justin-SJ-Hong") AUTHOR_MENTION="<@9064836383995412582>" ;;
+            "Justin-SJ-Hong") AUTHOR_MENTION="<@906483638399541258>" ;;
             *) AUTHOR_MENTION="@${{ github.event.pull_request.user.login }}" ;;
           esac
 
