@@ -27,10 +27,12 @@ export const LocalFilterExample = () => {
   return (
     <div className="mx-auto max-w-xl space-y-4 p-6">
       <SearchInput
+        size="sm" // 높이 사이즈 지정 가능 "sm|md|lg"
         placeholder="이름 또는 이메일 검색"
         value={searchText}
         onChangeText={setSearchText}
         onSubmit={(submittedValue) => setSearchText(submittedValue)}
+        className="w-60" // 너비 지정 가능 "w-60, 지정안되면 w-full"
       />
 
       <ul className="divide-y rounded-lg border">
