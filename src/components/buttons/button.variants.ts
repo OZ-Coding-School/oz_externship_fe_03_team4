@@ -21,31 +21,31 @@ export const buttonVariants = cva(
       color: {
         /** #2563EB */
         primary:
-          'bg-[#2563EB] text-white hover:brightness-95 active:brightness-90 focus-visible:ring-blue-300',
+          'bg-primary-button text-white hover:brightness-95 active:brightness-90 focus-visible:ring-primary-button-300',
         /** white / text #374151 / border #D1D5DB */
         secondary:
-          'bg-white text-[#374151] border border-[#D1D5DB] hover:bg-gray-50 focus-visible:ring-gray-300',
+          'bg-secondary-button text-secondary-button-fg border border-secondary-button-border hover:bg-gray-50 focus-visible:ring-secondary-button-ring',
         /** #16A34A */
         success:
-          'bg-[#16A34A] text-white hover:brightness-95 active:brightness-90 focus-visible:ring-green-300',
+          'bg-success-button text-white hover:brightness-95 active:brightness-90 focus-visible:ring-success-button-300',
         /** #DC2626 */
         danger:
-          'bg-[#DC2626] text-white hover:brightness-95 active:brightness-90 focus-visible:ring-red-300',
+          'bg-danger-button text-white hover:brightness-95 active:brightness-90 focus-visible:ring-danger-button-300',
         /** #EAB308 */
         warning:
-          'bg-[#EAB308] text-white hover:brightness-95 active:brightness-90 focus-visible:ring-yellow-300',
+          'bg-warning-button text-white hover:brightness-95 active:brightness-90 focus-visible:ring-warning-button-300',
         /** (기존 other →) info: #6B7280 */
-        info: 'bg-[#6B7280] text-white hover:brightness-95 active:brightness-90 focus-visible:ring-gray-300',
+        info: 'bg-info-button text-white hover:brightness-95 active:brightness-90 focus-visible:ring-info-button-300',
       },
       size: {
-        /** 8x4 / r-4 / text-12 */
-        small: 'px-2 py-1 rounded text-xs',
-        /** 16x8 / r-8 / text-14 */
-        medium: 'px-4 py-2 rounded-lg text-sm',
-        /** 24x12 / r-8 / text-16 */
-        large: 'px-6 py-3 rounded-lg text-base',
-        /** 기본 38px 규격(높이는 compoundVariants에서 부여) */
-        default: 'px-4 py-2 rounded-lg text-sm',
+        /** 폰트 크기 12px, 높이 24px, 모서리(border-radius) 4px, 좌우 패딩 8px, 상하 패딩 4px */
+        small: 'h-6 px-2 py-1 rounded text-xs',
+        /** 폰트 크기 14px, 높이 36px, 모서리(border-radius) 8px, 좌우 패딩 16px, 상하 패딩 8px */
+        medium: 'h-9 px-4 py-2 rounded-lg text-sm',
+        /** 폰트 크기 16px, 높이 48px, 모서리(border-radius) 8px, 좌우 패딩 24px, 상하 패딩 12px */
+        large: 'h-12 px-6 py-3 rounded-lg text-base',
+        /** 폰트 크기 14px, 높이 38px, 모서리(border-radius) 8px, 좌우 패딩 16px, 상하 패딩 8px */
+        default: 'h-[38px] px-4 py-2 rounded-lg text-sm',
       },
       /** 아이콘 전용 버튼 */
       iconOnly: {
@@ -57,12 +57,6 @@ export const buttonVariants = cva(
       disabled: { true: 'opacity-50 pointer-events-none', false: '' },
     },
     compoundVariants: [
-      // 높이 부여
-      { size: 'small', class: 'h-6' },
-      { size: 'medium', class: 'h-9' },
-      { size: 'large', class: 'h-12' },
-      { size: 'default', class: 'h-[38px]' },
-
       // 아이콘 전용: 기본 정사각 38×38
       {
         iconOnly: true,
