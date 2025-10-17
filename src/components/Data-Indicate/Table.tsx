@@ -13,7 +13,7 @@ interface TableProps {
 }
 
 // 재사용 가능한 공통 Table 컴포넌트
-function Table({ columns, data, className = "" }: TableProps) {
+export const Table = ({ columns, data, className = "" }: TableProps) => {
   return (
     <div className={`overflow-hidden rounded-lg border border-gray-200 ${className}`}>
       <table className="min-w-full border-collapse bg-white">
@@ -38,7 +38,9 @@ function Table({ columns, data, className = "" }: TableProps) {
               <tr key={idx} className="hover:bg-gray-50 transition-colors">
                 {columns.map((col) => (
                   <td key={col.key} className="px-6 py-3 border-b border-gray-100">
-                    {col.render ? col.render(row[col.key], row) : (row[col.key] as React.ReactNode)}
+                    {col.render
+                      ? col.render(row[col.key], row)
+                      : (row[col.key] as React.ReactNode)}
                   </td>
                 ))}
               </tr>
@@ -57,6 +59,4 @@ function Table({ columns, data, className = "" }: TableProps) {
       </table>
     </div>
   );
-}
-
-export default Table;
+};
