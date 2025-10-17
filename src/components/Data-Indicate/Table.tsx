@@ -16,7 +16,7 @@ interface TableProps {
 // 재사용 가능한 공통 Table 컴포넌트
 export const Table = ({ columns, data, className = "", icon: Icon }: TableProps) => {
   return (
-    <div className={`overflow-hidden rounded-lg border border-gray-200 ${className}`}>
+    <div className={`overflow-x-auto rounded-lg border border-gray-200 ${className}`}>
       <table className="min-w-full border-collapse bg-white">
         {/* 헤더 */}
         <thead className="bg-gray-50 text-gray-600 text-sm font-semibold">
