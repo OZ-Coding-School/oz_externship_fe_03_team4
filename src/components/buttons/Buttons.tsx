@@ -32,7 +32,7 @@ export type ButtonColor =
   | 'info'
 
 /** 버튼 크기 */
-export type ButtonSize = 'small' | 'medium' | 'large'
+export type ButtonSize = 'small' | 'medium' | 'large' | 'default'
 
 /**
  * Button Props
