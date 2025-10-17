@@ -1,1 +1,30 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* 전역 컬러 토큰 선언: --color-*  →  bg-*, text-*, border-*, ring-* 자동 생성 */
+@theme {
+  /* Primary */
+  --color-primary-button: #2563eb; /* bg-primary, text-primary ... */
+  --color-primary-button-300: #93c5fd; /* ring-primary-300 등 */
+
+  /* Secondary (화이트 버튼용) */
+  --color-secondary-button: #ffffff; /* bg-secondary */
+  --color-secondary-button-fg: #374151; /* text-secondary-fg */
+  --color-secondary-button-border: #d1d5db; /* border-secondary-border */
+  --color-secondary-button-ring: #d1d5db; /* ring-secondary-ring (≈ gray-300) */
+
+  /* Success */
+  --color-success-button: #16a34a;
+  --color-success-button-300: #86efac;
+
+  /* Danger */
+  --color-danger-button: #dc2626;
+  --color-danger-button-300: #fca5a5;
+
+  /* Warning */
+  --color-warning-button: #eab308;
+  --color-warning-button-300: #fde68a;
+
+  /* Info (기존 other) */
+  --color-info-button: #6b7280;
+  --color-info-button-300: #d1d5db;
+}

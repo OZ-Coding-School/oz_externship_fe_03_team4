@@ -1,3 +1,4 @@
+// src/components/buttons/Buttons.tsx
 /**
  * Button (프리셋 + 커스텀 색상 + 커스텀 높이/너비)
  *
@@ -8,156 +9,121 @@
  *
  * 디자인 비규격(임의 색/높이)에 유연하게 대응하기 위한 프리젠테이셔널 컴포넌트입니다.
  */
-import * as React from 'react'
+import {
+  forwardRef,
+  type CSSProperties,
+  type ButtonHTMLAttributes,
+  type MouseEventHandler,
+  type ReactNode,
+} from 'react'
+import { cn } from '../../utils/cn'
+import { buttonVariants } from './button.variants'
+import { Spinner } from '../Spinner'
 
-/**
- * 버튼의 색상 테마(프리셋) 정의
- * - 필요 시 custom* props로 프리셋을 덮어쓸 수 있습니다.
+/** 버튼 색상 프리셋
+ *  - (변경) other → info 로 개편
  */
 export type ButtonColor =
-  | 'primary' // #2563EB
-  | 'secondary' // white (text #374151, border #D1D5DB)
-  | 'success' // #16A34A
-  | 'danger' // #DC2626
-  | 'warning' // #EAB308
-  | 'other' // #6B7280
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
 
 /** 버튼 크기 */
-export type ButtonSize = 'small' | 'medium' | 'large'
+export type ButtonSize = 'small' | 'medium' | 'large' | 'default'
 
 /**
- * Button 컴포넌트 Props
- * - color 프리셋 + custom* 자유 입력형 색상을 동시에 지원
+ * Button Props
+ *
+ * - custom + BgColor/TextColor/BorderColor/RingColor (커스텀 배경색/텍스트/테두리/포커스 링)
+ *
+ * 사이즈/치수:
+ * - size: 패딩/라운드/폰트 결정
+ * - customHeight: 높이를 px/문자열로 지정하면 h-* 클래스는 제거되고 inline-style 우선
+ * - customWidth: 가로 폭 커스텀 (iconOnly + customHeight만 주면 정사각 자동 보정)
  */
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** 프리셋 색상 (primary가 기본, primary/secondary/success/danger/warning/other 선택 가능) */
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   color?: ButtonColor
-  /** 자유 입력 배경색 (예: "#FF69B4", "rgb(...)", "hsl(...)") */
+  size?: ButtonSize
+
   customBgColor?: string
-  /** 자유 입력 글자색 */
   customTextColor?: string
-  /** 자유 입력 테두리색 (값이 있으면 자동으로 1px solid 적용) */
   customBorderColor?: string
-  /** 자유 입력 포커스 링 색 (Tailwind 클래스 값 예: "focus-visible:ring-pink-300") */
   customRingColor?: string
 
-  /** 버튼 크기 (small=12px, medium=14px, large=16px) */
-  size?: ButtonSize
-  /** 높이를 픽셀/문자열로 지정. 지정 시 h-* 클래스는 제거되고 inline-style이 우선합니다. */
   customHeight?: number | string
-  /** 너비 커스텀. iconOnly에서 customHeight만 주면 정사각형으로 자동 보정됩니다. */
   customWidth?: number | string
 
-  /** 아이콘 + 텍스트 (좌) */
-  leftIcon?: React.ReactNode
-  /** 아이콘 + 텍스트 (우) */
-  rightIcon?: React.ReactNode
-  /** 아이콘 전용 버튼 (정사각 38×38) */
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
   iconOnly?: boolean
-  /** 로딩 상태 */
   loading?: boolean
-  /** 가로 100% */
   fullWidth?: boolean
 }
 
-/** 클래스 병합 유틸 */
-function mergeClassNames(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ')
-}
-
-/**
- * 프리셋 색상 클래스 세트.
- * customBg/Text/Border가 주어지면 이 프리셋은 무시됩니다(커스텀 우선).
- * 반환값:
- *  - base: 배경/텍스트/보더/호버/액티브 클래스
- *  - ring: focus-visible 링 클래스
+/** 안전 클릭 래핑:
+ *  - 로딩/비활성화 상태에서는 onClick을 무시
  */
-function presetColorClasses(color: ButtonColor = 'primary') {
-  switch (color) {
-    case 'secondary':
-      return {
-        base: 'bg-white text-[#374151] border border-[#D1D5DB] hover:bg-gray-50',
-        ring: 'focus-visible:ring-gray-300',
-      }
-    case 'success':
-      return {
-        base: 'bg-[#16A34A] text-white hover:brightness-95 active:brightness-90',
-        ring: 'focus-visible:ring-green-300',
-      }
-    case 'danger':
-      return {
-        base: 'bg-[#DC2626] text-white hover:brightness-95 active:brightness-90',
-        ring: 'focus-visible:ring-red-300',
-      }
-    case 'warning':
-      return {
-        base: 'bg-[#EAB308] text-white hover:brightness-95 active:brightness-90',
-        ring: 'focus-visible:ring-yellow-300',
-      }
-    case 'other':
-      return {
-        base: 'bg-[#6B7280] text-white hover:brightness-95 active:brightness-90',
-        ring: 'focus-visible:ring-gray-300',
-      }
-    default: // primary
-      return {
-        base: 'bg-[#2563EB] text-white hover:brightness-95 active:brightness-90',
-        ring: 'focus-visible:ring-blue-300',
-      }
-  }
-}
+const useSafeClick = (
+  onClick?: MouseEventHandler<HTMLButtonElement>,
+  blocked?: boolean
+) =>
+  ((e) => {
+    if (blocked) return
+    onClick?.(e)
+  }) as MouseEventHandler<HTMLButtonElement>
 
-/** 사이즈(패딩/높이/라운드/폰트) */
-function sizeClasses(size: ButtonSize | undefined, hasCustomHeight: boolean) {
-  if (hasCustomHeight) {
-    switch (size) {
-      case 'small':
-        return 'px-2 py-1 rounded text-xs'
-      case 'medium':
-        return 'px-4 py-2 rounded-lg text-sm'
-      case 'large':
-        return 'px-6 py-3 rounded-lg text-base'
-      default:
-        return 'px-4 py-2 rounded-lg text-sm' // 기본 38px 규격 대신 높이 제외
+/** 치수 스타일 합성:
+ *  - customHeight/Width를 inline-style로 주입
+ *  - iconOnly + customHeight → 정사각(width = height) 자동 보정(커스텀 width 있으면 우선)
+ */
+const resolveDimensionStyle = (opts: {
+  customHeight?: number | string
+  customWidth?: number | string
+  iconOnly?: boolean
+}): CSSProperties => {
+  const { customHeight, customWidth, iconOnly } = opts
+  const style: CSSProperties = {}
+
+  const hasHeight = customHeight !== undefined && customHeight !== null
+  if (hasHeight) {
+    style.height =
+      typeof customHeight === 'number' ? `${customHeight}px` : customHeight
+    if (iconOnly) {
+      style.width =
+        customWidth ??
+        (typeof customHeight === 'number'
+          ? `${customHeight}px`
+          : (customHeight as string))
+    } else if (customWidth) {
+      style.width =
+        typeof customWidth === 'number' ? `${customWidth}px` : customWidth
     }
+  } else if (customWidth) {
+    style.width =
+      typeof customWidth === 'number' ? `${customWidth}px` : customWidth
   }
-  // 기존: 높이 포함
-  switch (size) {
-    case 'small':
-      return 'px-2 py-1 h-6 rounded text-xs'
-    case 'medium':
-      return 'px-4 py-2 h-9 rounded-lg text-sm'
-    case 'large':
-      return 'px-6 py-3 h-12 rounded-lg text-base'
-    default:
-      return 'px-4 py-2 h-[38px] rounded-lg text-sm'
-  }
-}
 
-/** 아이콘 전용 레이아웃. customHeight가 있으면 w/h 클래스를 제거합니다. */
-function iconOnlyLayout(hasCustomHeight: boolean) {
-  return hasCustomHeight
-    ? 'p-2 rounded-lg inline-flex items-center justify-center'
-    : 'w-[38px] h-[38px] p-2 rounded-lg inline-flex items-center justify-center'
+  return style
 }
 
 /**
  * Button
  * - preset 또는 custom 스타일을 적용하여 다양한 디자인을 수용
- * - sizeClasses로 패딩/폰트 결정, 높이는 필요 시 customHeight로 오버라이드
- * - 로딩/disabled 시 클릭 방지(handleClick) 및 시각적 상태 처리
+ * - size(패딩/라운드/폰트) + compoundVariants(높이) + iconOnly 레이아웃
  */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const {
       color = 'primary',
+      size,
       customBgColor,
       customTextColor,
       customBorderColor,
-      customRingColor, // Tailwind class (e.g., "focus-visible:ring-pink-300")
+      customRingColor,
 
-      size,
       customHeight,
       customWidth,
 
@@ -172,81 +138,51 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       style,
       onClick,
       children,
-      ...props
-    },
-    ref
-  ) => {
+      ...rest
+    } = props
+
     const isDisabled = disabled || loading
-    const hasCustomHeight = customHeight !== undefined && customHeight !== null
 
-    // 1) 레이아웃 클래스
-    const baseLayout = iconOnly
-      ? iconOnlyLayout(hasCustomHeight)
-      : mergeClassNames(
-          'inline-flex items-center justify-center gap-2',
-          sizeClasses(size, hasCustomHeight)
-        )
-
-    // 2) 프리셋 or 커스텀 색상 선택
-    // - custom* 값이 하나라도 있으면 preset.base 대신 inline-style을 사용합니다.
-    const preset = presetColorClasses(color)
-    const useCustom = Boolean(
+    // 커스텀 색상: inline-style 우선 적용
+    const customColorStyle: CSSProperties | undefined =
       customBgColor || customTextColor || customBorderColor
+        ? {
+            backgroundColor: customBgColor,
+            color: customTextColor,
+            ...(customBorderColor
+              ? {
+                  borderColor: customBorderColor,
+                  borderWidth: 1,
+                  borderStyle: 'solid',
+                }
+              : {}),
+          }
+        : undefined
+
+    // 치수 스타일
+    const dimensionStyle = resolveDimensionStyle({
+      customHeight,
+      customWidth,
+      iconOnly,
+    })
+    const finalStyle = { ...style, ...customColorStyle, ...dimensionStyle }
+
+    // 클래스: cva + 옵션 합성 (custom 색상일 때도 hover/active는 동일하게 유지됨)
+    const classes = cn(
+      buttonVariants({
+        color,
+        size: size ?? 'default',
+        iconOnly,
+        fullWidth,
+        disabled: !!isDisabled,
+      }),
+      // 커스텀 링 클래스가 주어지면 추가, 아니면 color 프리셋에 포함된 링 사용
+      customRingColor,
+      // 🔧 외부에서 넘긴 className은 최종 우선순위
+      className
     )
 
-    // 3) 커스텀 색상 스타일 (inline style)
-    // - backgroundColor / color / border(옵션)를 합성합니다.
-    const customStyle: React.CSSProperties | undefined = useCustom
-      ? {
-          backgroundColor: customBgColor,
-          color: customTextColor,
-          ...(customBorderColor
-            ? {
-                borderColor: customBorderColor,
-                borderWidth: 1,
-                borderStyle: 'solid',
-              }
-            : {}),
-        }
-      : undefined
-
-    // 4) 높이/너비 커스텀 주입
-    // - customHeight가 있으면 h-*를 쓰지 않습니다.
-    // - iconOnly + customHeight → width를 height와 동일하게 맞춰 정사각형 보장.
-    // - customWidth가 있으면 그 값을 우선합니다.
-    const dimensionStyle: React.CSSProperties = {}
-    if (hasCustomHeight) {
-      dimensionStyle.height =
-        typeof customHeight === 'number' ? `${customHeight}px` : customHeight
-      if (iconOnly) {
-        const resolvedWidth =
-          customWidth ??
-          (typeof customHeight === 'number'
-            ? `${customHeight}px`
-            : customHeight)
-        dimensionStyle.width = resolvedWidth as string
-      } else if (customWidth) {
-        dimensionStyle.width =
-          typeof customWidth === 'number' ? `${customWidth}px` : customWidth
-      }
-    } else if (customWidth) {
-      // 높이는 프리셋 유지, 가로만 커스텀
-      dimensionStyle.width =
-        typeof customWidth === 'number' ? `${customWidth}px` : customWidth
-    }
-
-    const finalStyle = { ...style, ...customStyle, ...dimensionStyle }
-
-    // 5) 포커스 링 클래스 (커스텀 우선)
-    // - customRingColor가 없으면 preset.ring을 사용합니다.
-    const ringClass = customRingColor || preset.ring
-
-    // 6) 안전한 onClick 래핑
-    /** 로딩/비활성화 상태에서는 클릭을 무시하고, 전달된 onClick만 안전하게 호출합니다. */
-    const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-      if (isDisabled) return
-      onClick?.(e)
-    }
+    const handleClick = useSafeClick(onClick, isDisabled)
 
     return (
       <button
@@ -256,34 +192,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         onClick={handleClick}
         style={finalStyle}
-        className={mergeClassNames(
-          'font-medium transition-[filter,background-color,border-color] duration-150 select-none',
-          'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-          useCustom ? 'hover:brightness-95 active:brightness-90' : preset.base, // 커스텀도 hover/active 유지
-          ringClass,
-          baseLayout,
-          fullWidth && 'w-full',
-          isDisabled && 'pointer-events-none opacity-50',
-          className
-        )}
-        {...props}
+        className={classes}
+        {...rest}
       >
-        {/* 로딩 스피너 */}
-        {loading && (
-          <span
-            className="inline-block animate-spin"
-            aria-hidden="true"
-            style={{
-              width: 16,
-              height: 16,
-              borderRadius: '9999px',
-              border: '2px solid currentColor',
-              borderRightColor: 'transparent',
-            }}
-          />
-        )}
+        {loading && <Spinner />}
 
-        {/* 아이콘 + 텍스트 */}
         {!iconOnly && leftIcon && (
           <span className="inline-flex items-center">{leftIcon}</span>
         )}
@@ -294,7 +207,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span className="inline-flex items-center">{rightIcon}</span>
         )}
 
-        {/* 아이콘 전용 */}
         {iconOnly && (leftIcon || rightIcon) && (
           <span className="inline-flex items-center">
             {leftIcon ?? rightIcon}
