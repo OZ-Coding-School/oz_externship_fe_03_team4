@@ -1,5 +1,5 @@
-import Table from "../../components/Data-Indicate/Table";
-import Card from "../../components/Data-Indicate/Card";
+import { Table } from "../../components/Data-Indicate/Table";
+import { Card } from "../../components/Data-Indicate/Card";
 import { User, Star } from "lucide-react"; // 아이콘 예시
 
 export default function TableTestPage() {
