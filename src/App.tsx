@@ -4,11 +4,13 @@ import Layout from './components/Layout'
 import ButtonTestPage from './pages/tests/ButtonTestPage'
 import { LocalFilterExample } from './components/search/LocalFilterExample'
 import ExampleForm from './components/FormUI/ExampleForm'
+import AdminLoginPage from './pages/AdminLoginPage'
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="login" element={<AdminLoginPage />} />
         <Route element={<Layout />}>
           {/* <Route index element={<ToastTest />} /> */}
           <Route index element={<ButtonTestPage />} />

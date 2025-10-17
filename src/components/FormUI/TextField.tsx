@@ -30,7 +30,7 @@ export const TextField = forwardRef<HTMLInputElement, Props>(
           {...props}
         />
         {rightSlot && (
-          <span className="absolute top-1/2 right-3 -translate-y-1/2">
+          <span className="absolute inset-y-0 right-0 flex items-center pr-3">
             {rightSlot}
           </span>
         )}
