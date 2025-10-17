@@ -23,6 +23,7 @@ export const Table = ({ columns, data, className = "", icon: Icon }: TableProps)
           <tr>
             {columns.map((col) => (
               <th
+                scope="col" // 접근성 개선: 열 헤더임을 스크린리더에 명시
                 key={col.key}
                 className="px-6 py-3 text-left border-b border-gray-200"
               >
