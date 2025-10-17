@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '../buttons/Buttons'
 import { cn } from '../../utils/cn'
-import { buildPageTokens, ELLIPSIS, PageToken } from '../../utils/pagination'
+import { buildPageTokens, ELLIPSIS } from '../../utils/pagination'
 
 /**
  * Pagination Props
@@ -26,73 +26,6 @@ export type PaginationProps = {
   disabled?: boolean
   className?: string
 }
-
-/** 내부 토큰 타입 */
-// const ELLIPSIS = '…'
-
-// type PageToken = number | typeof ELLIPSIS
-
-/**
- * 페이지 토큰 빌더
- * - 1 ... [siblings around current] ... total
- * - boundaryCount 로 시작/끝 고정 개수를 제어
- */
-// function buildPageTokens(
-//   totalPages: number,
-//   currentPage: number,
-//   siblingCount = 1,
-//   boundaryCount = 1
-// ): PageToken[] {
-//   const tokens: PageToken[] = []
-
-//   if (totalPages <= 0) return tokens
-
-//   const startPages = range(1, Math.min(boundaryCount, totalPages))
-//   const endPages = range(
-//     Math.max(totalPages - boundaryCount + 1, boundaryCount + 1),
-//     totalPages
-//   )
-
-//   const leftSibling = Math.max(
-//     Math.min(currentPage - siblingCount, totalPages),
-//     boundaryCount + 1
-//   )
-//   const rightSibling = Math.min(
-//     Math.max(currentPage + siblingCount, 1),
-//     Math.max(totalPages - boundaryCount, boundaryCount)
-//   )
-
-//   // merge
-//   tokens.push(...startPages)
-
-//   // left ellipsis
-//   if (leftSibling > boundaryCount + 1) {
-//     tokens.push(ELLIPSIS)
-//   }
-
-//   // middle window
-//   for (let p = leftSibling; p <= rightSibling; p++) {
-//     if (p >= 1 && p <= totalPages) tokens.push(p)
-//   }
-
-//   // right ellipsis
-//   if (rightSibling < totalPages - boundaryCount) {
-//     tokens.push(ELLIPSIS)
-//   }
-
-//   // end pages
-//   for (const p of endPages) {
-//     if (!tokens.includes(p)) tokens.push(p)
-//   }
-
-//   // de-dup + sorted by appearance already
-//   return tokens
-// }
-
-// function range(start: number, end: number): number[] {
-//   if (end < start) return []
-//   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-// }
 
 /**
  * 페이지 네비게이션 컴포넌트
