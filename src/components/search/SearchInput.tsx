@@ -27,7 +27,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       clearable = true, // boolean : 검색어삭제 버튼 표시 여부 (기본값 : true)
       className, // string | undefined - 컴포넌트에 추가할 클래스
       inputProps, // object — input에 직접 전달할 속성(id, name 등), value/defaultValue/onChange 제외
-      onChangeText, // [필수값, 그 외 필수x] string — 검색어 입력 시마다 호출 (디바운스 훅 코드 추가하면 적용 가능, 예제페이지 참고)
+      onChangeText, // [필수값, 그 외 필수x] string — 검색어 입력 시마다 호출 (디바운스 훅 코드 추가하면 디바운스 적용 가능, 예제페이지 참고)
       onSubmit, // string — Enter 키 입력 시 현재 검색어를 인자로 호출
       label, // ReactNode — 상단 라벨
       hintText, // ReactNode — 하단 좌측에 힌트메세지
