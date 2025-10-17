@@ -4,8 +4,8 @@ import Layout from './components/Layout'
 import DanbiTestPage from './pages/tests/DanbiTestPage'
 import HYTestPage from './pages/tests/HYTestPage'
 import WonheeTestPage from './pages/tests/WonheeTestPage'
-import KyungbokTestPage from './pages/tests/kyungbokTestPage'
-import HyunjinTestPage from './pages/tests/hyunjinTestPage'
+import KyungbokTestPage from './pages/tests/KyungbokTestPage'
+import HyunjinTestPage from './pages/tests/HyunjinTestPage'
 
 function App() {
   return (
