@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '../buttons/Buttons'
 import { cn } from '../../utils/cn'
+import { buildPageTokens, ELLIPSIS, PageToken } from '../../utils/pagination'
 
 /**
  * Pagination Props
@@ -27,71 +28,71 @@ export type PaginationProps = {
 }
 
 /** 내부 토큰 타입 */
-const ELLIPSIS = '…'
+// const ELLIPSIS = '…'
 
-type PageToken = number | typeof ELLIPSIS
+// type PageToken = number | typeof ELLIPSIS
 
 /**
  * 페이지 토큰 빌더
  * - 1 ... [siblings around current] ... total
  * - boundaryCount 로 시작/끝 고정 개수를 제어
  */
-function buildPageTokens(
-  totalPages: number,
-  currentPage: number,
-  siblingCount = 1,
-  boundaryCount = 1
-): PageToken[] {
-  const tokens: PageToken[] = []
+// function buildPageTokens(
+//   totalPages: number,
+//   currentPage: number,
+//   siblingCount = 1,
+//   boundaryCount = 1
+// ): PageToken[] {
+//   const tokens: PageToken[] = []
 
-  if (totalPages <= 0) return tokens
+//   if (totalPages <= 0) return tokens
 
-  const startPages = range(1, Math.min(boundaryCount, totalPages))
-  const endPages = range(
-    Math.max(totalPages - boundaryCount + 1, boundaryCount + 1),
-    totalPages
-  )
+//   const startPages = range(1, Math.min(boundaryCount, totalPages))
+//   const endPages = range(
+//     Math.max(totalPages - boundaryCount + 1, boundaryCount + 1),
+//     totalPages
+//   )
 
-  const leftSibling = Math.max(
-    Math.min(currentPage - siblingCount, totalPages),
-    boundaryCount + 1
-  )
-  const rightSibling = Math.min(
-    Math.max(currentPage + siblingCount, 1),
-    Math.max(totalPages - boundaryCount, boundaryCount)
-  )
+//   const leftSibling = Math.max(
+//     Math.min(currentPage - siblingCount, totalPages),
+//     boundaryCount + 1
+//   )
+//   const rightSibling = Math.min(
+//     Math.max(currentPage + siblingCount, 1),
+//     Math.max(totalPages - boundaryCount, boundaryCount)
+//   )
 
-  // merge
-  tokens.push(...startPages)
+//   // merge
+//   tokens.push(...startPages)
 
-  // left ellipsis
-  if (leftSibling > boundaryCount + 1) {
-    tokens.push(ELLIPSIS)
-  }
+//   // left ellipsis
+//   if (leftSibling > boundaryCount + 1) {
+//     tokens.push(ELLIPSIS)
+//   }
 
-  // middle window
-  for (let p = leftSibling; p <= rightSibling; p++) {
-    if (p >= 1 && p <= totalPages) tokens.push(p)
-  }
+//   // middle window
+//   for (let p = leftSibling; p <= rightSibling; p++) {
+//     if (p >= 1 && p <= totalPages) tokens.push(p)
+//   }
 
-  // right ellipsis
-  if (rightSibling < totalPages - boundaryCount) {
-    tokens.push(ELLIPSIS)
-  }
+//   // right ellipsis
+//   if (rightSibling < totalPages - boundaryCount) {
+//     tokens.push(ELLIPSIS)
+//   }
 
-  // end pages
-  for (const p of endPages) {
-    if (!tokens.includes(p)) tokens.push(p)
-  }
+//   // end pages
+//   for (const p of endPages) {
+//     if (!tokens.includes(p)) tokens.push(p)
+//   }
 
-  // de-dup + sorted by appearance already
-  return tokens
-}
+//   // de-dup + sorted by appearance already
+//   return tokens
+// }
 
-function range(start: number, end: number): number[] {
-  if (end < start) return []
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-}
+// function range(start: number, end: number): number[] {
+//   if (end < start) return []
+//   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+// }
 
 /**
  * 페이지 네비게이션 컴포넌트
@@ -120,7 +121,7 @@ export const Pagination = ({
     if (clamped !== currentPage) onPageChange(clamped)
   }
 
-  if (totalPages <= 1) return null
+  if (totalPages <= 0) return null
 
   return (
     <nav
@@ -133,7 +134,7 @@ export const Pagination = ({
     >
       {showFirstLast && (
         <Button
-          size="small"
+          size="medium"
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
@@ -141,7 +142,6 @@ export const Pagination = ({
           aria-label="Go to first page"
           disabled={!canPrev || disabled}
           onClick={() => goto(1)}
-          className="rounded-lg px-[13px] py-[9px]"
         >
           {/* visually hidden text for icon-only is handled via aria-label */}
           First
@@ -149,14 +149,13 @@ export const Pagination = ({
       )}
 
       <Button
-        size="small"
+        size="medium"
         color="secondary"
         iconOnly
         leftIcon={<ChevronLeft className="h-4 w-4" />}
         aria-label="Go to previous page"
         disabled={!canPrev || disabled}
         onClick={() => goto(currentPage - 1)}
-        className="rounded-lg px-[13px] py-[9px]"
       />
 
       {tokens.map((t, i) =>
@@ -167,13 +166,12 @@ export const Pagination = ({
         ) : (
           <Button
             key={t}
-            size="small"
+            size="medium"
             color={t === currentPage ? 'primary' : 'secondary'}
             customTextColor={t === currentPage ? '' : '#000000'}
             customHeight={40}
             aria-current={t === currentPage ? 'page' : undefined}
             onClick={() => goto(t)}
-            className="rounded-lg px-[12px] py-[8px]"
           >
             {t}
           </Button>
@@ -181,7 +179,7 @@ export const Pagination = ({
       )}
 
       <Button
-        size="small"
+        size="medium"
         color="secondary"
         customTextColor="#000000"
         customHeight={34}
@@ -190,12 +188,11 @@ export const Pagination = ({
         aria-label="Go to next page"
         disabled={!canNext || disabled}
         onClick={() => goto(currentPage + 1)}
-        className="rounded-lg px-[13px] py-[9px]"
       />
 
       {showFirstLast && (
         <Button
-          size="small"
+          size="medium"
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
@@ -203,7 +200,6 @@ export const Pagination = ({
           aria-label="Go to last page"
           disabled={!canNext || disabled}
           onClick={() => goto(totalPages)}
-          className="rounded-lg px-[13px] py-[9px]"
         >
           Last
         </Button>
