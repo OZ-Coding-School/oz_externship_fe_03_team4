@@ -54,9 +54,51 @@ export default function AdminLoginPage() {
                                 required
                             />
                         </FormField>
+                        <FormField
+                            id="password"
+                            label="비밀번호"
+                            hint={!pwError && "정규식 확인 후 작성예정임다"}
+                            error={pwError}
+                        >
+                            <TextField
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="비밀번호를 입력하세요"
+                                leftIcon={<Lock className="h-5 w-5 text-amber-700" />}
+                                rightSlot={
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="text-neutral-400 hover:text-neurtal-600 transition"
+                                        aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5 text-amber-950" />
+                                        ) : (
+                                            <Eye className="h-5 w-5 text-amber-950" />
+                                        )}
+                                    </button>
+                                }
+                                autoComplete="current-password"
+                                required
+                            />
+                        </FormField>
+
+                        <AdminLoginButton
+                            type="submit"
+                            full
+                            className="mt-2"
+                            disabled={isLoading}
+                            aria-busy={isLoading}
+                            isLoading={isLoading}
+                        >
+                            {isLoading ? "접속 중" : "접속하기"}
+                        </AdminLoginButton>
                     </form>
                 </div>
             </section>
+
+            
         </main>
     )
     }

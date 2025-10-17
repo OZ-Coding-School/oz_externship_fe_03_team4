@@ -8,11 +8,12 @@ const MotionButton = motion(Button as any)
 
 type AdminLoginButtonProps = Omit<
   ButtonProps,
-  'loading' | 'leftIcon' | 'rightIcon' | 'fullWidth' | 'type' | 'color' | 'size'
+  'loading' | 'leftIcon' | 'rightIcon' | 'fullWidth' | 'color' | 'size'
 > &
   MotionProps & {
     full?: boolean
     isLoading?: boolean
+    type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
   }
 
 export const AdminLoginButton = forwardRef<
@@ -20,13 +21,21 @@ export const AdminLoginButton = forwardRef<
   AdminLoginButtonProps
 >(
   (
-    { className, children, full, isLoading = false, disabled, ...rest },
+    {
+      className,
+      children,
+      full,
+      isLoading = false,
+      disabled,
+      type: buttonType,
+      ...rest
+    },
     ref
   ) => {
     return (
       <MotionButton
         ref={ref}
-        type="submit"
+        type={buttonType ?? 'submit'}
         loading={isLoading}
         fullWidth={!!full}
         disabled={disabled || isLoading}
