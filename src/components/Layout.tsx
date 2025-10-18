@@ -7,7 +7,7 @@ export default function Layout(): ReactElement {
     <div className="min-h-screen bg-white text-neutral-900">
       <div className="mx-auto flex w-full max-w-[110rem] gap-6 px-4 py-8">
         <aside
-          className="sticky top-8 hidden h-[calc(100vh-4rem)] w-64 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white lg:block"
+          className="sticky top-8 block h-[calc(100vh-4rem)] w-64 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white"
           aria-label="Admin navigation"
         >
           <Sidebar />
