@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { toastVariantStyle, type ToastProps } from '../../store/toastStore'
+import { toastVariantStyle } from '../../constants/toastStyle'
+import type { ToastProps } from '../../store/toastStore'
 
 interface ToastItemProps extends ToastProps {
   onClose: (toast: ToastProps) => void
