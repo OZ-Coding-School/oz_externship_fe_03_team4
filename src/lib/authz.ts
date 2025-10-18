@@ -29,3 +29,16 @@ export const parseJwt = (token?: string | null) => {
     return null
   }
 }
+
+export const getAccessToken = () => {
+  return localStorage.getItem('accessToken')
+}
+
+export const dropAccessToken = () => {
+  try {
+    localStorage.removeItem('accessToken')
+  } catch {}
+  if (api.defaults.headers?.common) {
+    delete api.defaults.headers.common['Authorization']
+  }
+}
