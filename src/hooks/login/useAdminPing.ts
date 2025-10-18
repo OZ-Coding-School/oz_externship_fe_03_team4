@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api, joinAdminPath } from '../../lib'
 
-export type AdminPingResult = 'ok' | 'unauthorized' | 'forbidden' | 'error'
+export type AdminPingResult = 'ok' | 'unauthorized' | 'forbidden'
 
 export const useAdminPing = (
   isRequestEnabled: boolean,
@@ -15,10 +15,10 @@ export const useAdminPing = (
         await api.get(joinAdminPath(endpointPath), { signal })
         return 'ok'
       } catch (error: any) {
-        const statusCode = error?.response?.statusCode
-        if (statusCode === 401) return 'unauthorized'
-        if (statusCode === 403) return 'forbidden'
-        return 'error'
+        const status = error?.response?.status
+        if (status === 401) return 'unauthorized'
+        if (status === 403) return 'forbidden'
+        return 'forbidden'
       }
     },
     staleTime: 0,
