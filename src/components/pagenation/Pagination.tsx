@@ -71,14 +71,16 @@ export const Pagination = ({
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
-          leftIcon={<ChevronLeft className="h-4 w-4" />}
+          leftIcon={
+            <>
+              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" />
+            </>
+          }
           aria-label="Go to first page"
           disabled={!canPrev || disabled}
           onClick={() => goto(1)}
-        >
-          {/* visually hidden text for icon-only is handled via aria-label */}
-          First
-        </Button>
+        />
       )}
 
       <Button
@@ -129,13 +131,16 @@ export const Pagination = ({
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
-          rightIcon={<ChevronRight className="h-4 w-4" />}
+          rightIcon={
+            <>
+              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" />
+            </>
+          }
           aria-label="Go to last page"
           disabled={!canNext || disabled}
           onClick={() => goto(totalPages)}
-        >
-          Last
-        </Button>
+        />
       )}
     </nav>
   )
