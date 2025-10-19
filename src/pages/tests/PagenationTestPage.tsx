@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import { Pagination } from '../../components/pagenation/Pagination'
+import { Pagination } from '../../components/pagination/Pagination'
 import { Button } from '../../components/buttons/Buttons'
 
 /**

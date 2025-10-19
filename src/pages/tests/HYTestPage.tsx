@@ -9,7 +9,7 @@
 import { useState, type ReactNode } from 'react'
 import { Button } from '../../components/buttons/Buttons'
 import { ArrowDownToLine, Share2, Bolt, Trash2, X } from 'lucide-react'
-import { Pagination } from '../../components/pagenation/Pagination'
+import { Pagination } from '../../components/pagination/Pagination'
 
 /** 데모 섹션 카드 래퍼. title/desc와 children 영역을 제공합니다. */
 const Section = ({
