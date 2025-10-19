@@ -75,7 +75,6 @@ export const Pagination = ({
           size="medium"
           color="secondary"
           customTextColor="#000000"
-          customHeight={34}
           iconOnly
           leftIcon={<ChevronsLeft className="h-4 w-4" />}
           aria-label="Go to first page"
@@ -105,7 +104,6 @@ export const Pagination = ({
             size="medium"
             color={t === currentPage ? 'primary' : 'secondary'}
             customTextColor={t === currentPage ? '' : '#000000'}
-            customHeight={40}
             aria-current={t === currentPage ? 'page' : undefined}
             onClick={() => goto(t)}
           >
@@ -118,7 +116,6 @@ export const Pagination = ({
         size="medium"
         color="secondary"
         customTextColor="#000000"
-        customHeight={34}
         iconOnly
         leftIcon={<ChevronRight className="h-4 w-4" />}
         aria-label="Go to next page"
@@ -131,7 +128,6 @@ export const Pagination = ({
           size="medium"
           color="secondary"
           customTextColor="#000000"
-          customHeight={34}
           iconOnly
           rightIcon={<ChevronsRight className="h-4 w-4" />}
           aria-label="Go to last page"
