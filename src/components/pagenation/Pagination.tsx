@@ -1,5 +1,10 @@
 import { useMemo } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronsLeft,
+  ChevronRight,
+  ChevronsRight,
+} from 'lucide-react'
 import { Button } from '../buttons/Buttons'
 import { cn } from '../../utils/cn'
 import { buildPageTokens, ELLIPSIS } from '../../utils/pagination'
@@ -71,12 +76,8 @@ export const Pagination = ({
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
-          leftIcon={
-            <>
-              <ChevronLeft className="h-4 w-4" />
-              <ChevronLeft className="h-4 w-4" />
-            </>
-          }
+          iconOnly
+          leftIcon={<ChevronsLeft className="h-4 w-4" />}
           aria-label="Go to first page"
           disabled={!canPrev || disabled}
           onClick={() => goto(1)}
@@ -131,12 +132,8 @@ export const Pagination = ({
           color="secondary"
           customTextColor="#000000"
           customHeight={34}
-          rightIcon={
-            <>
-              <ChevronRight className="h-4 w-4" />
-              <ChevronRight className="h-4 w-4" />
-            </>
-          }
+          iconOnly
+          rightIcon={<ChevronsRight className="h-4 w-4" />}
           aria-label="Go to last page"
           disabled={!canNext || disabled}
           onClick={() => goto(totalPages)}
