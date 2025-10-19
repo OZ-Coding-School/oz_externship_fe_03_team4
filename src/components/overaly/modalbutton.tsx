@@ -6,11 +6,11 @@ interface ModalButtonProps {
   disabled?: boolean;
 }
 
-export default function ModalButton({ 
+const ModalButton = ({ 
   children, 
   onClick, 
   disabled = false
-}: ModalButtonProps) {
+}: ModalButtonProps) => {
   return (
     <button
       type="button"
@@ -27,3 +27,5 @@ export default function ModalButton({
     </button>
   );
 }
+
+export default ModalButton;

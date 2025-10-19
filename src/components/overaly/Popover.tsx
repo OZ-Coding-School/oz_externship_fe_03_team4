@@ -8,7 +8,7 @@ interface PopoverProps {
   showIcon?: boolean;
 }
 
-function ensurePortalRoot(): HTMLElement {
+const ensurePortalRoot = (): HTMLElement => {
   const existing = document.getElementById('portal-root');
   if (existing) return existing;
 
@@ -18,7 +18,7 @@ function ensurePortalRoot(): HTMLElement {
   return el;
 }
 
-export default function Popover({ trigger, children, showIcon = true }: PopoverProps) {
+const Popover = ({ trigger, children, showIcon = true }: PopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
@@ -80,3 +80,5 @@ export default function Popover({ trigger, children, showIcon = true }: PopoverP
     </>
   );
 }
+
+export default Popover;
