@@ -1,26 +1,15 @@
-import { useMemo } from 'react'
 import {
-  ChevronLeft,
   ChevronsLeft,
+  ChevronLeft,
   ChevronRight,
   ChevronsRight,
 } from 'lucide-react'
-import { Button } from '../buttons/Buttons'
 import { cn } from '../../utils/cn'
-import { buildPageTokens, ELLIPSIS } from '../../utils/pagination'
+import { usePaginationNav } from './usePaginationNav'
+import { Ellipsis } from './Ellipsis'
+import { IconButton } from './IconButton'
+import { PageButton } from './PageButton'
 
-/**
- * Pagination Props
- *
- * - `currentPage`: 현재 페이지 번호
- * - `totalPages`: 전체 페이지 수
- * - `onPageChange`: 페이지 변경 시 콜백
- * - `siblingCount`: 현재 페이지 주변 표시 개수
- * - `boundaryCount`: 처음/끝 표시 개수
- * - `showFirstLast`: 첫/마지막 이동 버튼 표시 여부
- * - `disabled`: 전체 비활성화 여부
- * - `className`: 추가 클래스명
- */
 export type PaginationProps = {
   currentPage: number
   totalPages: number
@@ -32,9 +21,6 @@ export type PaginationProps = {
   className?: string
 }
 
-/**
- * 페이지 네비게이션 컴포넌트
- */
 export const Pagination = ({
   currentPage,
   totalPages,
@@ -45,93 +31,70 @@ export const Pagination = ({
   disabled = false,
   className,
 }: PaginationProps) => {
-  const tokens = useMemo(
-    () => buildPageTokens(totalPages, currentPage, siblingCount, boundaryCount),
-    [totalPages, currentPage, siblingCount, boundaryCount]
-  )
-
-  const canPrev = currentPage > 1
-  const canNext = currentPage < totalPages
-
-  const goto = (page: number) => {
-    if (disabled) return
-    const clamped = Math.max(1, Math.min(totalPages, page))
-    if (clamped !== currentPage) onPageChange(clamped)
-  }
-
+  const { tokens, prevDisabled, nextDisabled, goto } = usePaginationNav({
+    totalPages,
+    currentPage,
+    siblingCount,
+    boundaryCount,
+    disabled,
+    onPageChange,
+  })
   if (totalPages <= 0) return null
+
+  const ARIA = {
+    nav: '페이지 탐색',
+    first: '첫 페이지로 이동',
+    prev: '이전 페이지로 이동',
+    next: '다음 페이지로 이동',
+    last: '마지막 페이지로 이동',
+  } as const
 
   return (
     <nav
-      aria-label="Pagination"
-      className={cn(
-        'flex items-center gap-2 select-none',
-        // 필요 시 여기에 컨테이너 스타일을 추가하세요
-        className
-      )}
+      aria-label={ARIA.nav}
+      className={cn('flex items-center gap-2 select-none', className)}
     >
       {showFirstLast && (
-        <Button
-          size="medium"
-          color="secondary"
-          customTextColor="#000000"
-          iconOnly
-          leftIcon={<ChevronsLeft className="h-4 w-4" />}
-          aria-label="Go to first page"
-          disabled={!canPrev || disabled}
+        <IconButton
+          icon={<ChevronsLeft className="h-4 w-4" />}
+          label={ARIA.first}
+          disabled={prevDisabled}
           onClick={() => goto(1)}
         />
       )}
 
-      <Button
-        size="medium"
-        color="secondary"
-        iconOnly
-        leftIcon={<ChevronLeft className="h-4 w-4" />}
-        aria-label="Go to previous page"
-        disabled={!canPrev || disabled}
+      <IconButton
+        icon={<ChevronLeft className="h-4 w-4" />}
+        label={ARIA.prev}
+        disabled={prevDisabled}
         onClick={() => goto(currentPage - 1)}
       />
 
       {tokens.map((t, i) =>
-        t === ELLIPSIS ? (
-          <span key={`e-${i}`} className="text-foreground/60 px-2">
-            {ELLIPSIS}
-          </span>
+        t.type === 'ellipsis' ? (
+          <Ellipsis key={`${t}-${i}`} />
         ) : (
-          <Button
-            key={t}
-            size="medium"
-            color={t === currentPage ? 'primary' : 'secondary'}
-            customTextColor={t === currentPage ? '' : '#000000'}
-            aria-current={t === currentPage ? 'page' : undefined}
-            onClick={() => goto(t)}
-          >
-            {t}
-          </Button>
+          <PageButton
+            key={`p-${t.page}`}
+            page={t.page}
+            active={t.page === currentPage}
+            onClick={() => goto(t.page)}
+          />
         )
       )}
 
-      <Button
-        size="medium"
-        color="secondary"
-        customTextColor="#000000"
-        iconOnly
-        leftIcon={<ChevronRight className="h-4 w-4" />}
-        aria-label="Go to next page"
-        disabled={!canNext || disabled}
+      <IconButton
+        icon={<ChevronRight className="h-4 w-4" />}
+        label={ARIA.next}
+        disabled={nextDisabled}
         onClick={() => goto(currentPage + 1)}
       />
 
       {showFirstLast && (
-        <Button
-          size="medium"
-          color="secondary"
-          customTextColor="#000000"
-          iconOnly
-          rightIcon={<ChevronsRight className="h-4 w-4" />}
-          aria-label="Go to last page"
-          disabled={!canNext || disabled}
+        <IconButton
+          icon={<ChevronsRight className="h-4 w-4" />}
+          label={ARIA.last}
+          disabled={nextDisabled}
           onClick={() => goto(totalPages)}
         />
       )}
