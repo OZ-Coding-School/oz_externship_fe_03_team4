@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { User, ShoppingCart, Settings } from "lucide-react";
 
 export type NotificationItem = {
@@ -19,7 +19,7 @@ const iconMap = {
   system: <Settings className="w-5 h-5 text-gray-400" />,
 };
 
-export const List: React.FC<ListProps> = ({ items }) => {
+export function List({ items }: ListProps) {
   const [listItems, setListItems] = useState(items);
 
   // 클릭 시 읽음 처리
@@ -54,4 +54,4 @@ export const List: React.FC<ListProps> = ({ items }) => {
       ))}
     </div>
   );
-};
+}
