@@ -1,6 +1,7 @@
 import { Table } from "../../components/Data-Indicate/Table";
 import { Card } from "../../components/Data-Indicate/Card";
-import { User, Star } from "lucide-react"; // 아이콘 예시
+import { type NotificationItem, List } from "../../components/Data-Indicate/List";
+import { User, Star } from "lucide-react";
 
 export default function WonheeTestPage() {
   const columns = [
@@ -36,9 +37,34 @@ export default function WonheeTestPage() {
     { title: "비활성 계정", value: 12, diff: "-3%", icon: User, color: "purple" },
   ];
 
+  // ✅ 명시적 타입 지정으로 오류 해결
+  const notifications: NotificationItem[] = [
+    {
+      id: 1,
+      icon: "user",
+      message: "새 사용자 등록",
+      time: "2분 전",
+      isRead: false,
+    },
+    {
+      id: 2,
+      icon: "order",
+      message: "새 주문이 접수되었습니다",
+      time: "5분 전",
+      isRead: true,
+    },
+    {
+      id: 3,
+      icon: "system",
+      message: "시스템 업데이트 완료",
+      time: "1시간 전",
+      isRead: true,
+    },
+  ];
+
   return (
-    <section className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Table & Card 테스트 페이지</h1>
+    <section className="p-6 space-y-8">
+      <h1 className="text-2xl font-bold">Table · Card · List 테스트 페이지</h1>
 
       {/* Card 섹션 */}
       <div className="flex gap-4 flex-wrap">
@@ -56,7 +82,14 @@ export default function WonheeTestPage() {
 
       {/* Table 섹션 */}
       <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-2">사용자 목록</h2>
         <Table columns={columns} data={data} />
+      </div>
+
+      {/* List 섹션 */}
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-2">알림 리스트</h2>
+        <List items={notifications} />
       </div>
     </section>
   );
