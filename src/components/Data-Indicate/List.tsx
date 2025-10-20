@@ -1,4 +1,3 @@
-import React from "react";
 import { User, ShoppingCart, Cog } from "lucide-react";
 
 interface NotificationItem {
