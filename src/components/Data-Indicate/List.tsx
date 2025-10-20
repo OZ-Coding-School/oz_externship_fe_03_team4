@@ -1,4 +1,4 @@
-import { User, ShoppingCart, Bell } from "lucide-react";
+import { User, ShoppingCart, Settings } from "lucide-react";
 
 export type NotificationItem = {
   id: number;
@@ -15,7 +15,7 @@ export interface ListProps {
 const iconMap = {
   user: <User className="w-5 h-5 text-gray-500" />,
   order: <ShoppingCart className="w-5 h-5 text-gray-400" />,
-  system: <Bell className="w-5 h-5 text-gray-400" />,
+  system: <Settings className="w-5 h-5 text-gray-400" />,
 };
 
 export const List = ({ items }: ListProps) => {
