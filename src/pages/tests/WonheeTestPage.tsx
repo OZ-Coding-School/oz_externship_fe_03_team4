@@ -37,7 +37,7 @@ export default function WonheeTestPage() {
     { title: "비활성 계정", value: 12, diff: "-3%", icon: User, color: "purple" },
   ];
 
-  // ✅ 명시적 타입 지정으로 오류 해결
+  // 명시적 타입 지정으로 List.tsx의 오류 해결
   const notifications: NotificationItem[] = [
     {
       id: 1,
