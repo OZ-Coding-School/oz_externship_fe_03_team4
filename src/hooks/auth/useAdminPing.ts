@@ -1,3 +1,4 @@
+// 관리자 권한 확인을 위한 서버 핑
 import { useQuery } from '@tanstack/react-query'
 import { joinAdminPath } from '../../lib/authz'
 import api from '../../lib/axios'

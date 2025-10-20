@@ -1,3 +1,4 @@
+// JWT토큰에서 role, 만료시간 정보를 파싱하는 훅
 import { useMemo } from 'react'
 import { parseJwt } from '../../lib/authz'
 
