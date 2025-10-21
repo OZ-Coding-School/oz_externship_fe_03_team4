@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Table } from "../components/Data-Indicate/Table";
-import { BadgeCheck, UserX } from "lucide-react";
+import { Badge } from "../components/Badge";
 
 const UserListPage = () => {
-  // 더미 데이터(나중에 API로 변경)
+  // 더미 데이터 (나중에 API로 변경)
   const [users] = useState([
     {
       id: "U001",
@@ -102,47 +102,45 @@ const UserListPage = () => {
     { key: "nickname", label: "닉네임" },
     { key: "name", label: "이름" },
     { key: "birth", label: "생년월일" },
+
+    // 권한 (Badge 사용)
     {
       key: "role",
       label: "권한",
       render: (value: unknown) => {
         const role = value as string;
-        const color =
-          role === "관리자"
-            ? "bg-purple-100 text-purple-700"
-            : role === "스태프"
-            ? "bg-blue-100 text-blue-700"
-            : "bg-gray-100 text-gray-700";
-        return <span className={`px-2 py-1 rounded-md text-xs font-medium ${color}`}>{role}</span>;
+        let variant: "info" | "primary" | "default" = "default";
+
+        if (role === "관리자") variant = "info";
+        else if (role === "스태프") variant = "primary";
+        else variant = "default";
+
+        return <Badge variant={variant} label={role} />;
       },
     },
+
+    // 상태 (Badge 사용)
     {
       key: "status",
       label: "상태",
       render: (value: unknown) => {
         const status = value as string;
-        const color =
-          status === "활성"
-            ? "text-green-600"
-            : status === "비활성"
-            ? "text-gray-400"
-            : "text-yellow-600";
-        const Icon = status === "활성" ? BadgeCheck : UserX;
-        return (
-          <div className="flex items-center gap-1">
-            <Icon size={14} className={color} />
-            <span className={`text-sm ${color}`}>{status}</span>
-          </div>
-        );
+        let variant: "success" | "warning" | "default" = "default";
+
+        if (status === "활성") variant = "success";
+        else if (status === "탈퇴요청") variant = "warning";
+        else variant = "default";
+
+        return <Badge variant={variant} label={status} />;
       },
     },
+
     { key: "joinedAt", label: "가입일" },
     { key: "withdrawAt", label: "탈퇴요청일" },
   ];
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
-
       {/* 메인 컨텐츠 */}
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-semibold mb-6">유저 관리</h1>
