@@ -26,3 +26,5 @@ export const useReviewsQuery = (
     staleTime: 30_000,
   })
 }
+// 타입으로 꺼내쓸수 있도록 설정
+export type { ReviewsParams } from './types.local'
