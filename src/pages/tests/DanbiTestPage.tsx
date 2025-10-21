@@ -1,9 +1,13 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { VideoProgress } from '../../components/Progress/VideoProgress'
 import {
   VideoGroupProgress,
   type VideoProgressData,
 } from '../../components/Progress/VideoGroupProgress'
+import { CourseManagementPage } from '../CourseManagementPage/CourseManagementPage'
+import { CourseTable } from '../CourseManagementPage/CourseTable'
+import { SearchInput } from '../../components/search/SearchInput'
+import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 
 // import { useState } from 'react'
 // import { Accordion } from '../../components/Accordion/Accordion'
@@ -145,89 +149,95 @@ import {
 //   )
 // }
 
-export default function DanbiTestPage() {
-  const video1Ref = useRef<HTMLVideoElement>(null)
-  const video2Ref = useRef<HTMLVideoElement>(null)
-  const video3Ref = useRef<HTMLVideoElement>(null)
+/************************************/
 
-  const [videosProgress, setVideosProgress] = useState<VideoProgressData[]>([
-    { videoId: 'video-1', progress: 0, duration: 600, completed: false },
-    { videoId: 'video-2', progress: 0, duration: 900, completed: false },
-    { videoId: 'video-3', progress: 0, duration: 300, completed: false },
-  ])
+// const video1Ref = useRef<HTMLVideoElement>(null)
+//   const video2Ref = useRef<HTMLVideoElement>(null)
+//   const video3Ref = useRef<HTMLVideoElement>(null)
 
-  const handleVideoProgress = (videoId: string) => (progress: number) => {
-    setVideosProgress((prev) =>
-      prev.map((v) =>
-        v.videoId === videoId
-          ? {
-              ...v,
-              progress,
-              completed: progress >= 97,
-            }
-          : v
-      )
-    )
-  }
+//   const [videosProgress, setVideosProgress] = useState<VideoProgressData[]>([
+//     { videoId: 'video-1', progress: 0, duration: 600, completed: false },
+//     { videoId: 'video-2', progress: 0, duration: 900, completed: false },
+//     { videoId: 'video-3', progress: 0, duration: 300, completed: false },
+//   ])
 
-  return (
-    <div className="min-h-screen p-8">
-      <div className="mx-auto space-y-8">
-        <section>
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">
-            강의 전체 진행률
-          </h2>
-          <VideoGroupProgress videos={videosProgress} showLabel />
-        </section>
+//   const handleVideoProgress = (videoId: string) => (progress: number) => {
+//     setVideosProgress((prev) =>
+//       prev.map((v) =>
+//         v.videoId === videoId
+//           ? {
+//               ...v,
+//               progress,
+//               completed: progress >= 97,
+//             }
+//           : v
+//       )
+//     )
+//   }
 
-        {/* 동영상 1 */}
-        <section>
-          <h3 className="mb-2 font-semibold text-gray-900">동영상 1</h3>
-          <video ref={video1Ref} controls className="mb-4 w-full">
-            <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <VideoProgress
-            videoRef={video1Ref}
-            showLabel
-            onProgressChange={handleVideoProgress('video-1')}
-          />
-        </section>
+//   return (
+//     <div className="min-h-screen p-8">
+//       <div className="mx-auto space-y-8">
+//         <section>
+//           <h2 className="mb-4 text-lg font-semibold text-gray-900">
+//             강의 전체 진행률
+//           </h2>
+//           <VideoGroupProgress videos={videosProgress} showLabel />
+//         </section>
 
-        {/* 동영상 2 */}
-        <section>
-          <h3 className="mb-2 font-semibold text-gray-900">동영상 2</h3>
-          <video ref={video2Ref} controls className="mb-4 w-full">
-            <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <VideoProgress
-            videoRef={video2Ref}
-            showLabel
-            onProgressChange={handleVideoProgress('video-2')}
-          />
-        </section>
+//         {/* 동영상 1 */}
+//         <section>
+//           <h3 className="mb-2 font-semibold text-gray-900">동영상 1</h3>
+//           <video ref={video1Ref} controls className="mb-4 w-full">
+//             <source
+//               src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+//               type="video/mp4"
+//             />
+//           </video>
+//           <VideoProgress
+//             videoRef={video1Ref}
+//             showLabel
+//             onProgressChange={handleVideoProgress('video-1')}
+//           />
+//         </section>
 
-        {/* 동영상 3 */}
-        <section>
-          <h3 className="mb-2 font-semibold text-gray-900">동영상 3</h3>
-          <video ref={video3Ref} controls className="mb-4 w-full">
-            <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <VideoProgress
-            videoRef={video3Ref}
-            showLabel
-            onProgressChange={handleVideoProgress('video-3')}
-          />
-        </section>
-      </div>
-    </div>
-  )
+//         {/* 동영상 2 */}
+//         <section>
+//           <h3 className="mb-2 font-semibold text-gray-900">동영상 2</h3>
+//           <video ref={video2Ref} controls className="mb-4 w-full">
+//             <source
+//               src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+//               type="video/mp4"
+//             />
+//           </video>
+//           <VideoProgress
+//             videoRef={video2Ref}
+//             showLabel
+//             onProgressChange={handleVideoProgress('video-2')}
+//           />
+//         </section>
+
+//         {/* 동영상 3 */}
+//         <section>
+//           <h3 className="mb-2 font-semibold text-gray-900">동영상 3</h3>
+//           <video ref={video3Ref} controls className="mb-4 w-full">
+//             <source
+//               src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+//               type="video/mp4"
+//             />
+//           </video>
+//           <VideoProgress
+//             videoRef={video3Ref}
+//             showLabel
+//             onProgressChange={handleVideoProgress('video-3')}
+//           />
+//         </section>
+//       </div>
+//     </div>
+//   )
+// }
+
+/** 테스트 페이지의 진입 컴포넌트 (default export 하나만 유지) */
+export default function TestPage() {
+  return <CourseManagementPage />
 }
