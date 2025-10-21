@@ -56,36 +56,42 @@ const UserListPage = () => {
 
         {/* 검색 / 필터 영역 */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
-          {/* SearchInput 적용 */}
-          <SearchInput
-            placeholder="이메일, 닉네임, 이름, ID 검색..."
-            value={search}
-            onChangeText={setSearch}
-            className="flex-1"
-            clearable
-          />
+          {/* 검색창: flex-grow + min-width */}
+          <div className="flex-1 min-w-[200px] max-w-full">
+            <SearchInput
+              placeholder="이메일, 닉네임, 이름, ID 검색..."
+              value={search}
+              onChangeText={setSearch}
+              clearable
+              className="w-full"
+            />
+          </div>
 
-          {/* 상태 필터 Select */}
-          <Select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">전체</option>
-            <option value="active">활성</option>
-            <option value="inactive">비활성</option>
-            <option value="withdrawn">탈퇴요청</option>
-          </Select>
+          {/* 상태 필터 Select: 고정 너비 */}
+          <div className="w-40">
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="">전체</option>
+              <option value="active">활성</option>
+              <option value="inactive">비활성</option>
+              <option value="withdrawn">탈퇴요청</option>
+            </Select>
+          </div>
 
-          {/* 권한 필터 Select */}
-          <Select
-            value={roleFilter}
-            onChange={(e) => setRoleFilter(e.target.value)}
-          >
-            <option value="">전체 권한</option>
-            <option value="admin">관리자</option>
-            <option value="staff">스태프</option>
-            <option value="user">일반회원</option>
-          </Select>
+          {/* 권한 필터 Select: 고정 너비 */}
+          <div className="w-40">
+            <Select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+            >
+              <option value="">전체 권한</option>
+              <option value="admin">관리자</option>
+              <option value="staff">스태프</option>
+              <option value="user">일반회원</option>
+            </Select>
+          </div>
         </div>
 
         {/* 로딩 / 에러 */}
