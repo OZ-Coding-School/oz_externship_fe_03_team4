@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
-import { buildPageTokens, ELLIPSIS } from '../../utils/pagination'
+import { buildPageItems, ELLIPSIS } from '../../utils/pagination'
 
-export type NavItem = { type: 'page'; page: number } | { type: 'ellipsis' }
+export type NavItem =
+  | { type: 'page'; page: number; key: string }
+  | { type: 'ellipsis'; key: string }
 
 export const usePaginationNav = ({
   totalPages,
@@ -18,32 +20,34 @@ export const usePaginationNav = ({
   disabled?: boolean
   onPageChange: (page: number) => void
 }) => {
-  const raw = useMemo(
-    () => buildPageTokens(totalPages, currentPage, siblingCount, boundaryCount),
-    [totalPages, currentPage, siblingCount, boundaryCount]
-  )
-
-  const tokens = useMemo<NavItem[]>(
-    () =>
-      raw.map((t) =>
-        t === ELLIPSIS
-          ? { type: 'ellipsis' }
-          : { type: 'page', page: t as number }
-      ),
-    [raw]
-  )
+  const items = useMemo<NavItem[]>(() => {
+    const raw = buildPageItems(
+      totalPages,
+      currentPage,
+      siblingCount,
+      boundaryCount
+    )
+    return raw.map((pageOrEllipsis, idx) =>
+      pageOrEllipsis === ELLIPSIS
+        ? { type: 'ellipsis', key: `ellipsis:${idx}` }
+        : {
+            type: 'page',
+            page: pageOrEllipsis as number,
+            key: `page:${pageOrEllipsis}`,
+          }
+    )
+  }, [totalPages, currentPage, siblingCount, boundaryCount])
 
   const canPrev = currentPage > 1
   const canNext = currentPage < totalPages
   const prevDisabled = disabled || !canPrev
   const nextDisabled = disabled || !canNext
 
-  const clamp = (p: number) => Math.max(1, Math.min(totalPages, p))
   const goto = (p: number) => {
     if (disabled) return
-    const c = clamp(p)
+    const c = Math.max(1, Math.min(totalPages, p))
     if (c !== currentPage) onPageChange(c)
   }
 
-  return { tokens, canPrev, canNext, prevDisabled, nextDisabled, goto }
+  return { items, canPrev, canNext, prevDisabled, nextDisabled, goto }
 }

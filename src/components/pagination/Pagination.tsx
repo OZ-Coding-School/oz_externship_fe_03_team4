@@ -21,6 +21,14 @@ export type PaginationProps = {
   className?: string
 }
 
+const ARIA = {
+  nav: '페이지 탐색',
+  first: '첫 페이지로 이동',
+  prev: '이전 페이지로 이동',
+  next: '다음 페이지로 이동',
+  last: '마지막 페이지로 이동',
+} as const
+
 export const Pagination = ({
   currentPage,
   totalPages,
@@ -31,7 +39,7 @@ export const Pagination = ({
   disabled = false,
   className,
 }: PaginationProps) => {
-  const { tokens, prevDisabled, nextDisabled, goto } = usePaginationNav({
+  const { items, prevDisabled, nextDisabled, goto } = usePaginationNav({
     totalPages,
     currentPage,
     siblingCount,
@@ -40,14 +48,6 @@ export const Pagination = ({
     onPageChange,
   })
   if (totalPages <= 0) return null
-
-  const ARIA = {
-    nav: '페이지 탐색',
-    first: '첫 페이지로 이동',
-    prev: '이전 페이지로 이동',
-    next: '다음 페이지로 이동',
-    last: '마지막 페이지로 이동',
-  } as const
 
   return (
     <nav
@@ -70,15 +70,15 @@ export const Pagination = ({
         onClick={() => goto(currentPage - 1)}
       />
 
-      {tokens.map((t, i) =>
-        t.type === 'ellipsis' ? (
-          <Ellipsis key={`${t}-${i}`} />
+      {items.map((item) =>
+        item.type === 'ellipsis' ? (
+          <Ellipsis key={item.key} />
         ) : (
           <PageButton
-            key={`p-${t.page}`}
-            page={t.page}
-            active={t.page === currentPage}
-            onClick={() => goto(t.page)}
+            key={item.key}
+            page={item.page}
+            active={item.page === currentPage}
+            onClick={() => goto(item.page)}
           />
         )
       )}
