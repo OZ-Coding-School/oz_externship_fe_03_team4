@@ -1,6 +1,5 @@
-import axios from 'axios'
-import { getAccessToken, removeAccessToken } from './token'
-import Cookies from 'js-cookie'
+import axios, { AxiosError} from 'axios'
+import { getAccessToken, removeAccessToken, setAccessToken } from './token'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -17,7 +16,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (res) => res,
-  async (err) => {
+  async (err: AxiosError) => {
     if (err.response?.status === 401) {
       try {
         const refreshRes = await axios.post(
@@ -26,9 +25,13 @@ api.interceptors.response.use(
           { withCredentials: true }
         )
         const newToken = refreshRes.data.accessToken
-        Cookies.set('accessToken', newToken)
-        err.config.headers.Authorization = `Bearer ${newToken}`
-        return api(err.config)
+        setAccessToken(newToken)
+
+        if (err.config?.headers) {
+          err.config.headers.Authorization = `Bearer ${newToken}`
+        }
+
+        return api(err.config!)
       } catch (e) {
         removeAccessToken()
         window.location.href = '/login'
