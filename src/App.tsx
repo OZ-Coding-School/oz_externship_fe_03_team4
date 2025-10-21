@@ -11,6 +11,7 @@ import StudyReviewPage from './pages/StudyReviewPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import UserListPage from "./pages/UserListPage";
 import StudyReviewPage from './pages/StudyReviewPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 
 function App() {
   return (
