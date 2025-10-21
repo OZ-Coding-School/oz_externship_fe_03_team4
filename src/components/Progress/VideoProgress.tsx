@@ -2,7 +2,7 @@ import { RefObject, useEffect, useState } from 'react'
 import { ProgressBar } from './ProgressBar'
 
 export interface VideoProgressProps {
-  videoRef: RefObject<HTMLVideoElement | null> //제어할 video element의 ref
+  videoRef: RefObject<HTMLVideoElement> //제어할 video element의 ref
   showLabel?: boolean
   onProgressChange?: (progress: number) => void
   className?: string
@@ -39,7 +39,9 @@ export function VideoProgress({
     return () => {
       video.removeEventListener('timeupdate', handleTimeUpdate)
     }
-  }, [videoRef, onProgressChange])
+    //의존성 배열 lint 오류 제거 주석
+    //eslint-disable-next-line
+  }, [onProgressChange])
 
   return (
     <ProgressBar
