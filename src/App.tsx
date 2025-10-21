@@ -8,11 +8,13 @@ import KyungbokTestPage from './pages/tests/KyungbokTestPage'
 import HyunjinTestPage from './pages/tests/HyunjinTestPage'
 import UserListPage from './pages/UserListPage'
 import StudyReviewPage from './pages/StudyReviewPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="login" element={<AdminLoginPage />} />
         <Route element={<Layout />}>
           <Route path="danbi" element={<DanbiTestPage />} />
           <Route path="wonhee" element={<WonheeTestPage />} />
