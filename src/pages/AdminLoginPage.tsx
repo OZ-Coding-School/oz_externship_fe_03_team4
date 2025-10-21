@@ -18,8 +18,8 @@ export default function AdminLoginPage() {
 
     try {
       // await api.post("v1/auth/login", {email, password});
-    } catch (err) {
-      console.error(err)
+    } catch {
+      /* 에러제거하자제발 */
     } finally {
       setIsLoading(false)
     }

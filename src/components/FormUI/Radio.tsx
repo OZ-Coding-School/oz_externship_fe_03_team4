@@ -1,5 +1,4 @@
-import React from 'react'
-import type { InputHTMLAttributes } from 'react'
+import React, { type InputHTMLAttributes } from 'react'
 import { cn } from '../../utils/cn'
 
 type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {

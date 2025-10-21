@@ -1,5 +1,4 @@
-import { forwardRef } from 'react'
-import type { TextareaHTMLAttributes } from 'react'
+import { forwardRef, type TextareaHTMLAttributes } from 'react'
 import { cn } from '../../utils/cn'
 
 type Props = TextareaHTMLAttributes<HTMLTextAreaElement>
@@ -19,3 +18,5 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     />
   )
 )
+
+TextArea.displayName = 'TextArea'

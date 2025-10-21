@@ -1,20 +1,16 @@
 import { forwardRef } from 'react'
-import { motion, type MotionProps } from 'framer-motion'
 import { Button, type ButtonProps } from '../buttons/Buttons'
 import { Spinner } from '../Spinner'
 import { cn } from '../../utils/cn'
 
-const MotionButton = motion(Button as any)
-
 type AdminLoginButtonProps = Omit<
   ButtonProps,
   'loading' | 'leftIcon' | 'rightIcon' | 'fullWidth' | 'color' | 'size'
-> &
-  MotionProps & {
-    full?: boolean
-    isLoading?: boolean
-    type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
-  }
+> & {
+  full?: boolean
+  isLoading?: boolean
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
+}
 
 export const AdminLoginButton = forwardRef<
   HTMLButtonElement,
@@ -33,7 +29,7 @@ export const AdminLoginButton = forwardRef<
     ref
   ) => {
     return (
-      <MotionButton
+      <Button
         ref={ref}
         type={buttonType ?? 'submit'}
         loading={isLoading}
@@ -47,16 +43,13 @@ export const AdminLoginButton = forwardRef<
           full && 'w-full',
           className
         )}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
         {...rest}
       >
         {isLoading && <Spinner size={18} />}
         <span className={isLoading ? 'opacity-90' : ''}>
           {children ?? '접속하기'}
         </span>
-      </MotionButton>
+      </Button>
     )
   }
 )

@@ -6,13 +6,16 @@ export const LocalFilterExample = () => {
   const [searchText, setSearchText] = useState('')
   const debouncedSearchText = useDebouncedValue(searchText, 300)
 
-  const members = [
-    { id: 1, name: '윤경복', email: 'bok@naver.com' },
-    { id: 2, name: '서단비', email: 'danbi-seo@naver.com' },
-    { id: 3, name: '김현진', email: 'hyunjin@naver.com' },
-    { id: 4, name: '홍엽', email: 'justin-hong@naver.com' },
-    { id: 5, name: '이원희', email: 'wonhee@naver.com' },
-  ]
+  const members = useMemo(
+    () => [
+      { id: 1, name: '윤경복', email: 'bok@naver.com' },
+      { id: 2, name: '서단비', email: 'danbi-seo@naver.com' },
+      { id: 3, name: '김현진', email: 'hyunjin@naver.com' },
+      { id: 4, name: '홍엽', email: 'justin-hong@naver.com' },
+      { id: 5, name: '이원희', email: 'wonhee@naver.com' },
+    ],
+    []
+  )
 
   const filteredMembers = useMemo(() => {
     const keyword = debouncedSearchText.trim().toLowerCase()
@@ -22,7 +25,7 @@ export const LocalFilterExample = () => {
         field.toLowerCase().includes(keyword)
       )
     )
-  }, [debouncedSearchText])
+  }, [debouncedSearchText, members]) // 의존성 누락 추가함
 
   return (
     <div className="mx-auto max-w-xl space-y-4 p-6">

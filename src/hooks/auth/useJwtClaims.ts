@@ -1,9 +1,11 @@
 // JWT토큰에서 role, 만료시간 정보를 파싱하는 훅
 import { useMemo } from 'react'
 import { parseJwt } from '../../lib/authz'
+//제네릭 타입으로 정의하기
+export type JwtPayload = Record<string, unknown> | null
 
 export type JwtClaims = {
-  payload: any | null
+  payload: JwtPayload
   role: string | null
   exp: number | null
   isExpired: boolean

@@ -1,5 +1,4 @@
-import { forwardRef } from 'react'
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react'
 import { cn } from '../../utils/cn'
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
@@ -26,3 +25,5 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>(
     </label>
   )
 )
+
+Checkbox.displayName = 'Checkbox'

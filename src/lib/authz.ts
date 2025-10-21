@@ -5,7 +5,7 @@ const RAW = import.meta.env.VITE_ADMIN_API_BASE ?? '/v1/admin'
 // API요청을 합치는 함수
 export const joinAdminPath = (suffix = '') => {
   const baseURL = (api.defaults.baseURL || '').replace(/\/+$/, '')
-  let base = (RAW || '').replace(/\/+$/, '')
+  const base = (RAW || '').replace(/\/+$/, '')      // let -> const 변경
   let path = `${base}${suffix}`
   if (baseURL.endsWith('/api') && path.startsWith('/api/')) {
     path = path.replace(/^\/api\//, '/')
