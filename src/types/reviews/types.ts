@@ -20,3 +20,28 @@ export type ReviewListDTO = {
     results: ReviewDTO[]
   }
 }
+
+export type Review = {
+    id: number
+    studyTitle: string
+    authorName: string
+    authorEmail: string
+    raring: number
+    summary: string
+    createdAt: string
+    updatedAt: string | null
+}
+
+export const mapDtoToReview = (r: ReviewDTO): Review => ({
+    id: r.id,
+    studyTitle: r.study_group?.name ?? '',
+    authorName: r.user?.nickname ?? '',
+    authorEmail: r.user?.email ?? '',
+    raring: r.star_rating,
+    summary: r.content,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+})
+
+
+

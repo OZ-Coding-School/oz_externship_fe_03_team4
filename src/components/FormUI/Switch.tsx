@@ -1,5 +1,4 @@
-import { forwardRef } from 'react'
-import type { ButtonHTMLAttributes } from 'react'
+import { forwardRef, type ButtonHTMLAttributes } from 'react'
 import { cn } from '../../utils/cn'
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -28,3 +27,5 @@ export const Switch = forwardRef<HTMLButtonElement, Props>(
     </button>
   )
 )
+
+Switch.displayName = 'Switch'

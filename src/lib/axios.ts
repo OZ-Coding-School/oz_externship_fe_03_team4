@@ -1,4 +1,4 @@
-import axios, { AxiosError} from 'axios'
+import axios, { AxiosError } from 'axios'
 import { getAccessToken, removeAccessToken, setAccessToken } from './token'
 
 const api = axios.create({
@@ -32,7 +32,7 @@ api.interceptors.response.use(
         }
 
         return api(err.config!)
-      } catch (e) {
+      } catch { // 변수제거
         removeAccessToken()
         window.location.href = '/login'
       }

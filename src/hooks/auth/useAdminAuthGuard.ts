@@ -7,13 +7,11 @@ export type AdminGuardStatus = 'loading' | 'ok' | 'unauthorized' | 'forbidden'
 
 type AdminAuthOptions = {
   allowedRoles?: string[]
-  routeKey?: string
   endpointPath?: string
 }
 
 export const useAdminAuthGuard = ({
   allowedRoles = ['admin'],
-  routeKey,
   endpointPath = '/users/',
 }: AdminAuthOptions = {}) => {
   const accessToken = getAccessToken()
@@ -24,12 +22,14 @@ export const useAdminAuthGuard = ({
     if (isTokenExpired) removeAccessToken()
   }, [isTokenExpired])
 
+  const allowedRolesSet = useMemo(() => new Set(allowedRoles), [allowedRoles])
+
   const localGuardStatus: AdminGuardStatus = useMemo(() => {
     if (!accessToken) return 'unauthorized'
     if (isTokenExpired) return 'unauthorized'
-    if (userRole && allowedRoles.includes(userRole)) return 'ok'
+    if (userRole && allowedRolesSet.has(userRole)) return 'ok'
     return 'loading'
-  }, [accessToken, isTokenExpired, userRole, allowedRoles.join('|'), routeKey])
+  }, [accessToken, isTokenExpired, userRole, allowedRolesSet])
 
   const shouldRequestServerCheck = localGuardStatus === 'loading'
   const {

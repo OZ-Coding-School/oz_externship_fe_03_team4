@@ -1,5 +1,4 @@
-import { forwardRef } from 'react'
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react'
 import { cn } from '../../utils/cn'
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
@@ -38,3 +37,5 @@ export const TextField = forwardRef<HTMLInputElement, Props>(
     )
   }
 )
+
+TextField.displayName = 'TextField'

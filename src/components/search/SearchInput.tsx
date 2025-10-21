@@ -1,8 +1,13 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import { X, Search as SearchIcon } from 'lucide-react'
 import { cn } from '../../utils/cn'
 import { sizePresets, type BaseInputProps } from '../../types/search/types'
-import type { ReactNode } from 'react'
 
 export type SearchInputRef = { focus: () => void; clear: () => void }
 
