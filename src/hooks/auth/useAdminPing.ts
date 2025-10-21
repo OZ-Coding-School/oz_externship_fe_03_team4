@@ -22,7 +22,7 @@ export const useAdminPing = (
       try {
         await api.get(joinAdminPath(endpointPath), { signal })
         return 'ok'
-      } catch (error) {
+      } catch (error: unknown) {
         const err = error as AxiosErrorResponse
         const responseStatus = err?.response?.status
         if (responseStatus === 401) return 'unauthorized'
