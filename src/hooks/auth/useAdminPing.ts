@@ -5,6 +5,12 @@ import api from '../../lib/axios'
 
 export type AdminPingResult = 'ok' | 'unauthorized' | 'forbidden'
 
+type AxiosErrorResponse = {
+  response?: {
+    status?: number
+  }
+}
+
 export const useAdminPing = (
   isRequestEnabled: boolean,
   endpointPath: string = '/users/' // 엔드포인트는 추후 변경가능, 임시적용
@@ -16,10 +22,11 @@ export const useAdminPing = (
       try {
         await api.get(joinAdminPath(endpointPath), { signal })
         return 'ok'
-      } catch (error: any) {
-        const status = error?.response?.status
-        if (status === 401) return 'unauthorized'
-        if (status === 403) return 'forbidden'
+      } catch (error) {
+        const err = error as AxiosErrorResponse
+        const responseStatus = err?.response?.status
+        if (responseStatus === 401) return 'unauthorized'
+        if (responseStatus === 403) return 'forbidden'
         return 'forbidden'
       }
     },
