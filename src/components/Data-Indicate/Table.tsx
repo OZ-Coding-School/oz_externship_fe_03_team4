@@ -1,26 +1,31 @@
 import type { LucideIcon } from "lucide-react";
 
-interface TableColumn {
-  key: string;
+interface TableColumn<T> {
+  key: keyof T | string;
   label?: string;
-  render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
-interface TableProps {
-  data: Record<string, unknown>[];
-  columns?: TableColumn[];
+interface TableProps<T> {
+  data: T[];
+  columns?: TableColumn<T>[];
   className?: string;
   icon?: LucideIcon;
 }
 
-export const Table = ({ data, columns, className = "", icon: Icon }: TableProps) => {
-  const autoColumns: TableColumn[] =
+export const Table = <T extends Record<string, unknown>>({
+  data,
+  columns,
+  className = "",
+  icon: Icon,
+}: TableProps<T>) => {
+  const autoColumns: TableColumn<T>[] =
     columns && columns.length > 0
       ? columns
       : data.length > 0
-      ? Object.keys(data[0]).map((key) => ({
+      ? (Object.keys(data[0]) as (keyof T)[]).map((key) => ({
           key,
-          label: key.charAt(0).toUpperCase() + key.slice(1),
+          label: key.toString().charAt(0).toUpperCase() + key.toString().slice(1),
         }))
       : [];
 
@@ -31,11 +36,11 @@ export const Table = ({ data, columns, className = "", icon: Icon }: TableProps)
           <tr>
             {autoColumns.map((col) => (
               <th
-                key={col.key}
+                key={col.key.toString()}
                 scope="col"
                 className="px-6 py-3 text-left border-b border-gray-200"
               >
-                {col.label || col.key}
+                {col.label || col.key.toString()}
               </th>
             ))}
           </tr>
@@ -47,13 +52,13 @@ export const Table = ({ data, columns, className = "", icon: Icon }: TableProps)
               <tr key={rowIdx} className="hover:bg-gray-50 transition-colors">
                 {autoColumns.map((col) => (
                   <td
-                    key={col.key}
+                    key={col.key.toString()}
                     className={`px-6 py-3 border-b border-gray-100 ${
                       Icon ? "flex items-center gap-2" : ""
                     }`}
                   >
                     {Icon && <Icon size={16} className="text-gray-500" />}
-                    {col.render ? col.render(row[col.key], row) : (row[col.key] as React.ReactNode)}
+                    {col.render ? col.render(row[col.key as keyof T], row) : (row[col.key as keyof T] as React.ReactNode)}
                   </td>
                 ))}
               </tr>
