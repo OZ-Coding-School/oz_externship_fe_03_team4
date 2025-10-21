@@ -3,6 +3,8 @@ import { Table } from "../components/Data-Indicate/Table";
 import { Badge } from "../components/Badge";
 import { useUsers } from "../hooks/useUsers";
 import type { MappedUser } from "../types/user";
+import { SearchInput } from "../components/search/SearchInput";
+import { Select } from "../components/FormUI/Select";
 
 const UserListPage = () => {
   const [search, setSearch] = useState("");
@@ -52,17 +54,19 @@ const UserListPage = () => {
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-semibold mb-6">유저 관리</h1>
 
-        {/* 검색 / 필터 */}
-        <div className="flex items-center gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
-          <input
-            type="text"
+        {/* 검색 / 필터 영역 */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
+          {/* SearchInput 적용 */}
+          <SearchInput
             placeholder="이메일, 닉네임, 이름, ID 검색..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChangeText={setSearch}
+            className="flex-1"
+            clearable
           />
-          <select
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+
+          {/* 상태 필터 Select */}
+          <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -70,9 +74,10 @@ const UserListPage = () => {
             <option value="active">활성</option>
             <option value="inactive">비활성</option>
             <option value="withdrawn">탈퇴요청</option>
-          </select>
-          <select
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          </Select>
+
+          {/* 권한 필터 Select */}
+          <Select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
@@ -80,7 +85,7 @@ const UserListPage = () => {
             <option value="admin">관리자</option>
             <option value="staff">스태프</option>
             <option value="user">일반회원</option>
-          </select>
+          </Select>
         </div>
 
         {/* 로딩 / 에러 */}
