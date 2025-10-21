@@ -3,7 +3,6 @@ import { Button } from '../../components/buttons/Buttons'
 import { Share2 } from 'lucide-react'
 import { Pagination } from '../../components/pagination/Pagination'
 import { Tabs } from '../../components/tab/Tabs'
-import { Routes, Route } from 'react-router'
 
 const Section = ({
   title,
