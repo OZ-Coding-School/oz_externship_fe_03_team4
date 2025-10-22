@@ -12,18 +12,10 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
       <ReviewPair label="스터디 그룹명" value={review.studyTitle} />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <ReviewPair
-          label="시작일"
-          value={review.studyStartDate}
-          className="flex-1"
-        />
-        <ReviewPair
-          label="종료일"
-          value={review.studyEndDate}
-          className="flex-1"
-        />
+        <ReviewPair label="시작일" value={review.studyStartDate || '-'} />
+        <ReviewPair label="종료일" value={review.studyEndDate || '-'} />
       </div>
-
+      {/* 현재 와이어프레임에는 있는데, 백엔드 API에는 없음 : 혁님께 요청해야됨 */}
       <ReviewPair
         label="스터디 소개"
         value={
@@ -65,7 +57,7 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
 
       <div className="grid grid-cols-2 gap-3 text-sm text-neutral-500">
         <ReviewPair label="생성일" value={review.createdAt} />
-        <ReviewPair label="수정일" value={review.updatedAt} />
+        <ReviewPair label="수정일" value={review.updatedAt ?? '-'} />
       </div>
     </section>
   </div>
