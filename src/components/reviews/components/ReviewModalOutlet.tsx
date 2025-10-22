@@ -6,23 +6,21 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
     {/* 좌측 스터디 그룹 정보 */}
     <section className="space-y-3">
-      <h3 className="text-base font-semibold text-neutral-700">
+      <h3 className="mb-5 text-base font-semibold text-neutral-700">
         스터디 그룹 정보
       </h3>
       <ReviewPair label="스터디 그룹명" value={review.studyTitle} />
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <ReviewPair label="시작일" value={review.studyStartDate || '-'} />
         <ReviewPair label="종료일" value={review.studyEndDate || '-'} />
       </div>
       {/* 현재 와이어프레임에는 있는데, 백엔드 API에는 없음 : 혁님께 요청해야됨 */}
       <ReviewPair
         label="스터디 소개"
-        value={
-          <p className="text-sm whitespace-pre-line text-neutral-700">
-            {review.studyDescription}
-          </p>
-        }
+        value={review.studyDescription}
+        multiline
+        minHeightClass="min-h-[120px]"
       />
     </section>
 
@@ -48,11 +46,9 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
 
       <ReviewPair
         label="리뷰 내용"
-        value={
-          <p className="text-sm whitespace-pre-line text-neutral-700">
-            {review.content}
-          </p>
-        }
+        value={review.content}
+        multiline
+        minHeightClass="min-h-[120px]"
       />
 
       <div className="grid grid-cols-2 gap-3 text-sm text-neutral-500">
