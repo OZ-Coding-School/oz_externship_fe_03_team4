@@ -25,7 +25,7 @@ export const LectureTableRow = ({
       }`}
     >
       {/* ID */}
-      <td className="px-6 py-3 text-gray-900">{index}</td>
+      <td className="px-6 py-3 font-medium text-gray-900">{index}</td>
 
       {/* 썸네일 */}
       <td className="px-6 py-3">
