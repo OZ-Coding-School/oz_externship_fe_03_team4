@@ -37,5 +37,36 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
     </section>
 
     {/* 리뷰 정보가 출력될 부분임당 */}
+    <section className="space-y-3">
+      <h3 className="text-base font-semibold text-neutral-700">리뷰 정보</h3>
+      <div className="space-y-3 rounded-md border border-neutral-200 p-4">
+        <ReviewPair label="작성자" value={review.authorName} />
+        <ReviewPair label="이메일" value={review.authorEmail} />
+
+        <div>
+          <p className="text-sm text-neutral-500">별점</p>
+          <div className="flex items-center gap-2">
+            <RatingStars value={review.rating} />
+            <span className="text-sm text-neutral-700">
+              {review.rating} / 5
+            </span>
+          </div>
+        </div>
+
+        <ReviewPair
+          label="리뷰 내용"
+          value={
+            <p className="whitespace-pre-line text-neutral-700">
+              {review.content}
+            </p>
+          }
+        />
+
+        <div className="flex gap-3 text-sm text-neutral-500">
+          <p>생성일 : {review.createdAt}</p>
+          <p>수정일 : {review.updatedAt}</p>
+        </div>
+      </div>
+    </section>
   </div>
 )
