@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { ApiUser, MappedUser } from "../types/user";
+import type { ApiUser } from "../types/user";
 import { mapUserResponse } from "../utils/user";
 
 interface UseUsersProps {
@@ -11,6 +11,14 @@ interface UseUsersProps {
   role?: string;
 }
 
+// axios 기본 설정 (baseURL + 헤더 등)
+const api = axios.create({
+  baseURL: "https://api.ozcoding.site",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export const useUsers = ({
   page = 1,
   limit = 1000,
@@ -18,42 +26,34 @@ export const useUsers = ({
   status = "",
   role = "",
 }: UseUsersProps) => {
-  const [users, setUsers] = useState<MappedUser[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const token = localStorage.getItem("access_token");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const token = localStorage.getItem("access_token");
-        const res = await axios.get<{
-          detail: string;
-          data?: { users: ApiUser[] };
-        }>("/api/v1/admin/users", {
+  const query = useQuery({
+    queryKey: ["users", { page, limit, search, status, role }],
+    queryFn: async () => {
+      const res = await api.get<{ data?: { users: ApiUser[] } }>(
+        "/api/v1/admin/users", // base url에서 api가 제거 되었으므로 여기 추가
+        {
           params: { page, limit, search, status, role },
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: token ? `Bearer ${token}` : "",
           },
-        });
-
-        setUsers(res.data.data?.users?.map(mapUserResponse) ?? []);
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          setError(err.response?.data?.detail || "회원 목록 조회 실패");
-        } else {
-          setError("회원 목록 조회 실패");
         }
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchUsers();
-  }, [page, limit, search, status, role]);
+      return res.data.data?.users.map(mapUserResponse) ?? [];
+    },
+    staleTime: 1000 * 60 * 2, // 2분 캐시 유지
+    retry: 1, // 실패 시 한 번만 재시도
+  });
 
-  return { users, loading, error };
+  return {
+    users: query.data ?? [],
+    loading: query.isLoading,
+    error:
+      query.isError && query.error instanceof Error
+        ? query.error.message
+        : null,
+    refetch: query.refetch,
+  };
 };
