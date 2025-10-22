@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="login" element={<AdminLoginPage />} />
+        <Route index element={<AdminLoginPage />} />
         <Route element={<Layout />}>
           <Route path="danbi" element={<DanbiTestPage />} />
           <Route path="wonhee" element={<WonheeTestPage />} />
