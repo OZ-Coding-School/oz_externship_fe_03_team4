@@ -16,6 +16,8 @@ export type LectureDTO = {
   average_rating: number
   url_link: string
   is_bookmarked: boolean
+  created_at: string
+  updated_at: string
 }
 
 export type Lecture = {
@@ -30,6 +32,8 @@ export type Lecture = {
   discountPrice: number
   rating: number
   isBookmarked: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export type LectureListResponse = {
@@ -59,4 +63,6 @@ export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
   discountPrice: dto.discount_price,
   rating: dto.average_rating,
   isBookmarked: dto.is_bookmarked,
+  createdAt: dto.created_at,
+  updatedAt: dto.updated_at,
 })

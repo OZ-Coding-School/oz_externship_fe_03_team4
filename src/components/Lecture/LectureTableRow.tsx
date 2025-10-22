@@ -1,4 +1,4 @@
-import { Lecture } from '../../types/lectureManagement/types'
+import type { Lecture } from '../../types/lectureManagement/types'
 import { LectureThumbnail } from '../Lecture/LectureThumbnail'
 import { PlatformBadge } from '../Lecture/PlatformBadge'
 
@@ -34,7 +34,7 @@ export const LectureTableRow = ({
 
       {/* 강의명 */}
       <td className="px-6 py-3">
-        <span className="font-medium text-blue-600 hover:underline">
+        <span className="font-medium text-gray-900 hover:underline">
           {lecture.title}
         </span>
       </td>
@@ -48,10 +48,10 @@ export const LectureTableRow = ({
       </td>
 
       {/* 생성일시 */}
-      <td className="px-6 py-3 text-gray-500">2024-01-15 09:30</td>
+      <td className="px-6 py-3 text-gray-500">{lecture.createdAt}</td>
 
       {/* 수정일시 */}
-      <td className="px-6 py-3 text-gray-500">2024-01-20 14:25</td>
+      <td className="px-6 py-3 text-gray-500">{lecture.updatedAt}</td>
     </tr>
   )
 }

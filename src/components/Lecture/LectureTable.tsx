@@ -1,10 +1,28 @@
-import { Lecture } from '../../types/lectureManagement/types'
+import type { Lecture } from '../../types/lectureManagement/types'
 import { LectureTableRow } from '../Lecture/LectureTableRow'
 
 type LectureTableProps = {
   lectures: Lecture[]
   onLectureClick?: (lecture: Lecture) => void
 }
+
+type ColumnTable = {
+  key: string
+  label: string
+  width?: string
+}
+
+const COLUMNS: ColumnTable[] = [
+  { key: 'id', label: 'ID', width: 'w-16' },
+  { key: 'thumbnail', label: '썸네일', width: 'w-24' },
+  { key: 'title', label: '강의명' },
+  { key: 'instructor', label: '강사명', width: 'w-32' },
+  { key: 'platform', label: '플랫폼', width: 'w-28' },
+  { key: 'createdAt', label: '생성일시', width: 'w-44' },
+  { key: 'updatedAt', label: '수정일시', width: 'w-44' },
+]
+
+const TABLE_HEADER_STYLE = 'border-b border-gray-200 px-6 py-3 text-left'
 
 export const LectureTable = ({
   lectures,
@@ -15,27 +33,14 @@ export const LectureTable = ({
       <table className="min-w-full border-collapse bg-white">
         <thead className="bg-gray-50 text-sm font-semibold text-gray-600">
           <tr>
-            <th className="w-16 border-b border-gray-200 px-6 py-3 text-left">
-              ID
-            </th>
-            <th className="w-24 border-b border-gray-200 px-6 py-3 text-left">
-              썸네일
-            </th>
-            <th className="border-b border-gray-200 px-6 py-3 text-left">
-              강의명
-            </th>
-            <th className="w-32 border-b border-gray-200 px-6 py-3 text-left">
-              강사명
-            </th>
-            <th className="w-28 border-b border-gray-200 px-6 py-3 text-left">
-              플랫폼
-            </th>
-            <th className="w-44 border-b border-gray-200 px-6 py-3 text-left">
-              생성일시
-            </th>
-            <th className="w-44 border-b border-gray-200 px-6 py-3 text-left">
-              수정일시
-            </th>
+            {COLUMNS.map((column) => (
+              <th
+                key={column.key}
+                className={`${TABLE_HEADER_STYLE} ${column.width ?? ''}`}
+              >
+                {column.label}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody className="text-sm text-gray-700">
@@ -50,7 +55,10 @@ export const LectureTable = ({
             ))
           ) : (
             <tr>
-              <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+              <td
+                colSpan={COLUMNS.length}
+                className="px-6 py-12 text-center text-gray-400"
+              >
                 데이터가 없습니다.
               </td>
             </tr>
