@@ -109,10 +109,7 @@ const StudyReviewPage = () => {
       studyTitle: review.studyTitle,
       author: { name: review.authorName, email: review.authorEmail },
       summary: review.summary,
-      rating:
-        (review as unknown as { raring?: number; rating?: number }).rating ??
-        (review as unknown as { raring?: number }).raring ??
-        0,
+      rating: review.rating ?? 0,
       createdAt: new Date(review.createdAt).toLocaleString(),
     }))
   }, [reviewListData])
