@@ -6,6 +6,7 @@ import HYTestPage from './pages/tests/HYTestPage'
 import WonheeTestPage from './pages/tests/WonheeTestPage'
 import KyungbokTestPage from './pages/tests/KyungbokTestPage'
 import HyunjinTestPage from './pages/tests/HyunjinTestPage'
+import UserListPage from "./pages/UserListPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="hy" element={<HYTestPage />} />
           <Route path="hyunjin" element={<HyunjinTestPage />} />
           <Route path="bok" element={<KyungbokTestPage />} />
+          <Route path="userlist" element={<UserListPage />} />
           {/* <Route index element={<ToastTest />} /> /}
           {/ <Route path="users" element={<userspage />} /> 
             아래 부분에 이렇게 계속 라우팅 추가해주시면 됩니다. */}
