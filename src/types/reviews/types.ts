@@ -1,6 +1,6 @@
 export type ReviewStatus = 'published' | 'hidden' | 'pending' | 'flagged'
 
-export type ReviewDTO = {
+export type ReviewDTO = {     // 서버 응답 타입 정의
   id: number
   study_group: {
     id: number
@@ -15,7 +15,7 @@ export type ReviewDTO = {
   updated_at: string | null
 }
 
-export type ReviewListDTO = {
+export type ReviewListDTO = {     // 서버 리뷰 목록 응답 전체 구조 정의
   status: number
   message: string
   detail: {
@@ -25,16 +25,16 @@ export type ReviewListDTO = {
     results: ReviewDTO[]
   }
 }
-// 리뷰
+// 클라이언트 표시용 타입 - 필드명을 카멜케이스로 맞추며, 실제 화면에서 보이는 이름으로 정리
 export type Review = {
   id: number
-  studyTitle: string
-  authorName: string
-  authorEmail: string
-  rating: number
-  summary: string
-  createdAt: string
-  updatedAt: string | null
+  studyTitle: string    // 스터디 그룹명
+  authorName: string    // 작성자 닉네임
+  authorEmail: string   // 작성자 이메일
+  rating: number        // 별점
+  summary: string       // 리뷰 요약
+  createdAt: string     // 생성일
+  updatedAt: string | null    // 수정일
 }
 
 // 상세보기(모달), 리뷰에 없는 필드만 추가
@@ -44,7 +44,7 @@ export interface ReviewDetail extends Review {
   studyDescription: string // 와이어프레임에는 있는데, api명세에는 없음 -> 혁님께 요청하기
   content: string
 }
-
+// 매핑 헬퍼 함수 -> 서버 응답을 프론트엔드용 리뷰 타입으로 변환
 export const mapDtoToReview = (r: ReviewDTO): Review => ({
   id: r.id,
   studyTitle: r.study_group?.name ?? '',
