@@ -5,6 +5,7 @@ import type { MappedUser } from "../types/user";
 import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
 import Modal from "../components/modal/Modal";
+import { Button } from "../components/buttons/Buttons"
 // import { useUsers } from "../hooks/useUsers"; // 🔹 나중에 API 연동 시 사용
 
 const UserListPage = () => {
@@ -221,9 +222,9 @@ const UserListPage = () => {
               </div>
 
               <div className="flex justify-end gap-2 mt-4">
-                <button className="bg-green-500 text-white px-4 py-1 rounded">권한 변경하기</button>
-                <button className="bg-blue-500 text-white px-4 py-1 rounded">수정하기</button>
-                <button className="bg-red-500 text-white px-4 py-1 rounded">삭제하기</button>
+                <Button color="success" size="medium">권한 변경하기</Button>
+                <Button color="primary" size="medium">수정하기</Button>
+                <Button color="danger" size="medium">삭제하기</Button>
               </div>
             </div>
           </Modal>
