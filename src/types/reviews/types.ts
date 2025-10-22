@@ -20,7 +20,7 @@ export type ReviewListDTO = {
     results: ReviewDTO[]
   }
 }
-
+// 리뷰
 export type Review = {
   id: number
   studyTitle: string
@@ -32,6 +32,14 @@ export type Review = {
   updatedAt: string | null
 }
 
+// 상세보기(모달), 리뷰에 없는 필드만 추가
+export interface ReviewDetail extends Review {
+  studyStartDate: string
+  studyEndDate: string
+  studyDescription: string
+  content: string
+}
+
 export const mapDtoToReview = (r: ReviewDTO): Review => ({
   id: r.id,
   studyTitle: r.study_group?.name ?? '',
@@ -41,4 +49,13 @@ export const mapDtoToReview = (r: ReviewDTO): Review => ({
   summary: r.content,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
+})
+
+//상세보기(모달)에 없는 부분 추가
+export const mapDtoToReviewDetail = (r: ReviewDTO): ReviewDetail => ({
+  ...mapDtoToReview(r),
+  content: r.content,
+  studyStartDate: '',
+  studyEndDate: '',
+  studyDescription: '',
 })
