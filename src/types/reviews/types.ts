@@ -59,3 +59,11 @@ export const mapDtoToReviewDetail = (r: ReviewDTO): ReviewDetail => ({
   studyEndDate: '',
   studyDescription: '',
 })
+
+export const mapReviewToDetail = (review: Review): ReviewDetail => ({
+  ...review,
+  content: review.summary ?? '',
+  studyStartDate: '',
+  studyEndDate: '',
+  studyDescription: '',
+})

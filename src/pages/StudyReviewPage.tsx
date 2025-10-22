@@ -13,6 +13,8 @@ import {
 import { Table } from '../components/Data-Indicate/Table'
 import { RatingStars } from '../components/Reviews/RatingStars'
 import { Select } from '../components/FormUI'
+import { ReviewModal } from '../components/Reviews/ReviewModal'
+import type { ReviewDetail } from '../types/reviews/types'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -21,6 +23,8 @@ const StudyReviewPage = () => {
   const initialSearchKeyword = searchParams.get('search') ?? ''
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
 
+  const [selectedReview, setSelectedReview] = useState<ReviewDetail | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchText, setSearchText] = useState(initialSearchKeyword)
   const [currentPageNumber, setCurrentPageNumber] = useState(initialPageNumber)
   const [currentSortKey, setCurrentSortKey] =
