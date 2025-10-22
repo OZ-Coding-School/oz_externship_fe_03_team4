@@ -7,11 +7,11 @@ interface TooltipProps {
   position?: 'top' | 'bottom';
 }
 
-export default function Tooltip({ 
+const Tooltip = ({ 
   content, 
   children, 
   position = 'top'
-}: TooltipProps) {
+}: TooltipProps) => {
   const [isShow, setIsShow] = useState(false);
   const [tooltipTop, setTooltipTop] = useState(0);
   const [tooltipLeft, setTooltipLeft] = useState(0);
@@ -46,7 +46,7 @@ export default function Tooltip({
 
     setTooltipTop(newTop);
     setTooltipLeft(newLeft);
-  });
+}, [isShow, position]);
 
   let portalElement = document.getElementById('portal-root');
   if (!portalElement) {
@@ -79,3 +79,5 @@ export default function Tooltip({
     </>
   );
 }
+
+export default Tooltip;
