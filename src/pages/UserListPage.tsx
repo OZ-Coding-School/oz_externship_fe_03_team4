@@ -207,67 +207,67 @@ const UserListPage = () => {
                 </div>
               </div>
 
-<div className="grid grid-cols-2 gap-4 mb-6">
-  {/* 회원 ID */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">회원 ID</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.id}</p>
-  </div>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {/* 회원 ID */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">회원 ID</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.id}</p>
+                </div>
 
-  {/* 이메일 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">이메일</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.email}</p>
-  </div>
+                {/* 이메일 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">이메일</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.email}</p>
+                </div>
 
-  {/* 이름 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">이름</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.name}</p>
-  </div>
+                {/* 이름 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">이름</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.name}</p>
+                </div>
 
-  {/* 성별 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">성별</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">남성</p>
-  </div>
+                {/* 성별 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">성별</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">남성</p>
+                </div>
 
-  {/* 닉네임 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">닉네임</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.nickname}</p>
-  </div>
+                {/* 닉네임 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">닉네임</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.nickname}</p>
+                </div>
 
-  {/* 생년월일 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">생년월일</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.birthday}</p>
-  </div>
+                {/* 생년월일 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">생년월일</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.birthday}</p>
+                </div>
 
-  {/* 전화번호 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">전화번호</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">010-1234-5678</p>
-  </div>
+                {/* 전화번호 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">전화번호</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">010-1234-5678</p>
+                </div>
 
-  {/* 권한 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">권한</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.role}</p>
-  </div>
+                {/* 권한 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">권한</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.role}</p>
+                </div>
 
-  {/* 상태 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">상태</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.status}</p>
-  </div>
+                {/* 상태 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">상태</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.status}</p>
+                </div>
 
-  {/* 가입일 */}
-  <div>
-    <p className="text-xs text-gray-500 mb-1">가입일</p>
-    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.joinedAt}</p>
-  </div>
-</div>
+                {/* 가입일 */}
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">가입일</p>
+                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.joinedAt}</p>
+                </div>
+              </div>
 
               <div className="flex justify-between items-center mt-4">
                 {/* 왼쪽: 권한 변경하기 */}
