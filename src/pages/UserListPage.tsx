@@ -4,6 +4,7 @@ import { Badge } from "../components/Badge";
 import type { MappedUser } from "../types/user";
 import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
+import Modal from "../components/modal/Modal";
 // import { useUsers } from "../hooks/useUsers"; // 🔹 나중에 API 연동 시 사용
 
 const UserListPage = () => {
@@ -11,12 +12,16 @@ const UserListPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
 
-  // 🔹 API 훅 주석 처리
+  // 🔹 API 훅 주석 처리 (나중에 연동 시 주석 해제)
   // const { users, loading, error } = useUsers({
   //   search,
   //   status: statusFilter,
   //   role: roleFilter,
   // });
+
+  // 모달 상태
+  const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 더미데이터
   const dummyUsers: MappedUser[] = [
@@ -66,7 +71,7 @@ const UserListPage = () => {
     },
   ];
 
-  // 🔹 클라이언트 필터링
+  // 클라이언트 필터링
   const filteredUsers = dummyUsers.filter((user) => {
     const matchesSearch =
       search === "" ||
@@ -122,14 +127,19 @@ const UserListPage = () => {
     { key: "withdrawAt", label: "탈퇴요청일" },
   ];
 
+  // 유저 클릭 시 모달 열기
+  const handleRowClick = (user: MappedUser) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-semibold mb-6">유저 관리</h1>
 
-        {/* 검색 / 필터 영역 */}
+        {/* 검색 / 필터 */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
-          {/* 검색창 */}
           <div className="flex-1 min-w-[200px] max-w-full">
             <SearchInput
               placeholder="이메일, 닉네임, 이름, ID 검색..."
@@ -140,7 +150,6 @@ const UserListPage = () => {
             />
           </div>
 
-          {/* 상태 필터 */}
           <div className="w-40">
             <Select
               value={statusFilter}
@@ -153,7 +162,6 @@ const UserListPage = () => {
             </Select>
           </div>
 
-          {/* 권한 필터 */}
           <div className="w-40">
             <Select
               value={roleFilter}
@@ -173,8 +181,53 @@ const UserListPage = () => {
 
         {/* 테이블 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <Table<MappedUser> data={filteredUsers} columns={columns} />
+          <Table<MappedUser>
+            data={filteredUsers}
+            columns={columns}
+            onRowClick={handleRowClick} // 🔹 행 클릭 이벤트
+          />
         </div>
+
+        {/* 모달 */}
+        {selectedUser && (
+          <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
+            <div className="p-6 w-[500px]">
+              <h2 className="text-xl font-semibold mb-4">회원 상세 정보</h2>
+              <div className="flex gap-4 mb-4">
+                {/* 사진 */}
+                <img
+                  src={`https://i.pravatar.cc/80?u=${selectedUser.id}`}
+                  alt={selectedUser.nickname}
+                  className="w-20 h-20 rounded-full border"
+                />
+                <div>
+                  <p className="font-bold">{selectedUser.nickname}</p>
+                  <p className="text-gray-500">{selectedUser.email}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
+                <div>회원 ID: {selectedUser.id}</div>
+                <div>이메일: {selectedUser.email}</div>
+                <div>이름: {selectedUser.name}</div>
+                <div>성별: 남성</div>
+                <div>닉네임: {selectedUser.nickname}</div>
+                <div>생년월일: {selectedUser.birthday}</div>
+                <div>전화번호: 010-1234-5678</div>
+                <div>권한: {selectedUser.role}</div>
+                <div>상태: {selectedUser.status}</div>
+                <div>가입일: {selectedUser.joinedAt}</div>
+                <div>탈퇴요청일: {selectedUser.withdrawAt}</div>
+              </div>
+
+              <div className="flex justify-end gap-2 mt-4">
+                <button className="bg-green-500 text-white px-4 py-1 rounded">권한 변경하기</button>
+                <button className="bg-blue-500 text-white px-4 py-1 rounded">수정하기</button>
+                <button className="bg-red-500 text-white px-4 py-1 rounded">삭제하기</button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </main>
     </div>
   );
