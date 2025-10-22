@@ -1,4 +1,4 @@
-import { Badge } from 'lucide-react'
+import { Badge } from '../Badge'
 
 type PlatformBadgeProps = {
   platform: 'Udemy' | 'Inflearn'

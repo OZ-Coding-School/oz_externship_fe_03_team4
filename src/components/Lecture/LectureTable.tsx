@@ -1,5 +1,5 @@
 import { Lecture } from '../../types/lectureManagement/types'
-import { LectureTableRow } from './LectureTableRow'
+import { LectureTableRow } from '../Lecture/LectureTableRow'
 
 type LectureTableProps = {
   lectures: Lecture[]

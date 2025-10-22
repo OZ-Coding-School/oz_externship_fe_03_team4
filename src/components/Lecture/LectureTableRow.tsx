@@ -1,7 +1,6 @@
-import { Badge } from 'lucide-react'
 import { Lecture } from '../../types/lectureManagement/types'
-import { LectureThumbnail } from './LectureThumbnail'
-import { PlatformBadge } from './PlatformBadge'
+import { LectureThumbnail } from '../Lecture/LectureThumbnail'
+import { PlatformBadge } from '../Lecture/PlatformBadge'
 
 type LectureTableRowProps = {
   lecture: Lecture
@@ -45,7 +44,7 @@ export const LectureTableRow = ({
 
       {/* 플랫폼 */}
       <td className="px-6 py-3">
-        <PlatformBadge variant={} platform={lecture.platform} />
+        <PlatformBadge platform={lecture.platform} />
       </td>
 
       {/* 생성일시 */}
