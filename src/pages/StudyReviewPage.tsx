@@ -11,7 +11,7 @@ import {
   type ReviewsParams,
 } from '../hooks/reviews/useReviewsQuery'
 import { Table } from '../components/Data-Indicate/Table'
-import { RatingStars } from '../components/reviews/RatingStars'
+import { RatingStars } from '../components/Reviews/RatingStars'
 import { Select } from '../components/FormUI'
 
 const DEFAULT_PAGE_SIZE = 20
