@@ -37,5 +37,5 @@ export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
     )
   }
 
-  return <>{children}</>
+  return children
 }
