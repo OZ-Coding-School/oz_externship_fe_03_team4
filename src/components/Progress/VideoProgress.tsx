@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react'
+import { type RefObject, useEffect, useState } from 'react'
 import { ProgressBar } from './ProgressBar'
 
 export interface VideoProgressProps {

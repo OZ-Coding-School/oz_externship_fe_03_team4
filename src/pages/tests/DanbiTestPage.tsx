@@ -1,13 +1,13 @@
-import { useMemo, useRef, useState } from 'react'
-import { VideoProgress } from '../../components/Progress/VideoProgress'
-import {
-  VideoGroupProgress,
-  type VideoProgressData,
-} from '../../components/Progress/VideoGroupProgress'
-import { CourseManagementPage } from '../CourseManagementPage/CourseManagementPage'
-import { CourseTable } from '../CourseManagementPage/CourseTable'
-import { SearchInput } from '../../components/search/SearchInput'
-import { useDebouncedValue } from '../../hooks/useDebouncedValue'
+// import { useMemo, useRef, useState } from 'react'
+// import { VideoProgress } from '../../components/Progress/VideoProgress'
+// import {
+//   VideoGroupProgress,
+//   type VideoProgressData,
+// } from '../../components/Progress/VideoGroupProgress'
+// import { LectureManagementPage } from '../lectureManagement/LectureManagementPage'
+// import { CourseTable } from '../CourseManagementPage/CourseTable'
+// import { SearchInput } from '../../components/search/SearchInput'
+// import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 
 // import { useState } from 'react'
 // import { Accordion } from '../../components/Accordion/Accordion'
@@ -239,5 +239,5 @@ import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 
 /** 테스트 페이지의 진입 컴포넌트 (default export 하나만 유지) */
 export default function TestPage() {
-  return <CourseManagementPage />
+  return <></>
 }
