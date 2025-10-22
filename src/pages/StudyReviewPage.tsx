@@ -14,7 +14,11 @@ import { Table } from '../components/Data-Indicate/Table'
 import { RatingStars } from '../components/Reviews/RatingStars'
 import { Select } from '../components/FormUI'
 import { ReviewModal } from '../components/Reviews/ReviewModal'
-import type { ReviewDetail } from '../types/reviews/types'
+import {
+  type ReviewDetail,
+  type Review,
+  mapReviewToDetail,
+} from '../types/reviews/types'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -23,7 +27,9 @@ const StudyReviewPage = () => {
   const initialSearchKeyword = searchParams.get('search') ?? ''
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
 
-  const [selectedReview, setSelectedReview] = useState<ReviewDetail | null>(null)
+  const [selectedReview, setSelectedReview] = useState<ReviewDetail | null>(
+    null
+  )
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchText, setSearchText] = useState(initialSearchKeyword)
   const [currentPageNumber, setCurrentPageNumber] = useState(initialPageNumber)
@@ -64,7 +70,23 @@ const StudyReviewPage = () => {
   const searchInputReference = useRef<SearchInputRef>(null)
 
   const tableColumns = [
-    { key: 'id', label: 'ID' },
+    {
+      key: 'id',
+      label: 'ID',
+      render: (value: unknown, row: Record<string, unknown>) => (
+        <button
+          onClick={() => {
+            const review = row as Review
+            const detail = mapReviewToDetail(review)
+            setSelectedReview(detail)
+            setIsModalOpen(true)
+          }}
+          className="text-neutral-600 hover:underline"
+        >
+          {String(value)}
+        </button>
+      ),
+    },
     { key: 'studyTitle', label: '스터디' },
     {
       key: 'author',
@@ -193,6 +215,16 @@ const StudyReviewPage = () => {
             }}
           />
         </div>
+      )}
+      {selectedReview && (
+        <ReviewModal
+          open={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedReview(null)
+          }}
+          review={selectedReview}
+        />
       )}
     </div>
   )

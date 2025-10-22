@@ -17,7 +17,14 @@ export const ReviewModalFooter = ({
         className
       )}
     >
-      <Button color="secondary" size="small" onClick={onClose}>
+      <Button
+        size="medium"
+        onClick={onClose}
+        customBgColor="#9CA3AF"
+        customTextColor="#ffffff"
+        customRingColor="focus-visible:ring-gray-300"
+        className="hover:bg-gray-800 active:bg-gray-200"
+      >
         닫기
       </Button>
     </footer>

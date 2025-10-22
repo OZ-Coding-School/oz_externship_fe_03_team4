@@ -59,7 +59,7 @@ export const mapDtoToReviewDetail = (r: ReviewDTO): ReviewDetail => ({
   studyEndDate: '',
   studyDescription: '',
 })
-
+// 헬퍼함수
 export const mapReviewToDetail = (review: Review): ReviewDetail => ({
   ...review,
   content: review.summary ?? '',
