@@ -9,8 +9,6 @@ import HyunjinTestPage from './pages/tests/HyunjinTestPage'
 import UserListPage from './pages/UserListPage'
 import StudyReviewPage from './pages/StudyReviewPage'
 import AdminLoginPage from './pages/AdminLoginPage'
-import UserListPage from "./pages/UserListPage";
-
 
 function App() {
   return (
