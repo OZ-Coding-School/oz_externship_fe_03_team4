@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Button } from '../../components/buttons/Buttons'
 import { Share2 } from 'lucide-react'
 import { Pagination } from '../../components/pagination/Pagination'
+import { Tabs } from '../../components/tab/Tabs'
 
 const Section = ({
   title,
@@ -279,6 +280,32 @@ const HYTestPage = () => {
               </div>
             </div>
           </div>
+        </Section>
+
+        <Section title="Tabs (라우터 연동)">
+          <Tabs
+            defaultValue="home"
+            className="w-full"
+            items={[
+              { id: 'home', label: 'Home', content: <div>Home Panel</div> },
+              {
+                id: 'search',
+                label: 'Search',
+                content: <div>Search Panel</div>,
+              },
+              {
+                id: 'settings',
+                label: 'Settings',
+                content: <div>Settings Panel</div>,
+              },
+              {
+                id: 'disabled',
+                label: 'Disabled',
+                content: <div>Disabled Panel</div>,
+                disabled: true,
+              },
+            ]}
+          />
         </Section>
 
         <footer className="pt-4 text-center text-xs text-gray-500">
