@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useLocation, useNavigate, Outlet } from 'react-router'
 import { cn } from '../../utils/cn'
 
@@ -14,10 +14,9 @@ export type TabsProps = {
   items: TabItem[]
   defaultValue?: string
   className?: string
-  showOutlet?: boolean
 }
 
-export const Tabs = ({ items, defaultValue, showOutlet }: TabsProps) => {
+export const Tabs = ({ items, defaultValue }: TabsProps) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -32,6 +31,11 @@ export const Tabs = ({ items, defaultValue, showOutlet }: TabsProps) => {
     ? (items.find((tab) => tab.to && pathname.startsWith(tab.to))?.id ??
       firstEnabledId)
     : active
+
+  useEffect(() => {
+    if (defaultValue) setActive(defaultValue)
+    else setActive(firstEnabledId)
+  }, [defaultValue, firstEnabledId])
 
   return (
     <div className="flex w-full flex-col gap-3">
@@ -64,12 +68,14 @@ export const Tabs = ({ items, defaultValue, showOutlet }: TabsProps) => {
       </div>
 
       <div className="mt-3 w-full rounded-lg border border-gray-200 bg-white p-4">
-        {routerMode
-          ? showOutlet && <Outlet />
-          : items.map(
-              (tab) =>
-                tab.id === activeId && <div key={tab.id}>{tab.content}</div>
-            )}
+        {routerMode ? (
+          <Outlet />
+        ) : (
+          items.map(
+            (tab) =>
+              tab.id === activeId && <div key={tab.id}>{tab.content}</div>
+          )
+        )}
       </div>
     </div>
   )
