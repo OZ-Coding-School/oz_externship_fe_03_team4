@@ -8,6 +8,7 @@ export type AdminGuardStatus = 'loading' | 'ok' | 'unauthorized' | 'forbidden'
 type AdminAuthOptions = {
   allowedRoles?: string[]
   endpointPath?: string
+  routeKey?: string
 }
 
 export const useAdminAuthGuard = ({
