@@ -42,7 +42,7 @@ const Dashboard = () => {
               </Accordion>
             </div>
           </div>
-          <SignupChart />
+          <SignupChart period={selectedPeriod} />
         </div>
       ),
     },

@@ -1,4 +1,4 @@
-import Dashboard from '../Dashboard'; // 경로는 파일 위치에 맞게 조정
+import Dashboard from '../Dashboard';
 
 const HyunjinTestPage = () => {
   return (
