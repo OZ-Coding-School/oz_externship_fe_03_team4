@@ -6,14 +6,14 @@ import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
 import Modal from "../components/modal/Modal";
 import { Button } from "../components/buttons/Buttons"
-// import { useUsers } from "../hooks/useUsers"; // 🔹 나중에 API 연동 시 사용
+// import { useUsers } from "../hooks/useUsers"; // 나중에 API 연동 시 사용
 
 const UserListPage = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
 
-  // 🔹 API 훅 주석 처리 (나중에 연동 시 주석 해제)
+  // API 훅 주석 처리 (나중에 연동 시 주석 해제)
   // const { users, loading, error } = useUsers({
   //   search,
   //   status: statusFilter,
@@ -57,7 +57,7 @@ const UserListPage = () => {
       role: "일반회원",
       status: "비활성",
       joinedAt: "2023-04-17",
-      withdrawAt: "-",
+      withdrawAt: "2023-06-17",
     },
     {
       id: "U004",
@@ -185,7 +185,7 @@ const UserListPage = () => {
           <Table<MappedUser>
             data={filteredUsers}
             columns={columns}
-            onRowClick={handleRowClick} // 🔹 행 클릭 이벤트
+            onRowClick={handleRowClick} // 행 클릭 이벤트
           />
         </div>
 
@@ -207,19 +207,67 @@ const UserListPage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-                <div>회원 ID: {selectedUser.id}</div>
-                <div>이메일: {selectedUser.email}</div>
-                <div>이름: {selectedUser.name}</div>
-                <div>성별: 남성</div>
-                <div>닉네임: {selectedUser.nickname}</div>
-                <div>생년월일: {selectedUser.birthday}</div>
-                <div>전화번호: 010-1234-5678</div>
-                <div>권한: {selectedUser.role}</div>
-                <div>상태: {selectedUser.status}</div>
-                <div>가입일: {selectedUser.joinedAt}</div>
-                <div>탈퇴요청일: {selectedUser.withdrawAt}</div>
-              </div>
+<div className="grid grid-cols-2 gap-4 mb-6">
+  {/* 회원 ID */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">회원 ID</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.id}</p>
+  </div>
+
+  {/* 이메일 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">이메일</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.email}</p>
+  </div>
+
+  {/* 이름 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">이름</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.name}</p>
+  </div>
+
+  {/* 성별 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">성별</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">남성</p>
+  </div>
+
+  {/* 닉네임 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">닉네임</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.nickname}</p>
+  </div>
+
+  {/* 생년월일 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">생년월일</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.birthday}</p>
+  </div>
+
+  {/* 전화번호 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">전화번호</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">010-1234-5678</p>
+  </div>
+
+  {/* 권한 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">권한</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.role}</p>
+  </div>
+
+  {/* 상태 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">상태</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.status}</p>
+  </div>
+
+  {/* 가입일 */}
+  <div>
+    <p className="text-xs text-gray-500 mb-1">가입일</p>
+    <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.joinedAt}</p>
+  </div>
+</div>
 
               <div className="flex justify-between items-center mt-4">
                 {/* 왼쪽: 권한 변경하기 */}
