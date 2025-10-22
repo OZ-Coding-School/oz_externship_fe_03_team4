@@ -46,7 +46,7 @@ const Tooltip = ({
 
     setTooltipTop(newTop);
     setTooltipLeft(newLeft);
-  });
+}, [isShow, position]);
 
   let portalElement = document.getElementById('portal-root');
   if (!portalElement) {

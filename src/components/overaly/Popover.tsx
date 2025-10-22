@@ -32,7 +32,7 @@ const Popover = ({ trigger, children, showIcon = true }: PopoverProps) => {
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const popoverRect = popoverRef.current.getBoundingClientRect();
 
-    let newTop = triggerRect.top + (triggerRect.height / 2) - (popoverRect.height / 2);
+    const newTop = triggerRect.top + (triggerRect.height / 2) - (popoverRect.height / 2);
     let newLeft = triggerRect.right + 8;
 
     if (newLeft + popoverRect.width > window.innerWidth - 10) {
@@ -41,7 +41,7 @@ const Popover = ({ trigger, children, showIcon = true }: PopoverProps) => {
 
     setTop(newTop);
     setLeft(newLeft);
-  });
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
