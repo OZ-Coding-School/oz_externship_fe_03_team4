@@ -27,7 +27,7 @@ export const FileAttach = ({ href, name }: FileAttachProps) => {
       title={fileName}
     >
       <FileText className="h-4 w-4 text-gray-600" />
-      <span className="text-sm text-gray-800">{fileName}</span>
+      <span className="truncate text-sm text-gray-800">{fileName}</span>
     </a>
   )
 }

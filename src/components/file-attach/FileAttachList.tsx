@@ -1,3 +1,4 @@
+// 공고 첨부파일 import 하실 때는 이 파일을 import 하시면 됩니다.
 import { FileAttach } from './FileAttach'
 
 type FileItem = string | { url: string; name?: string }
