@@ -4,7 +4,13 @@ import { StatusBadge } from './StatusBadge'
 
 export const applicationColumns = [
   { key: 'id' as const, label: 'ID' },
-  { key: 'postingTitle' as const, label: '공고명' },
+  {
+    key: 'postingTitle' as const,
+    label: '공고명',
+    render: (value) => (
+      <div className="min-w-[16rem] truncate">{value as string}</div>
+    ),
+  },
   {
     key: 'applicant' as const,
     label: '지원자 정보',
