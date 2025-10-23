@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 
 const monthlyData = [
   { month: '1월', count: 15 },
@@ -28,18 +28,26 @@ interface SignupChartProps {
   period: string;
 }
 
+const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | number, string>) => {
+  if (!active || !payload || !payload.length) return null;
+  return (
+    <div className="bg-white border border-gray-300 rounded-lg p-3 shadow-lg">
+      <p className="font-semibold text-gray-900">{label}</p>
+      <p className="text-blue-600">{`가입자 수: ${payload[0].value}명`}</p>
+    </div>
+  );
+};
+
 const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => {
   const data = period === '연도별' ? yearlyData : monthlyData;
-  
+
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <BarChart
-        data={data}
-        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-      >
+      <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
+        <Tooltip content={CustomTooltip} />
         <Legend />
         <Bar dataKey="count" name="회원가입 추세" barSize={70} fill="#FFD700" isAnimationActive={isAnimationActive} />
       </BarChart>
