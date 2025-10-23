@@ -1,5 +1,5 @@
 import { RatingStars } from './RatingStars'
-import { ModalPair } from './ModalPair'
+import { ModalPair } from '../reviews/ModalPair'
 import type { ReviewDetail } from '../../types/reviews/types'
 
 export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (

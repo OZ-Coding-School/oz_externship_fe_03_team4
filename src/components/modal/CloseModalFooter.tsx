@@ -1,3 +1,4 @@
+// 닫기버튼만 제공하는 푸터입니당~
 import { cn } from '../../utils/cn'
 import { Button } from '../buttons/Buttons'
 
