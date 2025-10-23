@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 import { Tabs } from '../../components/tab/Tabs'
 import { BreadCrumbs } from '../../components/breadcrumb/BreadCrumb'
+import { FileAttachList } from '../../components/file-attach/FileAttachList'
 
 const Section = ({
   title,
@@ -46,6 +47,15 @@ const HYTestPage = () => {
                 content: <div>Disabled Panel</div>,
                 disabled: true,
               },
+            ]}
+          />
+        </Section>
+
+        <Section title="File Attach List">
+          <FileAttachList
+            files={[
+              { url: '/api/download/123' },
+              { url: 'https://cdn.example.com/a/b/c.png' },
             ]}
           />
         </Section>
