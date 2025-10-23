@@ -1,9 +1,5 @@
 import Modal from '../modal/Modal'
-import {
-  ReviewModalFooter,
-  ReviewModalHeader,
-  ReviewModalOutlet,
-} from './components'
+import { ModalFooter, ModalHeader, ReviewModalOutlet } from './components'
 import type { ReviewDetail } from '../../types/reviews/types'
 
 interface ReviewModalProps {
@@ -15,9 +11,9 @@ interface ReviewModalProps {
 export const ReviewModal = ({ open, onClose, review }: ReviewModalProps) => {
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
-      <ReviewModalHeader title="리뷰 상세보기" onClose={onClose} />
+      <ModalHeader title="리뷰 상세보기" onClose={onClose} />
       <ReviewModalOutlet review={review} />
-      <ReviewModalFooter onClose={onClose} />
+      <ModalFooter onClose={onClose} />
     </Modal>
   )
 }
