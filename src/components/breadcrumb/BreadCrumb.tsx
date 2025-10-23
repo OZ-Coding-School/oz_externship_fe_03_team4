@@ -43,7 +43,10 @@ export const BreadCrumbs = () => {
           return (
             <li key={`${item.label}-${index}`} className="flex items-center">
               {item.to ? (
-                <Link className="text-gray-600 transition-colors" to={item.to}>
+                <Link
+                  className="text-gray-600 transition-colors hover:text-gray-900"
+                  to={item.to}
+                >
                   {item.label}
                 </Link>
               ) : (
