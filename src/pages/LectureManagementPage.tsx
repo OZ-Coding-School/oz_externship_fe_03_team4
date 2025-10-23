@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Lecture } from '../types/lectureManagement/types'
-import { mockLectures } from '../components/Lecture/mockLecture'
+import { mockLectures } from '../components/lecture/mockLecture'
 import { SearchInput } from '../components/search/SearchInput'
 import { LectureTable } from '../components/lecture/LectureTable'
 
