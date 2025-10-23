@@ -25,7 +25,7 @@ const yearlyData = [
 
 interface SignupChartProps {
   isAnimationActive?: boolean;
-  period: string;
+  period: 'monthly' | 'yearly';
 }
 
 const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | number, string>) => {
@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | 
 };
 
 const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => {
-  const data = period === '연도별' ? yearlyData : monthlyData;
+  const data = period === 'yearly' ? yearlyData : monthlyData;
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -49,7 +49,7 @@ const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => 
         <YAxis />
         <Tooltip content={CustomTooltip} />
         <Legend />
-        <Bar dataKey="count" name="회원가입 추세" barSize={70} fill="#FFD700" isAnimationActive={isAnimationActive} />
+        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} isAnimationActive={isAnimationActive}fill="#FFD700"/>
       </BarChart>
     </ResponsiveContainer>
   );
