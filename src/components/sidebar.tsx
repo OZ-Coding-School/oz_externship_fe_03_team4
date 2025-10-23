@@ -8,6 +8,7 @@ import {
   Star,
   Megaphone,
   ChevronDown,
+  ChartBar,
 } from "lucide-react";
 
 // 메뉴 데이터 타입 정의
@@ -65,8 +66,9 @@ const Sidebar = () => {
     user: {
       title: "회원 관리",
       items: [
-        { to: "/user-management", icon: Users, label: "유저 관리" },
+        { to: "/userlist", icon: Users, label: "유저 관리" },
         { to: "/withdraw-management", icon: UserX, label: "탈퇴 관리" },
+        { to: "/dashboard", icon: ChartBar, label: "대쉬 보드" },
       ],
     },
     study: {
