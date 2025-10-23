@@ -1,4 +1,4 @@
-import { RatingStars } from './RatingStars'
+import { RatingStars } from '../reviews/RatingStars'
 import { ModalPair } from '../reviews/ModalPair'
 import type { ReviewDetail } from '../../types/reviews/types'
 

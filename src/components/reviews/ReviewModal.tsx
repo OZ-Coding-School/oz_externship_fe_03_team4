@@ -1,7 +1,7 @@
 import Modal from '../modal/Modal'
 import type { ReviewDetail } from '../../types/reviews/types'
 import { ModalHeader } from '../modal/ModalHeader'
-import { ModalFooter } from '../modal/CloseModalFooter'
+import { ModalFooter } from '../reviews/ModalFooter'
 import { ReviewModalOutlet } from '../reviews/ReviewModalOutlet'
 
 interface ReviewModalProps {

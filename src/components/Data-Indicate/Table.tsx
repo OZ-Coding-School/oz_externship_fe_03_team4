@@ -11,6 +11,7 @@ interface TableProps<T> {
   columns?: TableColumn<T>[];
   className?: string;
   icon?: LucideIcon;
+  onRowClick?: (row: T) => void; // 추가
 }
 
 export const Table = <T extends Record<string, unknown>>({
@@ -18,6 +19,7 @@ export const Table = <T extends Record<string, unknown>>({
   columns,
   className = "",
   icon: Icon,
+  onRowClick, // 🔹 추가
 }: TableProps<T>) => {
   const autoColumns: TableColumn<T>[] =
     columns && columns.length > 0
@@ -49,7 +51,11 @@ export const Table = <T extends Record<string, unknown>>({
         <tbody className="text-sm text-gray-700">
           {data.length > 0 ? (
             data.map((row, rowIdx) => (
-              <tr key={rowIdx} className="hover:bg-gray-50 transition-colors">
+              <tr
+                key={rowIdx}
+                className={`hover:bg-gray-50 transition-colors ${onRowClick ? "cursor-pointer" : ""}`}
+                onClick={() => onRowClick?.(row)} // 클릭 이벤트 호출
+              >
                 {autoColumns.map((col) => (
                   <td
                     key={col.key.toString()}

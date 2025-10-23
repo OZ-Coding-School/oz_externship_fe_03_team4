@@ -11,9 +11,9 @@ import {
   type ReviewsParams,
 } from '../hooks/reviews/useReviewsQuery'
 import { Table } from '../components/Data-Indicate/Table'
-import { RatingStars } from '../components/Reviews/RatingStars'
+import { RatingStars } from '../components/reviews/RatingStars'
 import { Select } from '../components/FormUI'
-import { ReviewModal } from '../components/Reviews/ReviewModal'
+import { ReviewModal } from '../components/reviews/ReviewModal'
 import {
   type ReviewDetail,
   type Review,
