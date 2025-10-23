@@ -6,7 +6,7 @@ import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
 import Modal from "../components/modal/Modal";
 import { ModalHeader } from "../components/modal/ModalHeader";
-import { UserModalOutlet } from "../components/User-Information/UserModaloutlet";
+import { UserModalOutlet } from "../components/User-Information/UserModalOutlet"
 import { ModalFooter } from "../components/User-Information/ModalFooter";
 // import { useUsers } from "../hooks/useUsers"; // 나중에 API 연동 시 사용
 
