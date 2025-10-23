@@ -23,7 +23,7 @@ export const ApplicationFilterSection = ({
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <SearchField value={searchText} onChange={setSearchText} />
-      <div className="flex w-full gap-2 sm:w-auto">
+      <div className="flex w-full gap-3 sm:w-auto sm:gap-4 lg:gap-6">
         <StatusSelect value={statusFilter} onChange={setStatusFilter} />
         <SortSelect value={sortKey} onChange={setSortKey} />
       </div>
