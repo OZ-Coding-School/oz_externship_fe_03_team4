@@ -9,9 +9,9 @@ import type {
   SortKey,
   StatusFilter,
 } from '../types/applications'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 
 const PAGE_SIZE = 10
-
 const StudyApplicationPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
@@ -20,6 +20,7 @@ const StudyApplicationPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('전체')
   const [sortKey, setSortKey] = useState<SortKey>('-appliedAt')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+  const debouncedSearchText = useDebouncedValue(searchText, 300)
 
   const mockApplications: Application[] = useMemo(() => {
     const statuses: ApplicationStatus[] = ['승인', '검토중', '대기', '거절']
@@ -45,8 +46,8 @@ const StudyApplicationPage = () => {
       )
     }
 
-    if (searchText.trim()) {
-      const lowerCaseSearchText = searchText.trim().toLowerCase()
+    if (debouncedSearchText.trim()) {
+      const lowerCaseSearchText = debouncedSearchText.trim().toLowerCase()
       filteredList = filteredList.filter(
         (application) =>
           application.applicant.name
@@ -59,7 +60,7 @@ const StudyApplicationPage = () => {
     }
 
     return filteredList
-  }, [mockApplications, searchText, statusFilter])
+  }, [mockApplications, debouncedSearchText, statusFilter])
 
   const totalPages = Math.max(
     1,
