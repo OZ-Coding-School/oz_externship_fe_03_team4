@@ -11,7 +11,7 @@ export const StatusSelect = ({ value, onChange }: StatusSelectProps) => {
     <Select
       value={value}
       onChange={(e) => onChange(e.target.value as StatusFilter)}
-      className="w-40"
+      className="w-48"
     >
       <option value="전체">전체 상태</option>
       <option value="승인">승인</option>

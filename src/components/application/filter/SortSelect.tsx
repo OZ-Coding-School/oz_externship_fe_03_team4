@@ -11,7 +11,7 @@ export const SortSelect = ({ value, onChange }: SortSelectProps) => {
     <Select
       value={value}
       onChange={(e) => onChange(e.target.value as SortKey)}
-      className="w-40"
+      className="w-50"
     >
       <option value="-appliedAt">지원일 최신순</option>
       <option value="appliedAt">지원일 오래된순</option>
