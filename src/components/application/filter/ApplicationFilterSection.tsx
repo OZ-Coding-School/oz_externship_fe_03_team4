@@ -21,12 +21,14 @@ export const ApplicationFilterSection = ({
   setSortKey,
 }: ApplicationFilterSectionProps) => {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <SearchField value={searchText} onChange={setSearchText} />
-      <div className="flex w-full gap-3 sm:w-auto sm:gap-4 lg:gap-6">
-        <StatusSelect value={statusFilter} onChange={setStatusFilter} />
-        <SortSelect value={sortKey} onChange={setSortKey} />
+    <section className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <SearchField value={searchText} onChange={setSearchText} />
+        <div className="flex w-full gap-3 sm:w-auto sm:gap-4 lg:gap-6">
+          <StatusSelect value={statusFilter} onChange={setStatusFilter} />
+          <SortSelect value={sortKey} onChange={setSortKey} />
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
