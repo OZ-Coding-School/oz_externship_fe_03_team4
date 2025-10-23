@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { cn } from '../../../utils/cn'
 import { TextField } from '../../FormUI'
 
-interface ReviewPairProps {
+interface ModalPairProps {
   label: string
   value?: ReactNode
   className?: string
@@ -11,14 +11,14 @@ interface ReviewPairProps {
   minHeightClass?: string
 }
 
-export const ReviewPair = ({
+export const ModalPair = ({
   label,
   value,
   className,
   readOnly = true,
   multiline = false, // 여러 줄일 경우
   minHeightClass = 'min-h-[96px]', // 최소 높이
-}: ReviewPairProps) => {
+}: ModalPairProps) => {
   const isString = typeof value === 'string'
 
   return (

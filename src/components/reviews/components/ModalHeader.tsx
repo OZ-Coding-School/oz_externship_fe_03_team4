@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 
-export const ReviewModalHeader = ({
+export const ModalHeader = ({
   title,
   onClose,
 }: {
