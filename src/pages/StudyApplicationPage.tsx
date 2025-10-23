@@ -24,12 +24,12 @@ const StudyApplicationPage = () => {
 
   const mockApplications: Application[] = useMemo(() => {
     const statuses: ApplicationStatus[] = ['승인', '검토중', '대기', '거절']
-    return Array.from({ length: 28 }).map((_, index) => ({
+    return Array.from({ length: 30 }).map((_, index) => ({
       id: `#${1000 + index}`,
       postingTitle: `공고 ${index + 1}`,
       applicant: {
         name: `홍길동${index + 1}`,
-        email: `user${index + 1}@mail.com`,
+        email: `user${index + 1}@gmail.com`,
       },
       status: statuses[index % statuses.length],
       appliedAt: '2025-10-21 14:22',
