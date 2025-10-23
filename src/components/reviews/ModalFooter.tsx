@@ -1,5 +1,5 @@
-import { cn } from '../../../utils/cn'
-import { Button } from '../../buttons/Buttons'
+import { cn } from '../../utils/cn'
+import { Button } from '../buttons/Buttons'
 
 interface ModalFooterProps {
   onClose: () => void

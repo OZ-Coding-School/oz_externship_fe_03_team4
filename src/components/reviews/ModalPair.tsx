@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { cn } from '../../../utils/cn'
-import { TextField } from '../../FormUI'
+import { cn } from '../../utils/cn'
+import { TextField } from '../FormUI'
 
 interface ModalPairProps {
   label: string

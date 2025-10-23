@@ -1,6 +1,6 @@
-import { RatingStars } from '../RatingStars'
+import { RatingStars } from './RatingStars'
 import { ModalPair } from './ModalPair'
-import type { ReviewDetail } from '../../../types/reviews/types'
+import type { ReviewDetail } from '../../types/reviews/types'
 
 export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
