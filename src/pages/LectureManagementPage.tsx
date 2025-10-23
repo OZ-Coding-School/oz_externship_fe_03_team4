@@ -6,13 +6,13 @@ import { LectureTable } from '../components/Lecture/LectureTable'
 
 export const LectureManagementPage = () => {
   const [search, setSearch] = useState('')
-  const [lecture] = useState<Lecture[]>(mockLectures)
+  const [lectures] = useState<Lecture[]>(mockLectures)
 
-  const filteredLectures = lecture.filter((lecture) => {
-    if (!search) return true
+  const filteredLectures = lectures.filter((lectures) => {
+    if (!search.trim()) return true
     return (
-      lecture.title.toLowerCase().includes(search.toLowerCase()) ||
-      lecture.instructor.toLowerCase().includes(search.toLowerCase())
+      lectures.title.toLowerCase().includes(search.toLowerCase()) ||
+      lectures.instructor.toLowerCase().includes(search.toLowerCase())
     )
   })
 
