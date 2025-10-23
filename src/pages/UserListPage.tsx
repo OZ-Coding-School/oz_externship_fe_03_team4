@@ -5,7 +5,9 @@ import type { MappedUser } from "../types/user";
 import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
 import Modal from "../components/modal/Modal";
-import { Button } from "../components/buttons/Buttons"
+import { ModalHeader } from "../components/modal/ModalHeader";
+import { UserModalOutlet } from "../components/User-Information/UserModaloutlet";
+import { ModalFooter } from "../components/User-Information/ModalFooter";
 // import { useUsers } from "../hooks/useUsers"; // 나중에 API 연동 시 사용
 
 const UserListPage = () => {
@@ -96,6 +98,7 @@ const UserListPage = () => {
     return matchesSearch && matchesStatus && matchesRole;
   });
 
+  // 테이블 컬럼 정의
   const columns = [
     { key: "id", label: "회원 ID" },
     { key: "email", label: "이메일" },
@@ -176,7 +179,7 @@ const UserListPage = () => {
           </div>
         </div>
 
-        {/* 🔹 로딩 / 에러 메시지 영역 (API 사용 시 주석 해제) */}
+        {/* 로딩 / 에러 메시지 영역 (API 사용 시 주석 해제) */}
         {/* {loading && <p>로딩중...</p>} */}
         {/* {error && <p className="text-red-500">{error}</p>} */}
 
@@ -185,100 +188,26 @@ const UserListPage = () => {
           <Table<MappedUser>
             data={filteredUsers}
             columns={columns}
-            onRowClick={handleRowClick} // 행 클릭 이벤트
+            onRowClick={handleRowClick}
           />
         </div>
 
         {/* 모달 */}
         {selectedUser && (
-          <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
+          <Modal
+            isOn={isModalOpen}
+            onBackgroundClick={() => setIsModalOpen(false)}
+          >
             <div className="p-6 w-[700px]">
-              <h2 className="text-xl font-semibold mb-4">회원 상세 정보</h2>
-              <div className="flex gap-4 mb-4">
-                {/* 사진 */}
-                <img
-                  src={`https://i.pravatar.cc/80?u=${selectedUser.id}`}
-                  alt={selectedUser.nickname}
-                  className="w-20 h-20 rounded-full border"
-                />
-                <div>
-                  <p className="font-bold">{selectedUser.nickname}</p>
-                  <p className="text-gray-500">{selectedUser.email}</p>
-                </div>
-              </div>
+              {/* 분리된 컴포넌트 구조 */}
+              <ModalHeader
+                title="회원 상세 정보"
+                onClose={() => setIsModalOpen(false)}
+              />
 
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* 회원 ID */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">회원 ID</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.id}</p>
-                </div>
+              <UserModalOutlet user={selectedUser} />
 
-                {/* 이메일 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">이메일</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.email}</p>
-                </div>
-
-                {/* 이름 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">이름</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.name}</p>
-                </div>
-
-                {/* 성별 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">성별</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">남성</p>
-                </div>
-
-                {/* 닉네임 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">닉네임</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.nickname}</p>
-                </div>
-
-                {/* 생년월일 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">생년월일</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.birthday}</p>
-                </div>
-
-                {/* 전화번호 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">전화번호</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">010-1234-5678</p>
-                </div>
-
-                {/* 권한 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">권한</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.role}</p>
-                </div>
-
-                {/* 상태 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">상태</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.status}</p>
-                </div>
-
-                {/* 가입일 */}
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">가입일</p>
-                  <p className="p-2 bg-gray-100 rounded font-light text-gray-700 text-sm">{selectedUser.joinedAt}</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mt-4">
-                {/* 왼쪽: 권한 변경하기 */}
-                <Button color="success" size="medium">권한 변경하기</Button>
-              
-                {/* 오른쪽: 수정 / 삭제 */}
-                <div className="flex gap-2">
-                  <Button color="primary" size="medium">수정하기</Button>
-                  <Button color="danger" size="medium">삭제하기</Button>
-                </div>
-              </div>
+              <ModalFooter onClose={() => setIsModalOpen(false)} />
             </div>
           </Modal>
         )}
