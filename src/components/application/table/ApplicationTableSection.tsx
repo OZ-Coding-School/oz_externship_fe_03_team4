@@ -15,7 +15,7 @@ export const ApplicationTableSection = ({
 
   return (
     <section className="rounded-xl border border-neutral-200 bg-white shadow-sm">
-      <div className="max-h-[520px] overflow-auto rounded-xl">
+      <div className="rounded-xl">
         <Table<ApplicationRow>
           columns={applicationColumns}
           data={rows}
