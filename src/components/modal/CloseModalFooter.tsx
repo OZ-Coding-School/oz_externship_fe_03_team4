@@ -2,12 +2,15 @@
 import { cn } from '../../utils/cn'
 import { Button } from '../buttons/Buttons'
 
-interface ModalFooterProps {
+interface CloseModalFooterProps {
   onClose: () => void
   className?: string
 }
 
-export const ModalFooter = ({ onClose, className }: ModalFooterProps) => {
+export const CloseModalFooter = ({
+  onClose,
+  className,
+}: CloseModalFooterProps) => {
   return (
     <footer
       className={cn(
