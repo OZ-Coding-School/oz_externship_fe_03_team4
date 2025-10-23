@@ -192,7 +192,7 @@ const UserListPage = () => {
         {/* 모달 */}
         {selectedUser && (
           <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
-            <div className="p-6 w-[500px]">
+            <div className="p-6 w-[700px]">
               <h2 className="text-xl font-semibold mb-4">회원 상세 정보</h2>
               <div className="flex gap-4 mb-4">
                 {/* 사진 */}
