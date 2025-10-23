@@ -9,6 +9,8 @@
 // import { SearchInput } from '../../components/search/SearchInput'
 // import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 
+import { LectureManagementPage } from '../LectureManagementPage'
+
 // import { useState } from 'react'
 // import { Accordion } from '../../components/Accordion/Accordion'
 // import {
@@ -239,5 +241,9 @@
 
 /** 테스트 페이지의 진입 컴포넌트 (default export 하나만 유지) */
 export default function TestPage() {
-  return <></>
+  return (
+    <div>
+      <LectureManagementPage />
+    </div>
+  )
 }
