@@ -1,22 +1,18 @@
 import SignupChart from '../pages/chart/Signuptrend';
 import { Tabs, type TabItem } from '../components/tab/Tabs';
-import { Accordion } from '../components/Accordion/Accordion';
-import { AccordionItem, type ListItem } from '../components/Accordion/AccordionType';
-import { AccordionList } from '../components/Accordion/AccordionList';
 import { useState } from 'react';
+import { Select } from '../components/FormUI/Select';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('월별');
-  const [accordionValue, setAccordionValue] = useState('');
 
-  const periodItems: ListItem[] = [
+  const periodItems = [
     { id: 'monthly', label: '월별' },
     { id: 'yearly', label: '연도별' },
   ];
 
-  const handlePeriodSelect = (item: ListItem) => {
-    setSelectedPeriod(item.label);
-    setAccordionValue('');
+  const handlePeriodSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPeriod(e.target.value);
   };
 
   const tabItems: TabItem[] = [
@@ -28,18 +24,13 @@ const Dashboard = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">회원가입 추세</h2>
             <div className="w-32">
-              <Accordion 
-                value={accordionValue}
-                onValueChange={setAccordionValue}
-                selectedLabels={{ '0': selectedPeriod }}
-              >
-                <AccordionItem title={selectedPeriod}>
-                  <AccordionList 
-                    items={periodItems} 
-                    onSelectItem={handlePeriodSelect} 
-                  />
-                </AccordionItem>
-              </Accordion>
+              <Select value={selectedPeriod} onChange={handlePeriodSelect}>
+                {periodItems.map(item => (
+                  <option key={item.id} value={item.label}>
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
             </div>
           </div>
           <SignupChart period={selectedPeriod} />
