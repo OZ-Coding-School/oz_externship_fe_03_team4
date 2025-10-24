@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { Lecture } from '../types/lectureManagement/types'
-import { mockLectures } from '../components/lecture/mockLecture'
+import { mockLectures } from '../components/Lecture/mockLecture'
 import { SearchInput } from '../components/search/SearchInput'
-import { LectureTable } from '../components/lecture/LectureTable'
+import { LectureTable } from '../components/Lecture/LectureTable'
 
 export const LectureManagementPage = () => {
   const [search, setSearch] = useState('')
