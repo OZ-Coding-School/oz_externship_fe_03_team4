@@ -1,18 +1,19 @@
 // API 스키마
+// 지원 상태 (서버에서 내려오는 값)
 export type AdminApplicationStatus =
   | 'APPROVED'
   | 'APPLIED'
   | 'PENDING'
   | 'REJECTED'
-
+// 서버에서 제공해주는 지원 내역 데이터들
 export interface AdminApplicationApi {
-  id: number
-  recruitment_title: string
-  applicant_nickname: string
-  applicant_email: string
-  status: AdminApplicationStatus
-  created_at: string
-  updated_at: string
+  id: number // 고유id
+  recruitment_title: string // 공고명
+  applicant_nickname: string // 지원자이름
+  applicant_email: string // 이메일
+  status: AdminApplicationStatus // 지원 상태
+  created_at: string // 지원일
+  updated_at: string // 수정일
 }
 // 쿼리 파라미터와 정렬해주는 키
 export type AdminSortKey =
@@ -21,14 +22,15 @@ export type AdminSortKey =
   | '-updated_at'
   | 'updated_at'
 
+// ui용
 export type ApplicationStatus = '승인' | '검토중' | '대기' | '거절'
-export type StatusFilter = '전체' | ApplicationStatus
-
+export type StatusFilter = '전체' | ApplicationStatus // 상태 필터 옵션
+// 지원자 정보
 export interface Applicant {
   name: string
   email: string
 }
-
+// 우리가 사용하는 지원 내역 데이터 구조
 export interface Application {
   id: string
   postingTitle: string // 공고명
@@ -39,7 +41,7 @@ export interface Application {
 }
 
 // 상태/라벨 매핑하기
-export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
+export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =   // api -> 상태
   {
     APPROVED: '승인',
     APPLIED: '검토중',
@@ -47,7 +49,7 @@ export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
     REJECTED: '거절',
   }
 
-export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
+export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =   // 요긴 반대입니당
   {
     승인: 'APPROVED',
     검토중: 'APPLIED',
@@ -55,6 +57,7 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
     거절: 'REJECTED',
   }
 
+// api응답을 프론트에서 사용하는 걸로 변환해주는 매핑 함수
 export const mapAdminApiToUi = (a: AdminApplicationApi): Application => ({
   id: `#${a.id}`,
   postingTitle: a.recruitment_title,

@@ -33,7 +33,7 @@ const StudyApplicationPage = () => {
       'PENDING',
       'REJECTED',
     ]
-    return Array.from({ length: 30 }).map((_, index) => ({
+    return Array.from({ length: 10 }).map((_, index) => ({
       // id: `#${1000 + index}`, api연동시에는 이걸 사용
       id: 1000 + index,
       recruitment_title: `공고 ${index + 1}`,
@@ -131,7 +131,7 @@ const StudyApplicationPage = () => {
       />
 
       <ApplicationTableSection data={paginatedApplications} />
-
+      {/* 1페이지 이상일 경우에만 페이지네이션 렌더링 */}
       {totalPages > 1 && (
         <div className="flex justify-center">
           <Pagination
