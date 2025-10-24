@@ -10,7 +10,7 @@ export const ApplicationModalOutlet = ({
   const MULTILINE_PROPS = {
     // 중복되는 부분들 상수로 선언해서 조금이라도 줄이기
     multiline: true,
-    minHeightClass: 'min-h-[90px]',
+    minHeightClass: 'min-h-[60px]',
   } as const
   const {
     aid,
