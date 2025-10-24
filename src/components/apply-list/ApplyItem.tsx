@@ -1,13 +1,12 @@
 import { User } from 'lucide-react'
 import { Badge } from '../Badge'
+import { formatDate } from '../../utils/formatDate'
 
 export type Applicant = {
-  id: string
-  name: string
-  avatarUrl?: string
+  nickname: string
   email?: string
-  status?: '대기' | '검토중' | '거절' | '승인'
-  appliedAt?: string
+  applied_at?: string
+  status?: '지원중' | '검토중' | '거절' | '승인'
 }
 
 type ApplyItemProps = {
@@ -16,57 +15,34 @@ type ApplyItemProps = {
   onMoreClick?: (id: string) => void
 }
 
-// const statusStyle: Record<NonNullable<Applicant['status']>, string> = {
-//   new: 'bg-blue-50 text-blue-700',
-//   review: 'bg-amber-50 text-amber-700',
-//   interview: 'bg-purple-50 text-purple-700',
-//   rejected: 'bg-red-50 text-red-700',
-//   accepted: 'bg-green-50 text-green-700',
-// }
-
 const statusToVariant: Record<
   NonNullable<Applicant['status']>,
-  'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  'success' | 'warning' | 'danger' | 'info'
 > = {
-  대기: 'primary',
+  지원중: 'info',
   검토중: 'warning',
   거절: 'danger',
   승인: 'success',
 }
 
-function formatDate(iso?: string) {
-  if (!iso) return ''
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return ''
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  const hh = String(d.getHours()).padStart(2, '0')
-  const mm = String(d.getMinutes()).padStart(2, '0')
-  return `${y}-${m}-${day} ${hh}:${mm}`
-}
-
 export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
-  const { id, name, email, status = '대기', appliedAt } = applicant
+  const { nickname, email, status = '지원중', applied_at } = applicant
   // const statusCls = statusStyle[status] ?? 'bg-gray-100 text-gray-700'
-  const dateText = formatDate(appliedAt)
+  const dateText = formatDate(applied_at)
 
   return (
     <div
       role="button"
-      onClick={() => onClick?.(id)}
+      onClick={() => onClick?.(nickname)}
       className="flex w-full items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 hover:bg-gray-50"
     >
       <div className="flex w-full flex-col">
         <div className="mb-2 flex justify-between gap-2">
           <div className="flex items-center gap-2">
             <User className="h-4 w-4" />
-            <div className="truncate text-sm font-semibold">{name}</div>
+            <div className="truncate text-sm font-semibold">{nickname}</div>
           </div>
 
-          {/* <span className={`rounded-md px-2 py-0.5 text-xs ${statusCls}`}>
-            {status}
-          </span> */}
           <Badge
             variant={statusToVariant[status] ?? 'default'}
             label={status}

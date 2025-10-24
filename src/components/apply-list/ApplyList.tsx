@@ -28,7 +28,7 @@ export const ApplyList = ({
       <div className="flex flex-col gap-2 rounded-lg bg-gray-50 p-4">
         {applicants.map((a) => (
           <ApplyItem
-            key={a.id}
+            key={a.nickname}
             applicant={a}
             onClick={onItemClick}
             onMoreClick={onItemMoreClick}
