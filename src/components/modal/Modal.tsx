@@ -1,10 +1,10 @@
-import React from "react";
-import RoundBox from "./Roundbox";
+import React from 'react'
+import RoundBox from './Roundbox'
 
 interface ModalProps extends Record<string, unknown> {
-  isOn: boolean;
-  onBackgroundClick: () => void;
-  children: React.ReactNode;
+  isOn: boolean
+  onBackgroundClick: () => void
+  children: React.ReactNode
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -13,21 +13,16 @@ const Modal: React.FC<ModalProps> = ({
   children,
   ...props
 }) => {
-  if (!isOn) return null;
+  if (!isOn) return null
 
   const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
+    event.stopPropagation()
+  }
 
   return (
     <div
       onClick={onBackgroundClick}
-      className="
-        fixed inset-0 z-[90]
-        w-screen h-screen
-        flex flex-col justify-center items-center
-        bg-gray-500/50
-      "
+      className="fixed inset-0 z-[90] flex h-screen w-screen flex-col items-center justify-center bg-gray-500/50"
     >
       <RoundBox
         padding="lg"
@@ -38,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({
         {children}
       </RoundBox>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

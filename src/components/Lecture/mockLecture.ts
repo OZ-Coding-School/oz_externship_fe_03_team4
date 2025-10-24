@@ -4,7 +4,7 @@ export const mockLectures: Lecture[] = [
   {
     id: 1,
     uuid: '550e8400-e29b-41d4-a716-446655440000',
-    thumbnail: 'https://via.placeholder.com/150/0096FF/FFFFFF?text=React',
+    thumbnail: 'https://placehold.co/150x150/0096FF/FFFFFF?text=React',
     title: 'React 완벽 가이드 - Hooks, Context, Redux부터 Next.js까지',
     instructor: '김도현',
     description:
@@ -22,7 +22,7 @@ export const mockLectures: Lecture[] = [
   {
     id: 2,
     uuid: '660e8400-e29b-41d4-a716-446655440001',
-    thumbnail: 'https://via.placeholder.com/150/22C55E/FFFFFF?text=Spring',
+    thumbnail: 'https://placehold.co/150x150/0096FF/FFFFFF?text=JPA',
     title: 'Spring Boot와 JPA 실무 완전 정복',
     instructor: '이영한',
     description:
@@ -40,7 +40,7 @@ export const mockLectures: Lecture[] = [
   {
     id: 3,
     uuid: '770e8400-e29b-41d4-a716-446655440002',
-    thumbnail: 'https://via.placeholder.com/150/3B82F6/FFFFFF?text=Python',
+    thumbnail: 'https://placehold.co/150x150/0096FF/FFFFFF?text=Python',
     title: 'Python으로 배우는 머신러닝과 데이터 분석',
     instructor: '박데이터',
     description:
@@ -58,7 +58,7 @@ export const mockLectures: Lecture[] = [
   {
     id: 4,
     uuid: '880e8400-e29b-41d4-a716-446655440003',
-    thumbnail: 'https://via.placeholder.com/150/22C55E/FFFFFF?text=Vue',
+    thumbnail: 'https://placehold.co/150x150/0096FF/FFFFFF?text=Vue',
     title: 'Vue.js 3 Composition API 마스터하기',
     instructor: '최프론트',
     description:
@@ -76,7 +76,7 @@ export const mockLectures: Lecture[] = [
   {
     id: 5,
     uuid: '990e8400-e29b-41d4-a716-446655440004',
-    thumbnail: 'https://via.placeholder.com/150/3B82F6/FFFFFF?text=Docker',
+    thumbnail: 'https://placehold.co/150x150/0096FF/FFFFFF?text=Docker',
     title: 'Docker & Kubernetes 실전 가이드',
     instructor: '김데브옵스',
     description:
