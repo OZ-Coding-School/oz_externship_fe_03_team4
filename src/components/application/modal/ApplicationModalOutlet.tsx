@@ -32,11 +32,11 @@ export const ApplicationModalOutlet = ({
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
       <section className="space-y-4">
         <h3 className="mb-2 text-base font-semibold text-neutral-800">
-          공고 정보
+          스터디 구인 공고 정보
         </h3>
         <ModalPair label="공고명" value={recruitment?.title ?? postingTitle} />
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div>
           <ModalPair
             label="모집 인원"
             value={
@@ -48,25 +48,6 @@ export const ApplicationModalOutlet = ({
           <ModalPair label="마감일" value={recruitment?.deadline ?? '-'} />
         </div>
 
-        <ModalPair
-          label="태그"
-          value={
-            recruitment?.tags?.length ? (
-              <div className="flex flex-wrap gap-2">
-                {recruitment.tags.map((tag, i) => (
-                  <span
-                    key={`${tag}-${i}`}
-                    className="bg-neurtal-100 rounded-full px-2 py-1 text-xs text-neutral-700"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            ) : (
-              '-'
-            )
-          }
-        />
         <ModalPair
           label="강의 목록"
           value={
@@ -89,6 +70,26 @@ export const ApplicationModalOutlet = ({
             )
           }
         />
+
+        <section>
+          <h4 className="mb-2 text-sm font-semibold text-neutral-700">
+            사용자 정의 태그
+          </h4>
+          {recruitment?.tags?.length ? (
+            <div className="flex flex-wrap gap-2">
+              {recruitment.tags.map((tag, i) => (
+                <span
+                  key={`${tag}-${i}`}
+                  className="bg-neurtal-100 rounded-full px-2 py-1 text-xs text-neutral-700"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-neutral-500">-</p>
+          )}
+        </section>
       </section>
 
       <section className="space-y-4">
