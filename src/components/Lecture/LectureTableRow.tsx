@@ -1,6 +1,6 @@
 import type { Lecture } from '../../types/lectureManagement/types'
-import { LectureThumbnail } from '../../components/Lecture/LectureThumbnail'
-import { PlatformBadge } from '../../components/Lecture/PlatformBadge'
+import { LectureThumbnail } from '../Lecture/LectureThumbnail'
+import { PlatformBadge } from '../Lecture/PlatformBadge'
 
 type LectureTableRowProps = {
   lecture: Lecture
