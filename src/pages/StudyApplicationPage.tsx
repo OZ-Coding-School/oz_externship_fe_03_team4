@@ -24,7 +24,7 @@ const StudyApplicationPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('전체')
   const [sortKey, setSortKey] = useState<AdminSortKey>('-created_at')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-  const debouncedSearchText = useDebouncedValue(searchText, 300)
+  const debouncedSearchText = useDebouncedValue(searchText, 500)
 
   const mockApplications: AdminApplicationApi[] = useMemo(() => {
     const statuses: AdminApplicationStatus[] = [
@@ -116,7 +116,6 @@ const StudyApplicationPage = () => {
         searchText={searchText}
         setSearchText={(nextSearchText) => {
           setSearchText(nextSearchText)
-          setCurrentPage(1)
         }}
         statusFilter={statusFilter}
         setStatusFilter={(nextStatusFilter) => {
