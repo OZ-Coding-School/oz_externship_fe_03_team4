@@ -1,7 +1,6 @@
 import { ModalPair } from '../../reviews/ModalPair'
 import { StatusBadge } from '../table/StatusBadge'
 import type { ApplicationDetail } from '../../../types/applications'
-import Modal from '../../modal/Modal'
 
 export const ApplicationModalOutlet = ({
   detail,
@@ -114,32 +113,46 @@ export const ApplicationModalOutlet = ({
           />
         </div>
 
-        <h3 className="mt-6 text-base font-semibold text-neutral-800">지원서 정보</h3>
+        <h3 className="mt-6 text-base font-semibold text-neutral-800">
+          지원서 정보
+        </h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <ModalPair
-                label="상태"
-                value={<StatusBadge status={status} />}
-            />
-            <ModalPair label="지원일" value={appliedAt} />
-            <ModalPair label="수정일" value={updatedAt} />
+          <ModalPair label="상태" value={<StatusBadge status={status} />} />
+          <ModalPair label="지원일" value={appliedAt} />
+          <ModalPair label="수정일" value={updatedAt} />
         </div>
         <ModalPair
-            label="자기소개"
-            value={selfIntroduction || '-'}
-            multiline
-            minHeightClass="min-h-[100px]"
+          label="자기소개"
+          value={selfIntroduction || '-'}
+          multiline
+          minHeightClass="min-h-[100px]"
         />
         <ModalPair
-            label="지원동기"
-            value={motivation || '-'}
-            multiline
-            minHeightClass="min-h-[100px]"
+          label="지원동기"
+          value={motivation || '-'}
+          multiline
+          minHeightClass="min-h-[100px]"
         />
         <ModalPair
-            label="목표"
-            value={objective || '-'}
-            multiline
-            minHeightClass="min-h-[100px]"
+          label="목표"
+          value={objective || '-'}
+          multiline
+          minHeightClass="min-h-[100px]"
+        />
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <ModalPair label="가능 시간대" value={availableTime || '-'} />
+          <ModalPair
+            label="스터디 경험"
+            value={hasStudyExperience ? '예' : '아니오'}
+          />
+        </div>
+
+        <ModalPair
+          label="경험 상세"
+          value={studyExperience || '-'}
+          multiline
+          minHeightClass="min-h-[100px]"
         />
       </section>
     </div>
