@@ -7,6 +7,11 @@ export const ApplicationModalOutlet = ({
 }: {
   detail: ApplicationDetail
 }) => {
+  const MULTILINE_PROPS = {
+    // 중복되는 부분들 상수로 선언해서 조금이라도 줄이기
+    multiline: true,
+    minHeightClass: 'min-h-[100px]',
+  } as const
   const {
     postingTitle,
     applicant,
@@ -124,21 +129,14 @@ export const ApplicationModalOutlet = ({
         <ModalPair
           label="자기소개"
           value={selfIntroduction || '-'}
-          multiline
-          minHeightClass="min-h-[100px]"
+          {...MULTILINE_PROPS}
         />
         <ModalPair
           label="지원동기"
           value={motivation || '-'}
-          multiline
-          minHeightClass="min-h-[100px]"
+          {...MULTILINE_PROPS}
         />
-        <ModalPair
-          label="목표"
-          value={objective || '-'}
-          multiline
-          minHeightClass="min-h-[100px]"
-        />
+        <ModalPair label="목표" value={objective || '-'} {...MULTILINE_PROPS} />
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <ModalPair label="가능 시간대" value={availableTime || '-'} />
@@ -151,8 +149,7 @@ export const ApplicationModalOutlet = ({
         <ModalPair
           label="경험 상세"
           value={studyExperience || '-'}
-          multiline
-          minHeightClass="min-h-[100px]"
+          {...MULTILINE_PROPS}
         />
       </section>
     </div>
