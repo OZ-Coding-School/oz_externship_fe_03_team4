@@ -22,25 +22,26 @@ export interface ApplicationApi {
 export type AdminApplicationApi = ApplicationApi
 
 export interface ApplicationDetailApi extends ApplicationApi {
-  // 없는 부분만 추가에유~
-  self_introduction: string
-  motivation: string
-  objective: string
-  availableTime: string
-  hasStudyExperience: boolean
-  studyExperience: string | null
+  // 기존 목록에 없던 부분만 추가에유~
+  self_introduction: string // 자기소개
+  motivation: string // 지원동기
+  objective: string // 목표
+  availableTime: string // 가능시간
+  hasStudyExperience: boolean // 스터디 경험여부
+  studyExperience: string | null //  경험상세내용
   recruitment: {
-    id: number
-    title: string
-    expectedHeadcount: number
-    courses: Array<{ name: string; instructor: string }>
-    tags: string[]
-    deadline: string
+    // 공고정보
+    id: number // 공고id
+    title: string // 공고제목
+    expectedHeadcount: number // 모집인원
+    courses: Array<{ name: string; instructor: string }> // 강의목록 [강의이름 / 강사명]
+    tags: string[] // 태그 목록
+    deadline: string // 모집마감일
   }
   applicantDetail: {
-    id: number
-    gender: string | null
-    profileImage: string | null
+    id: number // 지원자고유 id
+    gender: string | null // 성별
+    profileImage: string | null // 프로필이미지 url
   }
 }
 
@@ -74,22 +75,24 @@ export interface Application {
 }
 
 export interface ApplicationDetail extends Application {
-  applicationCode?: string
-  selfIntroduction: string
-  motivation: string
-  objective: string
-  availableTime: string
-  hasStudyExperience: boolean
-  studyExperience: string | null
+  applicationCode?: string // 추적용 코드
+  selfIntroduction: string // 자기소개
+  motivation: string // 지원동기
+  objective: string // 목표
+  availableTime: string // 가능시간
+  hasStudyExperience: boolean // 스터디경험여부
+  studyExperience: string | null // 경험상세내용
   recruitment: {
-    id: number
-    title: string
-    expectedHeadcount: number
-    courses: Array<{ name: string; instructor: string }>
-    tags: string[]
-    deadline: string
+    // 공고정보
+    id: number // 공고id
+    title: string // 제목
+    expectedHeadcount: number // 인원
+    courses: Array<{ name: string; instructor: string }> // 강의명
+    tags: string[] // 태그
+    deadline: string // 모집마감일
   }
   applicantExtra: {
+    // 지원자 추가정보
     id: number
     gender: string | null
     profileImage: string | null
@@ -141,7 +144,7 @@ export const mapApplicationDetailApiToUi = (
 ): ApplicationDetail => {
   const baseUi = base ?? mapApplicationApiToUi(detail)
   return {
-    ...baseUi,
+    ...baseUi, // 목록의 공통 필드들을 복사합니당
     selfIntroduction: detail.self_introduction,
     motivation: detail.motivation,
     objective: detail.objective,
@@ -149,6 +152,7 @@ export const mapApplicationDetailApiToUi = (
     hasStudyExperience: detail.hasStudyExperience,
     studyExperience: detail.studyExperience,
     recruitment: {
+      // 공고정보
       id: detail.recruitment.id,
       title: detail.recruitment.title,
       expectedHeadcount: detail.recruitment.expectedHeadcount,
@@ -157,6 +161,7 @@ export const mapApplicationDetailApiToUi = (
       deadline: detail.recruitment.deadline,
     },
     applicantExtra: {
+      // 지원자 정보
       id: detail.applicantDetail.id,
       gender: detail.applicantDetail.gender,
       profileImage: detail.applicantDetail.profileImage,
