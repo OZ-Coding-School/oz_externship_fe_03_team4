@@ -132,7 +132,7 @@ const StudyApplicationPage = () => {
 
       <ApplicationTableSection data={paginatedApplications} />
 
-      {filteredApplications.length > 0 && (
+      {totalPages > 1 && (
         <div className="flex justify-center">
           <Pagination
             currentPage={currentPage}
