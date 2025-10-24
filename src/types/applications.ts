@@ -40,6 +40,28 @@ export interface Application {
   updatedAt: string
 }
 
+export interface ApplicationDetail extends Application {
+  selfIntroduction: string
+  motivation: string
+  objective: string
+  availableTime: string
+  hasStudyExperience: boolean
+  studyExperience: string | null
+  recruitment: {
+    id: number
+    title: string
+    expectedHeadcount: number
+    courses: Array<{ name: string; instructor: string }>
+    tags: string[]
+    deadline: string
+  }
+  applicantExtra: {
+    id: number
+    gender: string | null
+    profileImage: string | null
+  }
+}
+
 // 상태/라벨 매핑하기
 export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
   // api -> 상태
