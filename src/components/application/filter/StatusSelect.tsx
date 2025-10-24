@@ -14,10 +14,10 @@ export const StatusSelect = ({ value, onChange }: StatusSelectProps) => {
       className="w-48"
     >
       <option value="전체">전체 상태</option>
-      <option value="승인">승인</option>
-      <option value="검토중">검토중</option>
-      <option value="대기">대기</option>
-      <option value="거절">거절</option>
+      <option value="승인">승인 (APPROVED)</option>
+      <option value="검토중">검토중 (APPLIED)</option>
+      <option value="대기">대기 (PENDING)</option>
+      <option value="거절">거절 (REJECTED)</option>
     </Select>
   )
 }
