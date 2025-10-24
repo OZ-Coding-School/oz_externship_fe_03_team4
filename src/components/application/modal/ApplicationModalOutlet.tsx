@@ -123,7 +123,24 @@ export const ApplicationModalOutlet = ({
             <ModalPair label="지원일" value={appliedAt} />
             <ModalPair label="수정일" value={updatedAt} />
         </div>
-        
+        <ModalPair
+            label="자기소개"
+            value={selfIntroduction || '-'}
+            multiline
+            minHeightClass="min-h-[100px]"
+        />
+        <ModalPair
+            label="지원동기"
+            value={motivation || '-'}
+            multiline
+            minHeightClass="min-h-[100px]"
+        />
+        <ModalPair
+            label="목표"
+            value={objective || '-'}
+            multiline
+            minHeightClass="min-h-[100px]"
+        />
       </section>
     </div>
   )
