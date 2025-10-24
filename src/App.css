@@ -28,3 +28,13 @@
   --color-info-button: #6b7280;
   --color-info-button-300: #d1d5db;
 }
+
+/* 스크롤 숨기기 - 경복추가 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}

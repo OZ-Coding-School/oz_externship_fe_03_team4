@@ -157,7 +157,10 @@ export const ApplicationModalOutlet = ({
           {...MULTILINE_PROPS}
         />
         {status ? (
-          <div className="mt-2 flex justify-end">
+          <div className="mt-4">
+            <p className="mb-1 text-sm font-medium text-neutral-700">
+              지원 상태
+            </p>
             <StatusBadge status={status} />
           </div>
         ) : null}

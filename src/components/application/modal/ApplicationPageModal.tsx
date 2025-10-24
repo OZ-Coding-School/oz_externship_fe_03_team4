@@ -20,7 +20,7 @@ export const ApplicationPageModal = ({
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
       <ModalHeader title="지원 내역 상세" onClose={onClose} />
-      <div className="max-h-[75vh] overflow-y-auto px-6 py-4">
+      <div className="scrollbar-hide max-h-[60vh] overflow-y-auto px-6 py-4">
         <ApplicationModalOutlet detail={detail} />
       </div>
       <CloseModalFooter onClose={onClose} />
