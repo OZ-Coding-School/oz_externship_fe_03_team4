@@ -113,6 +113,17 @@ export const ApplicationModalOutlet = ({
             }
           />
         </div>
+
+        <h3 className="mt-6 text-base font-semibold text-neutral-800">지원서 정보</h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <ModalPair
+                label="상태"
+                value={<StatusBadge status={status} />}
+            />
+            <ModalPair label="지원일" value={appliedAt} />
+            <ModalPair label="수정일" value={updatedAt} />
+        </div>
+        
       </section>
     </div>
   )
