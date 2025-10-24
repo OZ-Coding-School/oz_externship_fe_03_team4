@@ -8,6 +8,8 @@ import { LectureModal } from '../components/Lecture/LectureModal'
 export const LectureManagementPage = () => {
   const [search, setSearch] = useState('')
   const [lectures] = useState<Lecture[]>(mockLectures)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedLecture, setSelectedLecture] = useState<LectureDetail | null>(
     null
   )
