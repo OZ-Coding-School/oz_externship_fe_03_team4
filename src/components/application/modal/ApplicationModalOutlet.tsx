@@ -86,6 +86,34 @@ export const ApplicationModalOutlet = ({
           }
         />
       </section>
+
+      <section className="space-y-4">
+        <h3 className="mb-2 text-base font-semibold text-neutral-800">
+          지원자 정보
+        </h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <ModalPair label="닉네임" value={applicant?.name ?? '-'} />
+          <ModalPair label="이메일" value={applicant?.email ?? '-'} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <ModalPair label="성벌" value={applicantExtra?.gender ?? '-'} />
+          <ModalPair
+            label="프로필"
+            value={
+              applicantExtra?.profileImage ? (
+                <img
+                  src={applicantExtra.profileImage}
+                  alt="profile"
+                  className="h-10 w-10 rounded-full object-cover ring-1 ring-neutral-200"
+                />
+              ) : (
+                '-'
+              )
+            }
+          />
+        </div>
+      </section>
     </div>
   )
 }
