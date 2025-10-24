@@ -5,12 +5,14 @@ export type CategoryDTO = {
 
 export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD'
 
-export type Platform = 'INFLEARN' | 'UDEMY' | 'FASTCAMPUS'
+export type Platform = 'INFLEARN' | 'UDEMY'
 
 export type LectureDTO = {
+  id: number
   uuid: string
   title: string
   instructor: string
+  description: string
   thumbnail_img_url: string
   categories: CategoryDTO[]
   difficulty: Difficulty
@@ -31,7 +33,8 @@ export type Lecture = {
   thumbnail: string
   title: string
   instructor: string
-  platform: 'Udemy' | 'Inflearn' | 'Fastcampus'
+  description: string
+  platform: 'Udemy' | 'Inflearn'
   categories: string[]
   difficulty: '쉬움' | '보통' | '어려움'
   originalPrice: number
@@ -58,13 +61,9 @@ export type LectureListResponse = {
 }
 
 // 매핑 상수
-export const PLATFORM_MAP: Record<
-  Platform,
-  'Udemy' | 'Inflearn' | 'Fastcampus'
-> = {
+export const PLATFORM_MAP: Record<Platform, 'Udemy' | 'Inflearn'> = {
   INFLEARN: 'Inflearn',
   UDEMY: 'Udemy',
-  FASTCAMPUS: 'Fastcampus',
 }
 
 export const DIFFICULTY_MAP: Record<Difficulty, '쉬움' | '보통' | '어려움'> = {
@@ -75,10 +74,12 @@ export const DIFFICULTY_MAP: Record<Difficulty, '쉬움' | '보통' | '어려움
 
 // API → UI 타입으로 변환
 export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
-  id: dto.uuid,
+  id: dto.id,
+  uuid: dto.uuid,
   thumbnail: dto.thumbnail_img_url,
   title: dto.title,
   instructor: dto.instructor,
+  description: dto.description,
   platform: PLATFORM_MAP[dto.platform],
   categories: dto.categories.map((category) => category.name),
   difficulty: DIFFICULTY_MAP[dto.difficulty],
