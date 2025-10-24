@@ -28,9 +28,9 @@ const StudyApplicationPage = () => {
 
   const mockApplications: AdminApplicationApi[] = useMemo(() => {
     const statuses: AdminApplicationStatus[] = [
-      'APPROVED',
-      'APPLIED',
-      'PENDING',
+      'ACCEPTED',
+      'APPLYING',
+      'REVIEWING',
       'REJECTED',
     ]
     return Array.from({ length: 10 }).map((_, index) => ({
