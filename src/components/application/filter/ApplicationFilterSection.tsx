@@ -1,4 +1,4 @@
-import type { StatusFilter, SortKey } from '../../../types/applications'
+import type { StatusFilter, AdminSortKey } from '../../../types/applications'
 import { SearchField } from './SearchField'
 import { SortSelect } from './SortSelect'
 import { StatusSelect } from './StatusSelect'
@@ -8,8 +8,8 @@ interface ApplicationFilterSectionProps {
   setSearchText: (v: string) => void
   statusFilter: StatusFilter
   setStatusFilter: (v: StatusFilter) => void
-  sortKey: SortKey
-  setSortKey: (v: SortKey) => void
+  sortKey: AdminSortKey
+  setSortKey: (v: AdminSortKey) => void
 }
 
 export const ApplicationFilterSection = ({
