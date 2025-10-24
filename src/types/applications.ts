@@ -10,7 +10,7 @@ export type AdminApplicationStatus = ApplicationStatusServer
 
 // 서버에서 제공해주는 지원 내역 데이터들
 export interface ApplicationApi {
-  id: number // 고유id
+  id: number // ui표시용, 고유id
   recruitment_title: string // 공고명
   applicant_nickname: string // 지원자이름
   applicant_email: string // 이메일
@@ -64,6 +64,7 @@ export interface Applicant {
 }
 // 우리가 사용하는 지원 내역 데이터 구조
 export interface Application {
+  aid: number
   id: string
   postingTitle: string // 공고명
   applicant: Applicant
@@ -73,6 +74,7 @@ export interface Application {
 }
 
 export interface ApplicationDetail extends Application {
+  applicationCode?: string
   selfIntroduction: string
   motivation: string
   objective: string
@@ -115,6 +117,7 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
 
 // api응답을 프론트에서 사용하는 걸로 변환해주는 매핑 함수
 export const mapApplicationApiToUi = (a: ApplicationApi): Application => ({
+  aid: a.id,
   id: `#${a.id}`,
   postingTitle: a.recruitment_title,
   applicant: {

@@ -10,9 +10,12 @@ export const ApplicationModalOutlet = ({
   const MULTILINE_PROPS = {
     // 중복되는 부분들 상수로 선언해서 조금이라도 줄이기
     multiline: true,
-    minHeightClass: 'min-h-[100px]',
+    minHeightClass: 'min-h-[90px]',
   } as const
   const {
+    aid,
+    id,
+    applicationCode,
     postingTitle,
     applicant,
     applicantExtra,
@@ -27,6 +30,8 @@ export const ApplicationModalOutlet = ({
     studyExperience,
     recruitment,
   } = detail
+  const applicationIdDisplay =
+    applicationCode ?? (typeof aid === 'number' ? `#${aid}` : id)
 
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
@@ -96,34 +101,33 @@ export const ApplicationModalOutlet = ({
         <h3 className="mb-2 text-base font-semibold text-neutral-800">
           지원자 정보
         </h3>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <ModalPair label="닉네임" value={applicant?.name ?? '-'} />
-          <ModalPair label="이메일" value={applicant?.email ?? '-'} />
+        <div className="flex items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3">
+          {applicantExtra?.profileImage ? (
+            <img
+              src={applicantExtra.profileImage}
+              alt="profile"
+              className="h-12 w-12 rounded-full object-cover ring-1 ring-neutral-200"
+            />
+          ) : (
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 text-sm text-neutral-500">
+              N/A
+            </div>
+          )}
+          <div className="min-w-0">
+            <div className="truncate font-medium text-neutral-900">
+              {applicant?.name ?? '-'}
+            </div>
+            <div className="truncate text-sm text-neutral-600">
+              {applicant?.email ?? '-'}
+            </div>
+            <div className="mt-0.5 text-xs text-neutral-500">
+              성별: {applicantExtra?.gender ?? '-'}
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <ModalPair label="성벌" value={applicantExtra?.gender ?? '-'} />
-          <ModalPair
-            label="프로필"
-            value={
-              applicantExtra?.profileImage ? (
-                <img
-                  src={applicantExtra.profileImage}
-                  alt="profile"
-                  className="h-10 w-10 rounded-full object-cover ring-1 ring-neutral-200"
-                />
-              ) : (
-                '-'
-              )
-            }
-          />
-        </div>
-
-        <h3 className="mt-6 text-base font-semibold text-neutral-800">
-          지원서 정보
-        </h3>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <ModalPair label="상태" value={<StatusBadge status={status} />} />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
+          <ModalPair label="지원 내역 ID" value={applicationIdDisplay} />
           <ModalPair label="지원일" value={appliedAt} />
           <ModalPair label="수정일" value={updatedAt} />
         </div>
@@ -152,6 +156,11 @@ export const ApplicationModalOutlet = ({
           value={studyExperience || '-'}
           {...MULTILINE_PROPS}
         />
+        {status ? (
+          <div className="mt-2 flex justify-end">
+            <StatusBadge status={status} />
+          </div>
+        ) : null}
       </section>
     </div>
   )
