@@ -11,8 +11,8 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
     'success' | 'info' | 'warning' | 'danger'
   > = {
     승인: 'success',
-    검토중: 'info',
-    대기: 'warning',
+    지원중: 'info',
+    검토중: 'warning',
     거절: 'danger',
   }
 
