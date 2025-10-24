@@ -48,17 +48,18 @@ const StudyApplicationPage = () => {
       ).toISOString(),
     }))
   }, [])
-
+  // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
     let filteredList = mockApplications
 
     if (statusFilter !== '전체') {
-      const apiCode = uiStatusToApi[statusFilter]
+      // 전체가 아닌 경우
+      const apiCode = uiStatusToApi[statusFilter] // 이 친구가 api상태 코드로 변환한 후 필터링합니당.
       filteredList = filteredList.filter(
         (application) => application.status === apiCode
       )
     }
-
+    // 공고명, 닉네임, 이메일에 검색어 포함이면 결과 출력
     if (debouncedSearchText.trim()) {
       const lowerCaseSearchText = debouncedSearchText.trim().toLowerCase()
       filteredList = filteredList.filter(
@@ -75,7 +76,7 @@ const StudyApplicationPage = () => {
       )
     }
 
-    // 정렬 부분
+    // 정렬 부분 : 생성, 수정을 지원하며, 날짜와 문자열을 Date.Parse()로 변환한 뒤 정렬합니당.
     const isDescending = sortKey.startsWith('-')
     const sortTargetKey = (isDescending ? sortKey.slice(1) : sortKey) as
       | 'created_at'
