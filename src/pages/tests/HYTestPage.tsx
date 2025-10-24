@@ -2,6 +2,39 @@ import { type ReactNode } from 'react'
 import { Tabs } from '../../components/tab/Tabs'
 import { BreadCrumbs } from '../../components/breadcrumb/BreadCrumb'
 import { FileAttachList } from '../../components/file-attach/FileAttachList'
+import { ApplyList } from '../../components/apply-list/ApplyList'
+import { type Applicant } from '../../components/apply-list/ApplyItem'
+
+const data: Applicant[] = [
+  {
+    id: '1',
+    name: '홍길동',
+    email: 'hong@example.com',
+    status: '검토중',
+    appliedAt: '2025-10-01T09:00:00Z',
+  },
+  {
+    id: '2',
+    name: '김지원',
+    email: 'jiwon@example.com',
+    status: '거절',
+    appliedAt: '2025-10-02T09:00:00Z',
+  },
+  {
+    id: '3',
+    name: '이밀란',
+    email: 'milanLee@example.com',
+    status: '승인',
+    appliedAt: '2025-10-03T09:00:00Z',
+  },
+  {
+    id: '4',
+    name: '강복순',
+    email: 'boksoon@example.com',
+    status: '대기',
+    appliedAt: '2025-10-04T09:00:00Z',
+  },
+]
 
 const Section = ({
   title,
@@ -58,6 +91,10 @@ const HYTestPage = () => {
               { url: 'https://cdn.example.com/a/b/c.png' },
             ]}
           />
+        </Section>
+
+        <Section title="Apply List">
+          <ApplyList applicants={data} />
         </Section>
 
         <footer className="pt-4 text-center text-xs text-gray-500">
