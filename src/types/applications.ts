@@ -15,7 +15,6 @@ export interface AdminApplicationApi {
   updated_at: string
 }
 // 쿼리 파라미터와 정렬해주는 키
-export type AdminStatusFilter = 'ALL' | AdminApplicationStatus
 export type AdminSortKey =
   | '-created_at'
   | 'created_at'
@@ -24,8 +23,6 @@ export type AdminSortKey =
 
 export type ApplicationStatus = '승인' | '검토중' | '대기' | '거절'
 export type StatusFilter = '전체' | ApplicationStatus
-
-export type SortKey = '-appliedAt' | 'appliedAt' | '-updatedAt' | 'updatedAt'
 
 export interface Applicant {
   name: string
@@ -66,6 +63,10 @@ export const mapAdminApiToUi = (a: AdminApplicationApi): Application => ({
     email: a.applicant_email,
   },
   status: apiStatusToUi[a.status],
-  appliedAt: new Date(a.created_at).toLocaleString(),
-  updatedAt: new Date(a.updated_at).toLocaleString(),
+  appliedAt: new Date(a.created_at).toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+  }), // 대한민국 시간으로 포맷팅
+  updatedAt: new Date(a.updated_at).toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+  }), // 대한민국 시간으로 포맷팅
 })
