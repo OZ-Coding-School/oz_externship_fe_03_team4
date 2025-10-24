@@ -4,6 +4,7 @@ import { useState } from 'react'
 type LectureThumbnailProps = {
   src: string
   alt: string
+  className?: string
 }
 
 export const LectureThumbnail = ({ src, alt }: LectureThumbnailProps) => {
