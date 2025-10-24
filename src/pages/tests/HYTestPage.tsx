@@ -10,25 +10,25 @@ const data: Applicant[] = [
     nickname: '홍길동',
     email: 'hong@example.com',
     status: '검토중',
-    applied_at: '2025-10-01T09:00:00Z',
+    created_at: '2025-10-01T09:00:00Z',
   },
   {
     nickname: '김지원',
     email: 'jiwon@example.com',
     status: '거절',
-    applied_at: '2025-10-02T09:00:00Z',
+    created_at: '2025-10-02T09:00:00Z',
   },
   {
     nickname: '이밀란',
     email: 'milanLee@example.com',
     status: '승인',
-    applied_at: '2025-10-03T09:00:00Z',
+    created_at: '2025-10-03T09:00:00Z',
   },
   {
     nickname: '강복순',
     email: 'boksoon@example.com',
     status: '지원중',
-    applied_at: '2025-10-04T09:00:00Z',
+    created_at: '2025-10-04T09:00:00Z',
   },
 ]
 

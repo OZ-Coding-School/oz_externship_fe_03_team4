@@ -5,19 +5,18 @@ import { StatusBadge } from '../application/table/StatusBadge'
 export type Applicant = {
   nickname: string
   email?: string
-  applied_at?: string
+  created_at?: string
   status?: '지원중' | '검토중' | '거절' | '승인'
 }
 
 type ApplyItemProps = {
   applicant: Applicant
   onClick?: (id: string) => void
-  onMoreClick?: (id: string) => void
 }
 
 export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
-  const { nickname, email, status = '지원중', applied_at } = applicant
-  const dateText = formatDate(applied_at)
+  const { nickname, email, status = '지원중', created_at } = applicant
+  const dateText = formatDate(created_at)
 
   return (
     <div
