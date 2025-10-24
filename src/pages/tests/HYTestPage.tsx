@@ -7,24 +7,28 @@ import type { Applicant } from '../../components/apply-list/ApplyItem'
 
 const data: Applicant[] = [
   {
+    id: 1,
     nickname: '홍길동',
     email: 'hong@example.com',
     status: '검토중',
     created_at: '2025-10-01T09:00:00Z',
   },
   {
+    id: 2,
     nickname: '김지원',
     email: 'jiwon@example.com',
     status: '거절',
     created_at: '2025-10-02T09:00:00Z',
   },
   {
+    id: 3,
     nickname: '이밀란',
     email: 'milanLee@example.com',
     status: '승인',
     created_at: '2025-10-03T09:00:00Z',
   },
   {
+    id: 4,
     nickname: '강복순',
     email: 'boksoon@example.com',
     status: '지원중',

@@ -3,13 +3,11 @@ import { ApplyItem, type Applicant } from './ApplyItem'
 
 type ApplyListProps = {
   applicants: Applicant[]
-  onItemClick?: (id: string) => void
   emptyText?: string
 }
 
 export const ApplyList = ({
   applicants,
-  onItemClick,
   emptyText = '지원자가 없습니다.',
 }: ApplyListProps) => {
   if (!applicants?.length) {
@@ -25,11 +23,7 @@ export const ApplyList = ({
       <div>지원 내역 ({applicants.length}명)</div>
       <div className="flex flex-col gap-2 rounded-lg bg-gray-50 p-4">
         {applicants.map((applicant) => (
-          <ApplyItem
-            key={applicant.nickname}
-            applicant={applicant}
-            onClick={onItemClick}
-          />
+          <ApplyItem key={applicant.id} applicant={applicant} />
         ))}
       </div>
     </div>

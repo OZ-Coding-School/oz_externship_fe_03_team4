@@ -3,6 +3,7 @@ import { formatDate } from '../../utils/formatDate'
 import { StatusBadge } from '../application/table/StatusBadge'
 
 export type Applicant = {
+  id: string | number
   nickname: string
   email?: string
   created_at?: string
@@ -22,7 +23,7 @@ export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
     <div
       role="button"
       onClick={() => onClick?.(nickname)}
-      className="flex w-full items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 hover:bg-gray-50"
+      className="flex w-full items-center gap-4 rounded-xl border border-gray-200 bg-white p-4"
     >
       <div className="flex w-full flex-col">
         <div className="mb-2 flex justify-between gap-2">
@@ -45,8 +46,6 @@ export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
           </div>
         </div>
       </div>
-
-      <div className="flex items-center gap-3"></div>
     </div>
   )
 }
