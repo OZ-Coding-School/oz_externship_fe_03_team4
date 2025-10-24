@@ -28,8 +28,8 @@ export const applicationColumns = [
     label: '상태',
     render: (value) => <StatusBadge status={value as Application['status']} />,
   },
-  { key: 'appliedAt' as const, label: '지원일시' },
-  { key: 'updatedAt' as const, label: '수정일시' },
+  { key: 'appliedAt' as const, label: '지원일시' }, // created_at
+  { key: 'updatedAt' as const, label: '수정일시' }, // updated_at
 ] satisfies Array<{
   key: keyof Application
   label?: string
