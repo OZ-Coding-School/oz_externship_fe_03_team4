@@ -4,12 +4,14 @@ import { applicationColumns } from './TableColumn'
 
 interface ApplicationTableSectionProps {
   data: Application[]
+  onRowClick?: (row: Application) => void
 }
 
 type ApplicationRow = Application & Record<string, unknown>
 
 export const ApplicationTableSection = ({
   data,
+  onRowClick,
 }: ApplicationTableSectionProps) => {
   const rows = data as ApplicationRow[]
 
@@ -20,6 +22,7 @@ export const ApplicationTableSection = ({
           columns={applicationColumns}
           data={rows}
           className="rounded-none border-t border-neutral-200"
+          onRowClick={(row) => onRowClick?.(row as Application)}
         />
       </div>
     </section>
