@@ -3,11 +3,15 @@ import { useSearchParams } from 'react-router'
 import { Pagination } from '../components/pagination/Pagination'
 import { ApplicationFilterSection } from '../components/application/filter/ApplicationFilterSection'
 import { ApplicationTableSection } from '../components/application/table/ApplicationTableSection'
-import type {
-  Application,
-  ApplicationStatus,
-  SortKey,
-  StatusFilter,
+import {
+  type Application,
+  type AdminApplicationApi,
+  type AdminApplicationStatus,
+  type AdminSortKey,
+  type StatusFilter,
+  // apiStatusToUi,
+  uiStatusToApi,
+  mapAdminApiToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 
@@ -18,31 +22,40 @@ const StudyApplicationPage = () => {
 
   const [searchText, setSearchText] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('전체')
-  const [sortKey, setSortKey] = useState<SortKey>('-appliedAt')
+  const [sortKey, setSortKey] = useState<AdminSortKey>('-created_at')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
   const debouncedSearchText = useDebouncedValue(searchText, 300)
 
-  const mockApplications: Application[] = useMemo(() => {
-    const statuses: ApplicationStatus[] = ['승인', '검토중', '대기', '거절']
+  const mockApplications: AdminApplicationApi[] = useMemo(() => {
+    const statuses: AdminApplicationStatus[] = [
+      'APPROVED',
+      'APPLIED',
+      'PENDING',
+      'REJECTED',
+    ]
     return Array.from({ length: 30 }).map((_, index) => ({
-      id: `#${1000 + index}`,
-      postingTitle: `공고 ${index + 1}`,
-      applicant: {
-        name: `홍길동${index + 1}`,
-        email: `user${index + 1}@gmail.com`,
-      },
+      // id: `#${1000 + index}`, api연동시에는 이걸 사용
+      id: 1000 + index,
+      recruitment_title: `공고 ${index + 1}`,
+      applicant_nickname: `홍길동${index + 1}`,
+      applicant_email: `user${index + 1}@gmail.com`,
       status: statuses[index % statuses.length],
-      appliedAt: '2025-10-21 14:22',
-      updatedAt: '2025-10-22 09:13',
+      created_at: new Date(
+        `2025-10-21T14:${String(index % 60).padStart(2, '0')}:00Z`
+      ).toISOString(),
+      updated_at: new Date(
+        `2025-10-22T09:${String(index % 60).padStart(2, '0')}:00Z`
+      ).toISOString(),
     }))
   }, [])
 
-  const filteredApplications = useMemo(() => {
+  const filteredApplications = useMemo((): Application[] => {
     let filteredList = mockApplications
 
     if (statusFilter !== '전체') {
+      const apiCode = uiStatusToApi[statusFilter]
       filteredList = filteredList.filter(
-        (application) => application.status === statusFilter
+        (application) => application.status === apiCode
       )
     }
 
@@ -50,17 +63,39 @@ const StudyApplicationPage = () => {
       const lowerCaseSearchText = debouncedSearchText.trim().toLowerCase()
       filteredList = filteredList.filter(
         (application) =>
-          application.applicant.name
+          application.recruitment_title
             .toLowerCase()
             .includes(lowerCaseSearchText) ||
-          application.applicant.email
+          application.applicant_nickname
+            .toLowerCase()
+            .includes(lowerCaseSearchText) ||
+          application.applicant_email
             .toLowerCase()
             .includes(lowerCaseSearchText)
       )
     }
 
-    return filteredList
-  }, [mockApplications, debouncedSearchText, statusFilter])
+    // 정렬 부분
+    const isDescending = sortKey.startsWith('-')
+    const sortTargetKey = (isDescending ? sortKey.slice(1) : sortKey) as
+      | 'created_at'
+      | 'updated_at'
+
+    filteredList = [...filteredList].sort((firstItem, secondItem) => {
+      const firstValue =
+        sortTargetKey === 'created_at'
+          ? Date.parse(firstItem.created_at)
+          : Date.parse(firstItem.updated_at)
+
+      const secondValue =
+        sortTargetKey === 'created_at'
+          ? Date.parse(secondItem.created_at)
+          : Date.parse(secondItem.updated_at)
+
+      return isDescending ? secondValue - firstValue : firstValue - secondValue
+    })
+    return filteredList.map(mapAdminApiToUi)
+  }, [mockApplications, debouncedSearchText, statusFilter, sortKey])
 
   const totalPages = Math.max(
     1,
@@ -89,7 +124,10 @@ const StudyApplicationPage = () => {
           setCurrentPage(1)
         }}
         sortKey={sortKey}
-        setSortKey={setSortKey}
+        setSortKey={(nextSortKey) => {
+          setSortKey(nextSortKey)
+          setCurrentPage(1)
+        }}
       />
 
       <ApplicationTableSection data={paginatedApplications} />
