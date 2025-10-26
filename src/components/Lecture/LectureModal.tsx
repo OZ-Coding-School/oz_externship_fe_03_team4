@@ -2,7 +2,7 @@ import type { LectureDetail } from '../../types/lectureManagement/types'
 import { CloseModalFooter } from '../modal/CloseModalFooter'
 import Modal from '../modal/Modal'
 import { ModalHeader } from '../modal/ModalHeader'
-import { LectureModalOutlet } from './LectureModalOutlet'
+import { LectureModalOutlet } from '../lecture/LectureModalOutlet'
 
 interface LectureModalProps {
   open: boolean
@@ -16,7 +16,11 @@ export const LectureModal = ({ open, onClose, lecture }: LectureModalProps) => {
     <Modal
       isOn={open}
       onBackgroundClick={onClose}
-      className="max-h-[90vh] overflow-auto"
+      style={{
+        maxHeight: '90vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <ModalHeader title="강의 상세 정보" onClose={onClose} />
       <LectureModalOutlet lecture={lecture} />

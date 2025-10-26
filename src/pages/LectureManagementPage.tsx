@@ -3,7 +3,7 @@ import type { Lecture, LectureDetail } from '../types/lectureManagement/types'
 import { mockLectures } from '../components/lecture/mockLecture'
 import { SearchInput } from '../components/search/SearchInput'
 import { LectureTable } from '../components/lecture/LectureTable'
-import { LectureModal } from '../components/Lecture/LectureModal'
+import { LectureModal } from '../components/lecture/LectureModal'
 
 export const LectureManagementPage = () => {
   const [search, setSearch] = useState('')
