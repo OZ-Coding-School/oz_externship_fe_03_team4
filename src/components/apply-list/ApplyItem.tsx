@@ -1,28 +1,26 @@
 import { User } from 'lucide-react'
 import { formatDate } from '../../utils/formatDate'
-import { StatusBadge } from '../application/table/StatusBadge'
+// import { StatusBadge } from '../application/table/StatusBadge'
+import { Badge } from '../Badge'
+import type { ApplicantWithDate, ApplyItemProps } from '../../types/apply/types'
 
-export type Applicant = {
-  id: string | number
-  nickname: string
-  email?: string
-  created_at?: string
-  status?: '지원중' | '검토중' | '거절' | '승인'
+const statusToVariant: Record<
+  NonNullable<ApplicantWithDate['status']>,
+  'success' | 'warning' | 'danger' | 'info'
+> = {
+  대기: 'info',
+  검토중: 'warning',
+  거절: 'danger',
+  승인: 'success',
 }
 
-type ApplyItemProps = {
-  applicant: Applicant
-  onClick?: (id: string) => void
-}
-
-export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
-  const { nickname, email, status = '지원중', created_at } = applicant
+export const ApplyItem = ({ applicant }: ApplyItemProps) => {
+  const { nickname, email, status = '대기', created_at } = applicant
   const dateText = formatDate(created_at)
 
   return (
     <div
       role="button"
-      onClick={() => onClick?.(nickname)}
       className="flex w-full items-center gap-4 rounded-xl border border-gray-200 bg-white p-4"
     >
       <div className="flex w-full flex-col">
@@ -32,17 +30,17 @@ export const ApplyItem = ({ applicant, onClick }: ApplyItemProps) => {
             <div className="truncate text-sm font-semibold">{nickname}</div>
           </div>
 
-          <StatusBadge status={status} />
+          {/* <StatusBadge status={status} /> */}
+          <Badge
+            variant={statusToVariant[status] ?? 'default'}
+            label={status}
+          />
         </div>
 
         <div className="min-w-0">
           <div className="mt-1 flex flex-col gap-1 text-xs text-gray-600">
-            {email && <div className="inline-flex">이메일: {email}</div>}
-            {dateText && (
-              <div className="hidden items-center gap-1 text-xs text-gray-500 md:inline-flex">
-                지원 일시: {dateText}
-              </div>
-            )}
+            {email && <span>이메일: {email}</span>}
+            {dateText && <span>지원 일시: {dateText}</span>}
           </div>
         </div>
       </div>

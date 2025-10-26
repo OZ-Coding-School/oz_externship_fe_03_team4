@@ -3,7 +3,7 @@ import { Tabs } from '../../components/tab/Tabs'
 import { BreadCrumbs } from '../../components/breadcrumb/BreadCrumb'
 import { FileAttachList } from '../../components/file-attach/FileAttachList'
 import { ApplyList } from '../../components/apply-list/ApplyList'
-import type { Applicant } from '../../components/apply-list/ApplyItem'
+import type { Applicant } from '../../types/apply/types'
 
 const data: Applicant[] = [
   {
@@ -31,7 +31,7 @@ const data: Applicant[] = [
     id: 4,
     nickname: '강복순',
     email: 'boksoon@example.com',
-    status: '지원중',
+    status: '대기',
     created_at: '2025-10-04T09:00:00Z',
   },
 ]

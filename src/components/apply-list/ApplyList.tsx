@@ -1,19 +1,12 @@
 // 지원내역 import 하실 때는 이 파일을 import 하시면 됩니다.
-import { ApplyItem, type Applicant } from './ApplyItem'
+import { ApplyItem } from './ApplyItem'
+import type { ApplyListProps } from '../../types/apply/types'
 
-type ApplyListProps = {
-  applicants: Applicant[]
-  emptyText?: string
-}
-
-export const ApplyList = ({
-  applicants,
-  emptyText = '지원자가 없습니다.',
-}: ApplyListProps) => {
+export const ApplyList = ({ applicants }: ApplyListProps) => {
   if (!applicants?.length) {
     return (
       <div className="flex flex-col gap-2 rounded-lg bg-gray-50 p-4">
-        {emptyText}
+        <span>지원자가 없습니다.</span>
       </div>
     )
   }
