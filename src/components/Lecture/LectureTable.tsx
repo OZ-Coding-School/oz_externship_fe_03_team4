@@ -1,6 +1,6 @@
 import { Table } from '../Data-Indicate/Table'
 import type { Lecture } from '../../types/lectureManagement/types'
-import { LectureThumbnail } from '../lectureLectureThumbnail'
+import { LectureThumbnail } from '../lecture/LectureThumbnail'
 import { PlatformBadge } from '../lecture/PlatformBadge'
 
 type LectureTableProps = {
