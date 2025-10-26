@@ -23,8 +23,18 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
             </div>
 
             <ModalPair label="고유 ID" value={lecture.id} noBorder />
-            <ModalPair label="UUID" value={lecture.uuid} noBorder />
-            <ModalPair label="강의명" value={lecture.title} noBorder />
+            <ModalPair
+              label="UUID"
+              value={<span className="font-mono text-sm">{lecture.uuid}</span>}
+              noBorder
+            />
+            <ModalPair
+              label="강의명"
+              value={
+                <span className="text-xl font-extrabold">{lecture.title}</span>
+              }
+              noBorder
+            />
             <ModalPair label="강사명" value={lecture.instructor} noBorder />
             <ModalPair
               label="플랫폼"
@@ -49,7 +59,7 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
 
           {/* 오른쪽 */}
           <section className="space-y-4">
-            <div className="rounded-lg p-4">
+            <div className="rounded-lg">
               <h3 className="mb-2 text-sm font-semibold text-gray-700">
                 강의 설명
               </h3>
@@ -73,13 +83,21 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
 
             <div className="grid grid-cols-2 gap-4">
               <ModalPair
-                label="월 가격"
-                value={`${lecture.originalPrice.toLocaleString()}원`}
+                label="원 가격"
+                value={
+                  <span className="text-gray-500 line-through">
+                    {lecture.originalPrice.toLocaleString()}원
+                  </span>
+                }
                 noBorder
               />
               <ModalPair
                 label="할인된 가격"
-                value={`${lecture.discountPrice.toLocaleString()}원`}
+                value={
+                  <span className="text-2xl font-bold text-yellow-500">
+                    {lecture.discountPrice.toLocaleString()}원
+                  </span>
+                }
                 noBorder
               />
             </div>
