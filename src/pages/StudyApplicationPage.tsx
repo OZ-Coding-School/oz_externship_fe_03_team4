@@ -9,11 +9,14 @@ import {
   type AdminApplicationStatus,
   type AdminSortKey,
   type StatusFilter,
+  // type ApplicationDetail,
   // apiStatusToUi,
   uiStatusToApi,
   mapAdminApiToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
+import { ApplicationPageModal } from '../components/application/modal/ApplicationPageModal'
+import { buildDetailSkeleton } from '../utils/applications.adapters'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -25,6 +28,7 @@ const StudyApplicationPage = () => {
   const [sortKey, setSortKey] = useState<AdminSortKey>('-created_at')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
   const debouncedSearchText = useDebouncedValue(searchText, 500)
+  const [selectedRow, setSelectedRow] = useState<Application | null>(null)
 
   const mockApplications: AdminApplicationApi[] = useMemo(() => {
     const statuses: AdminApplicationStatus[] = [
@@ -48,6 +52,7 @@ const StudyApplicationPage = () => {
       ).toISOString(),
     }))
   }, [])
+
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
     let filteredList = mockApplications
@@ -130,7 +135,10 @@ const StudyApplicationPage = () => {
         }}
       />
 
-      <ApplicationTableSection data={paginatedApplications} />
+      <ApplicationTableSection
+        data={paginatedApplications}
+        onRowClick={(row) => setSelectedRow(row)}
+      />
       {/* 1페이지 이상일 경우에만 페이지네이션 렌더링 */}
       {totalPages > 1 && (
         <div className="flex justify-center">
@@ -140,6 +148,13 @@ const StudyApplicationPage = () => {
             onPageChange={setCurrentPage}
           />
         </div>
+      )}
+      {selectedRow && (
+        <ApplicationPageModal
+          open
+          onClose={() => setSelectedRow(null)}
+          detail={buildDetailSkeleton(selectedRow)}
+        />
       )}
     </div>
   )
