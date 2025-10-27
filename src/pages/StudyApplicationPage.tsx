@@ -9,13 +9,14 @@ import {
   type AdminApplicationStatus,
   type AdminSortKey,
   type StatusFilter,
-  type ApplicationDetail,
+  // type ApplicationDetail,
   // apiStatusToUi,
   uiStatusToApi,
   mapAdminApiToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { ApplicationPageModal } from '../components/application/modal/ApplicationPageModal'
+import { buildDetailSkeleton } from '../utils/applications.adapters'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -51,28 +52,7 @@ const StudyApplicationPage = () => {
       ).toISOString(),
     }))
   }, [])
-  const toDetailSkeleton = (row: Application): ApplicationDetail => ({
-    ...row,
-    selfIntroduction: '',
-    motivation: '',
-    objective: '',
-    availableTime: '',
-    hasStudyExperience: false,
-    studyExperience: '',
-    recruitment: {
-      id: 0,
-      title: row.postingTitle,
-      expectedHeadcount: 0,
-      courses: [],
-      tags: [],
-      deadline: '',
-    },
-    applicantExtra: {
-      id: 0,
-      gender: null,
-      profileImage: null,
-    },
-  })
+
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
     let filteredList = mockApplications
@@ -173,7 +153,7 @@ const StudyApplicationPage = () => {
         <ApplicationPageModal
           open
           onClose={() => setSelectedRow(null)}
-          detail={toDetailSkeleton(selectedRow)}
+          detail={buildDetailSkeleton(selectedRow)}
         />
       )}
     </div>
