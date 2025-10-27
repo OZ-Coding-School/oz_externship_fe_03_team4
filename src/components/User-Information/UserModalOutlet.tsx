@@ -1,3 +1,4 @@
+import { useState, type ChangeEvent } from "react";
 import type { MappedUser } from "../../types/user";
 
 interface UserModalOutletProps {
@@ -11,19 +12,54 @@ export const UserModalOutlet = ({
   isEditing,
   onUserChange,
 }: UserModalOutletProps) => {
+  const [previewAvatar, setPreviewAvatar] = useState<string | null>(
+    typeof user.avatar === "string" ? user.avatar : null
+  );
+
   const handleChange = (field: keyof MappedUser, value: string) => {
     onUserChange({ ...user, [field]: value });
+  };
+
+  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      setPreviewAvatar(result);
+      onUserChange({ ...user, avatar: result });
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
     <div className="mt-4">
       {/* 프로필 영역 */}
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-          {/* 실제 이미지가 있다면 img src={user.avatar} 등 사용 */}
-          <span className="text-2xl font-bold text-gray-500">
-            {user.nickname.charAt(0)}
-          </span>
+        <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
+          {previewAvatar ? (
+            <img
+              src={previewAvatar}
+              alt="avatar"
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) : (
+            <span className="text-2xl font-bold text-gray-500">
+              {user.nickname.charAt(0)}
+            </span>
+          )}
+          {isEditing && (
+            <label className="absolute inset-0 cursor-pointer bg-black/20 flex items-center justify-center rounded-full text-white text-sm opacity-0 hover:opacity-100 transition">
+              변경
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarChange}
+              />
+            </label>
+          )}
         </div>
         <div>
           <p className="text-lg font-semibold">{user.nickname}</p>
