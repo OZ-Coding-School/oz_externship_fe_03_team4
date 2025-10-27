@@ -57,7 +57,7 @@ export const ApplicationModalOutlet = ({
           label="강의 목록"
           value={
             recruitment?.courses?.length ? (
-              <ul className="list-dics list-inside space-y-1 text-sm text-neutral-700">
+              <ul className="list-inside list-disc space-y-1 text-sm text-neutral-700">
                 {recruitment.courses.map((course, i) => (
                   <li key={`${course.name}-${i}`}>
                     <span className="font-medium">{course.name}</span>
@@ -85,7 +85,7 @@ export const ApplicationModalOutlet = ({
               {recruitment.tags.map((tag, i) => (
                 <span
                   key={`${tag}-${i}`}
-                  className="bg-neurtal-100 rounded-full px-2 py-1 text-xs text-neutral-700"
+                  className="rounded-full bg-neutral-100 px-2 py-1 text-xs text-neutral-700"
                 >
                   #{tag}
                 </span>
