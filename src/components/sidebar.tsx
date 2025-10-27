@@ -76,14 +76,14 @@ const Sidebar = () => {
       items: [
         { to: "/lecture-management", icon: BookOpen, label: "강의 관리" },
         { to: "/study-group-management", icon: ClipboardList, label: "스터디 그룹 관리" },
-        { to: "/review-management", icon: Star, label: "리뷰 관리" },
+        { to: "/reviews", icon: Star, label: "리뷰 관리" },
       ],
     },
     post: {
       title: "스터디 구인 공고 관리",
       items: [
         { to: "/post-management", icon: Megaphone, label: "공고 관리" },
-        { to: "/support-management", icon: ClipboardList, label: "지원 내역 관리" },
+        { to: "/application", icon: ClipboardList, label: "지원 내역 관리" },
       ],
     },
   };
