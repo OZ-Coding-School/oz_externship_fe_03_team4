@@ -9,6 +9,7 @@ interface ModalPairProps {
   readOnly?: boolean
   multiline?: boolean // 여러 줄일 경우
   minHeightClass?: string
+  noBorder?: boolean // 테투리 없는 스타일
 }
 
 export const ModalPair = ({
@@ -18,8 +19,23 @@ export const ModalPair = ({
   readOnly = true,
   multiline = false, // 여러 줄일 경우
   minHeightClass = 'min-h-[96px]', // 최소 높이
+  noBorder = false,
 }: ModalPairProps) => {
   const isString = typeof value === 'string'
+
+  // noBorder가 true일 때
+  if (noBorder) {
+    return (
+      <div className={cn('space-y-1', className)}>
+        <p className="text-sm text-gray-600">{label}</p>
+        {isString ? (
+          <p className="text-sm text-gray-800">{value as string}</p>
+        ) : (
+          <div className="text-sm text-gray-800">{value ?? '-'}</div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className={cn('space-y-1.5', className)}>

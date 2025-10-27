@@ -11,6 +11,7 @@ import StudyReviewPage from './pages/StudyReviewPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import Dashboard from './pages/Dashboard'
 import StudyApplicationPage from './pages/StudyApplicationPage'
+import { LectureManagementPage } from './pages/LectureManagementPage'
 
 function App() {
   return (
@@ -27,6 +28,10 @@ function App() {
           <Route path="reviews" element={<StudyReviewPage />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="application" element={<StudyApplicationPage />} />
+          <Route
+            path="lecture-management"
+            element={<LectureManagementPage />}
+          />
           {/* <Route index element={<ToastTest />} /> /}
           {/ <Route path="users" element={<userspage />} /> 
             아래 부분에 이렇게 계속 라우팅 추가해주시면 됩니다. */}

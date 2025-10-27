@@ -1,20 +1,41 @@
 import { useState } from 'react'
-import type { Lecture } from '../types/lectureManagement/types'
-import { mockLectures } from '../components/Lecture/mockLecture'
+import type { Lecture, LectureDetail } from '../types/lectureManagement/types'
+import { mockLectures } from '../components/lecture/mockLecture'
 import { SearchInput } from '../components/search/SearchInput'
-import { LectureTable } from '../components/Lecture/LectureTable'
+import { LectureTable } from '../components/lecture/LectureTable'
+import { LectureModal } from '../components/lecture/LectureModal'
 
 export const LectureManagementPage = () => {
   const [search, setSearch] = useState('')
-  const [lecture] = useState<Lecture[]>(mockLectures)
+  const [lectures] = useState<Lecture[]>(mockLectures)
+  const [selectedLecture, setSelectedLecture] = useState<LectureDetail | null>(
+    null
+  )
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const filteredLectures = lecture.filter((lecture) => {
-    if (!search) return true
+  const filteredLectures = lectures.filter((lectures) => {
+    if (!search.trim()) return true
     return (
-      lecture.title.toLowerCase().includes(search.toLowerCase()) ||
-      lecture.instructor.toLowerCase().includes(search.toLowerCase())
+      lectures.title.toLowerCase().includes(search.toLowerCase()) ||
+      lectures.instructor.toLowerCase().includes(search.toLowerCase())
     )
   })
+
+  const handleLectureClick = (lecture: Lecture) => {
+    const lectureDetail: LectureDetail = {
+      ...lecture,
+      duration: 7200,
+      url_link: `https://www.${lecture.platform.toLowerCase()}.com/course/${lecture.uuid}`,
+    }
+
+    setSelectedLecture(lectureDetail)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedLecture(null)
+  }
 
   return (
     <div className="min-h-screen w-full bg-gray-50">
@@ -37,8 +58,20 @@ export const LectureManagementPage = () => {
 
         {/* 테이블 */}
         <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-[0_3px_3px_rgba(0,0,0,0.05)]">
-          <LectureTable lectures={filteredLectures} />
+          <LectureTable
+            lectures={filteredLectures}
+            onLectureClick={handleLectureClick}
+          />
         </div>
+
+        {/* 모달 */}
+        {selectedLecture && (
+          <LectureModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            lecture={selectedLecture}
+          />
+        )}
       </main>
     </div>
   )
