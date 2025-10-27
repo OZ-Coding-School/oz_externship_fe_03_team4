@@ -2,9 +2,12 @@
 // 지원 상태 (서버에서 내려오는 값)
 export type ApplicationStatusServer =
   | 'ACCEPTED' // 승인
+  | 'APPROVED' // 승인
   | 'APPLYING' // 지원중
+  | 'APPLIED' // 대기
   | 'REVIEWING' // 검토중
   | 'REJECTED' // 거절
+  | 'PENDING' // 대기
 
 export type AdminApplicationStatus = ApplicationStatusServer
 
@@ -56,7 +59,7 @@ export type SortKeyApi =
 
 export type AdminSortKey = SortKeyApi
 // ui용
-export type ApplicationStatus = '승인' | '지원중' | '검토중' | '거절'
+export type ApplicationStatus = '승인' | '검토중' | '대기' | '거절'
 export type StatusFilter = '전체' | ApplicationStatus // 상태 필터 옵션
 // 지원자 정보
 export interface Applicant {
@@ -104,8 +107,11 @@ export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
   // api -> 상태
   {
     ACCEPTED: '승인',
-    APPLYING: '지원중',
+    APPROVED: '승인',
     REVIEWING: '검토중',
+    PENDING: '대기',
+    APPLYING: '대기',
+    APPLIED: '대기',
     REJECTED: '거절',
   }
 
@@ -113,8 +119,8 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
   // 요긴 반대입니당
   {
     승인: 'ACCEPTED',
-    지원중: 'APPLYING',
     검토중: 'REVIEWING',
+    대기: 'PENDING',
     거절: 'REJECTED',
   }
 
