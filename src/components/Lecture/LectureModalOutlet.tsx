@@ -1,7 +1,7 @@
 import type { LectureDetail } from '../../types/lectureManagement/types'
 import { Badge } from '../Badge'
 import { ModalPair } from '../reviews/ModalPair'
-import { PlatformBadge } from './PlatformBadge'
+import { PlatformBadge } from '../Lecture/PlatformBadge'
 
 interface LectureModalOutletProps {
   lecture: LectureDetail

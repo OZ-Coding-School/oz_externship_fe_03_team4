@@ -2,7 +2,7 @@ import type { LectureDetail } from '../../types/lectureManagement/types'
 import { CloseModalFooter } from '../modal/CloseModalFooter'
 import Modal from '../modal/Modal'
 import { ModalHeader } from '../modal/ModalHeader'
-import { LectureModalOutlet } from '../lecture/LectureModalOutlet'
+import { LectureModalOutlet } from '../Lecture/LectureModalOutlet'
 
 interface LectureModalProps {
   open: boolean

@@ -6,8 +6,8 @@ import { SearchInput } from "../components/search/SearchInput";
 import { Select } from "../components/FormUI/Select";
 import Modal from "../components/modal/Modal";
 import { ModalHeader } from "../components/modal/ModalHeader";
-import { UserModalOutlet } from "../components/User-Information/UserModalOutlet"
-import { ModalFooter } from "../components/User-Information/UserModalFooter";
+import { UserModalOutlet } from "../components/User-Information/UserModalOutlet";
+import { UserModalFooter } from "../components/User-Information/UserModalFooter";
 // import { useUsers } from "../hooks/useUsers"; // 나중에 API 연동 시 사용
 
 const UserListPage = () => {
@@ -25,6 +25,7 @@ const UserListPage = () => {
   // 모달 상태
   const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // 더미데이터
   const dummyUsers: MappedUser[] = [
@@ -135,6 +136,20 @@ const UserListPage = () => {
   const handleRowClick = (user: MappedUser) => {
     setSelectedUser(user);
     setIsModalOpen(true);
+    setIsEditing(false);
+  };
+
+  // 권한 변경 핸들러 (UserModalFooter와 타입 매칭)
+  const handleRoleChange = (role: "admin" | "staff" | "user") => {
+    if (!selectedUser) return;
+
+    const roleMap: Record<"admin" | "staff" | "user", "관리자" | "스태프" | "일반회원"> = {
+      admin: "관리자",
+      staff: "스태프",
+      user: "일반회원",
+    };
+
+    setSelectedUser({ ...selectedUser, role: roleMap[role] });
   };
 
   return (
@@ -179,10 +194,6 @@ const UserListPage = () => {
           </div>
         </div>
 
-        {/* 로딩 / 에러 메시지 영역 (API 사용 시 주석 해제) */}
-        {/* {loading && <p>로딩중...</p>} */}
-        {/* {error && <p className="text-red-500">{error}</p>} */}
-
         {/* 테이블 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <Table<MappedUser>
@@ -199,15 +210,24 @@ const UserListPage = () => {
             onBackgroundClick={() => setIsModalOpen(false)}
           >
             <div className="p-6 w-[700px]">
-              {/* 분리된 컴포넌트 구조 */}
               <ModalHeader
                 title="회원 상세 정보"
                 onClose={() => setIsModalOpen(false)}
               />
 
-              <UserModalOutlet user={selectedUser} />
+              <UserModalOutlet
+                user={selectedUser}
+                isEditing={isEditing}
+                onUserChange={setSelectedUser}
+              />
 
-              <ModalFooter onClose={() => setIsModalOpen(false)} />
+              <UserModalFooter
+                user={selectedUser}
+                isEditing={isEditing}
+                onEditToggle={() => setIsEditing(!isEditing)}
+                onClose={() => setIsModalOpen(false)}
+                onRoleChange={handleRoleChange}
+              />
             </div>
           </Modal>
         )}
