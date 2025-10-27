@@ -3,38 +3,55 @@ import { Tabs } from '../../components/tab/Tabs'
 import { BreadCrumbs } from '../../components/breadcrumb/BreadCrumb'
 import { FileAttachList } from '../../components/file-attach/FileAttachList'
 import { ApplyList } from '../../components/apply-list/ApplyList'
-import type { Applicant } from '../../types/apply/types'
+import {
+  mapAdminApiToUi,
+  type AdminApplicationApi,
+} from '../../types/applications'
+import { formatDate } from '../../utils/formatDate'
 
-const data: Applicant[] = [
+const apiData: AdminApplicationApi[] = [
   {
     id: 1,
-    nickname: '홍길동',
-    email: 'hong@example.com',
-    status: '검토중',
+    recruitment_title: 'FE Intern',
+    applicant_nickname: '홍길동',
+    applicant_email: 'hong@example.com',
+    status: 'REVIEWING',
     created_at: '2025-10-01T09:00:00Z',
+    updated_at: '2025-10-01T10:00:00Z',
   },
   {
     id: 2,
-    nickname: '김지원',
-    email: 'jiwon@example.com',
-    status: '거절',
+    recruitment_title: 'BE Intern',
+    applicant_nickname: '김지원',
+    applicant_email: 'jiwon@example.com',
+    status: 'REJECTED',
     created_at: '2025-10-02T09:00:00Z',
+    updated_at: '2025-10-02T10:00:00Z',
   },
   {
     id: 3,
-    nickname: '이밀란',
-    email: 'milanLee@example.com',
-    status: '승인',
+    recruitment_title: 'Design Intern',
+    applicant_nickname: '이밀란',
+    applicant_email: 'milanLee@example.com',
+    status: 'ACCEPTED',
     created_at: '2025-10-03T09:00:00Z',
+    updated_at: '2025-10-03T10:00:00Z',
   },
   {
     id: 4,
-    nickname: '강복순',
-    email: 'boksoon@example.com',
-    status: '대기',
+    recruitment_title: 'QA Intern',
+    applicant_nickname: '강복순',
+    applicant_email: 'boksoon@example.com',
+    status: 'APPLYING',
     created_at: '2025-10-04T09:00:00Z',
+    updated_at: '2025-10-04T10:00:00Z',
   },
 ]
+const applications = apiData.map(mapAdminApiToUi).map((ui, i) => ({
+  ...ui,
+  // created_at(ISO) 기준으로 "YYYY-MM-DD HH:mm" 형식 보장
+  appliedAt: formatDate(apiData[i].created_at),
+}))
 
 const Section = ({
   title,
@@ -94,7 +111,7 @@ const HYTestPage = () => {
         </Section>
 
         <Section title="Apply List">
-          <ApplyList applicants={data} />
+          <ApplyList applications={applications} />
         </Section>
 
         <footer className="pt-4 text-center text-xs text-gray-500">
