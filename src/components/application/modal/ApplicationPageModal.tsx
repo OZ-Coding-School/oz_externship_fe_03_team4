@@ -7,7 +7,7 @@ import { ApplicationModalOutlet } from './ApplicationModalOutlet'
 interface ApplicationPageModalProps {
   open: boolean
   onClose: () => void
-  detail: ApplicationDetail | null
+  detail: ApplicationDetail | null // null은 렌더링 안정성 확보를 위해 유지하려고 합니당.
 }
 
 export const ApplicationPageModal = ({
