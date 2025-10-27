@@ -54,7 +54,7 @@ export const UserModalFooter = ({
 
         <div className="flex gap-2">
           {isEditing ? (
-            <Button color="success" size="medium" onClick={handleSave}>
+            <Button color="primary" size="medium" onClick={handleSave}>
               저장하기
             </Button>
           ) : (

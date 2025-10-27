@@ -72,7 +72,7 @@ export const UserModalOutlet = ({
         {/* 회원 ID - 항상 읽기 전용 */}
         <div>
           <p className="text-xs text-gray-500 mb-1">회원 ID</p>
-          <div className="p-3 border rounded-lg bg-gray-50">
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
             <p className="font-medium">{user.id}</p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export const UserModalOutlet = ({
         {/* 이메일 - 항상 읽기 전용 */}
         <div>
           <p className="text-xs text-gray-500 mb-1">이메일</p>
-          <div className="p-3 border rounded-lg bg-gray-50">
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
             <p className="font-medium">{user.email}</p>
           </div>
         </div>
@@ -91,12 +91,14 @@ export const UserModalOutlet = ({
           {isEditing ? (
             <input
               type="text"
-              className="p-3 border rounded-lg w-full"
+              className={`p-3 rounded-lg w-full ${
+                isEditing ? "border border-gray-300" : "border-none bg-gray-50"
+              }`}
               value={user.nickname}
               onChange={(e) => handleChange("nickname", e.target.value)}
             />
           ) : (
-            <div className="p-3 border rounded-lg bg-gray-50">
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
               <p className="font-medium">{user.nickname}</p>
             </div>
           )}
@@ -108,12 +110,14 @@ export const UserModalOutlet = ({
           {isEditing ? (
             <input
               type="text"
-              className="p-3 border rounded-lg w-full"
+              className={`p-3 rounded-lg w-full ${
+                isEditing ? "border border-gray-300" : "border-none bg-gray-50"
+              }`}
               value={user.name}
               onChange={(e) => handleChange("name", e.target.value)}
             />
           ) : (
-            <div className="p-3 border rounded-lg bg-gray-50">
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
               <p className="font-medium">{user.name}</p>
             </div>
           )}
@@ -125,12 +129,14 @@ export const UserModalOutlet = ({
           {isEditing ? (
             <input
               type="date"
-              className="p-3 border rounded-lg w-full"
+              className={`p-3 rounded-lg w-full ${
+                isEditing ? "border border-gray-300" : "border-none bg-gray-50"
+              }`}
               value={user.birthday}
               onChange={(e) => handleChange("birthday", e.target.value)}
             />
           ) : (
-            <div className="p-3 border rounded-lg bg-gray-50">
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
               <p className="font-medium">{user.birthday}</p>
             </div>
           )}
@@ -139,7 +145,7 @@ export const UserModalOutlet = ({
         {/* 권한 - 항상 읽기 전용 */}
         <div>
           <p className="text-xs text-gray-500 mb-1">권한</p>
-          <div className="p-3 border rounded-lg bg-gray-50">
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
             <p className="font-medium">{user.role}</p>
           </div>
         </div>
@@ -149,7 +155,9 @@ export const UserModalOutlet = ({
           <p className="text-xs text-gray-500 mb-1">상태</p>
           {isEditing ? (
             <select
-              className="p-3 border rounded-lg w-full"
+              className={`p-3 rounded-lg w-full ${
+                isEditing ? "border border-gray-300" : "border-none bg-gray-50"
+              }`}
               value={user.status}
               onChange={(e) => handleChange("status", e.target.value)}
             >
@@ -158,7 +166,7 @@ export const UserModalOutlet = ({
               <option value="탈퇴요청">탈퇴요청</option>
             </select>
           ) : (
-            <div className="p-3 border rounded-lg bg-gray-50">
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
               <p className="font-medium">{user.status}</p>
             </div>
           )}
@@ -167,7 +175,7 @@ export const UserModalOutlet = ({
         {/* 가입일시 - 항상 읽기 전용 */}
         <div>
           <p className="text-xs text-gray-500 mb-1">가입일</p>
-          <div className="p-3 border rounded-lg bg-gray-50">
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
             <p className="font-medium">{user.joinedAt}</p>
           </div>
         </div>
@@ -178,12 +186,14 @@ export const UserModalOutlet = ({
           {isEditing ? (
             <input
               type="date"
-              className="p-3 border rounded-lg w-full"
+              className={`p-3 rounded-lg w-full ${
+                isEditing ? "border border-gray-300" : "border-none bg-gray-50"
+              }`}
               value={user.withdrawAt}
               onChange={(e) => handleChange("withdrawAt", e.target.value)}
             />
           ) : (
-            <div className="p-3 border rounded-lg bg-gray-50">
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
               <p className="font-medium">{user.withdrawAt}</p>
             </div>
           )}
