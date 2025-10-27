@@ -1,28 +1,9 @@
 import { User } from 'lucide-react'
-// import { formatDate } from '../../utils/formatDate'
 import { StatusBadge } from '../application/table/StatusBadge'
-// import { Badge } from '../Badge'
-// import type { ApplicantWithDate, ApplyItemProps } from '../../types/apply/types'
 import type { Application } from '../../types/applications'
-
-// const statusToVariant: Record<
-//   NonNullable<ApplicantWithDate['status']>,
-//   'success' | 'warning' | 'danger' | 'info'
-// > = {
-//   대기: 'info',
-//   검토중: 'warning',
-//   거절: 'danger',
-//   승인: 'success',
-// }
-
-// type ApplicationCard = Pick<
-//   Application,
-//   'id' | 'applicant' | 'status' | 'appliedAt'
-// >
 
 export const ApplyItem = ({ application }: { application: Application }) => {
   const { id, applicant, status, appliedAt } = application
-  // const dateText = formatDate(created_at)
 
   return (
     <div
@@ -40,10 +21,6 @@ export const ApplyItem = ({ application }: { application: Application }) => {
           </div>
 
           <StatusBadge status={status} />
-          {/* <Badge
-            variant={statusToVariant[status] ?? 'default'}
-            label={status}
-          /> */}
         </div>
 
         <div className="mt-1 flex flex-col gap-1 text-xs text-gray-600">

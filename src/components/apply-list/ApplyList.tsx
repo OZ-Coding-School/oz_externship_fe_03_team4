@@ -1,12 +1,6 @@
 // 지원내역 import 하실 때는 이 파일을 import 하시면 됩니다.
 import { ApplyItem } from './ApplyItem'
-// import type { ApplyListProps } from '../../types/apply/types'
 import type { Application } from '../../types/applications'
-
-// type ApplicationCard = Pick<
-//   Application,
-//   'id' | 'applicant' | 'status' | 'appliedAt'
-// >
 
 export const ApplyList = ({
   applications,
