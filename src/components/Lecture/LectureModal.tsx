@@ -16,11 +16,7 @@ export const LectureModal = ({ open, onClose, lecture }: LectureModalProps) => {
     <Modal
       isOn={open}
       onBackgroundClick={onClose}
-      style={{
-        maxHeight: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+      
     >
       <ModalHeader title="강의 상세 정보" onClose={onClose} />
       <LectureModalOutlet lecture={lecture} />

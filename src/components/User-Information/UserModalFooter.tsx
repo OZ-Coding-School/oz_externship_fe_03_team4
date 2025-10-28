@@ -70,7 +70,7 @@ export const UserModalFooter = ({
 
       {/* 권한 변경 모달 */}
       <Modal isOn={isRoleModalOpen} onBackgroundClick={() => setIsRoleModalOpen(false)}>
-        <div className="p-6 w-[450px]">
+        <div className="p-6 w-[400px] max-h-[400px]">
           <h2 className="text-lg font-bold mb-4 text-left">권한 변경</h2>
           <div className="flex flex-col gap-3 mb-6">
             {roles.map((role) => (
@@ -106,7 +106,7 @@ export const UserModalFooter = ({
 
       {/* 저장/권한 변경 완료 알람 */}
       <Modal isOn={isAlertOpen} onBackgroundClick={() => setIsAlertOpen(false)}>
-        <div className="p-6 w-[350px] text-center">
+        <div className="p-6 text-center w-[350px] max-h-[600px]">
           <h2 className="text-lg font-bold mb-4">알림</h2>
           <p className="mb-6">변경이 성공적으로 적용되었습니다.</p>
           <Button color="success" size="medium" onClick={() => setIsAlertOpen(false)}>
