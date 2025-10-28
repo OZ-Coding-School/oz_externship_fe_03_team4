@@ -18,6 +18,8 @@ export type StudyGroupDTO = {
   current_headcount: number
   is_leader: boolean
   lectures: StudyGroupLectureDTO[]
+  created_at: string
+  updated_at: string
 }
 
 export type StudyGroupListResponse = {
@@ -42,6 +44,8 @@ export type StudyGroup = {
   status: StudyGroupUiStatus
   isLeader: boolean
   lectures: StudyGroupLectureDTO[]
+  createdAt: string
+  updatedAt: string
 }
 
 // 상태 매핑
@@ -101,5 +105,7 @@ export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
     status: STUDY_GROUP_STATUS_MAP[dto.status],
     isLeader: dto.is_leader,
     lectures: dto.lectures,
+    createdAt: dto.created_at,
+    updatedAt: dto.updated_at,
   }
 }
