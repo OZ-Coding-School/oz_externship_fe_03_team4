@@ -23,7 +23,7 @@ const yearlyData = [
   { month: '2025년', count: 28 },
 ];
 
-interface WithdrawtrendProps {
+interface WithdrawtrencChartdProps {
   isAnimationActive?: boolean;
   period: 'monthly' | 'yearly';
 }
@@ -45,7 +45,7 @@ const CustomTooltip = ({
 const Withdrawtrend = ({
   isAnimationActive = true,
   period,
-}: WithdrawtrendProps) => {
+}: WithdrawtrencChartdProps) => {
   const data = period === 'yearly' ? yearlyData : monthlyData;
 
   return (

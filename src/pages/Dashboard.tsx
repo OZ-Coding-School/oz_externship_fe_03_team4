@@ -3,7 +3,7 @@ import { Tabs, type TabItem } from '../components/tab/Tabs';
 import { useState } from 'react';
 import { Select } from '../components/FormUI/Select';
 import Withdrawtrend from '../pages/chart/Withdrawtrend'
-import WithdrawReason from './chart/WithdrawReasonmain'
+import WithdrawReasonmain from'../pages/chart/WithdrawReasonmain';
 
 
 type Period = 'monthly' | 'yearly'
@@ -66,7 +66,7 @@ const Dashboard = () => {
     {
       id: 'reason',
       label: '탈퇴 사유 분석',
-         content: <WithdrawReason />,
+         content: <WithdrawReasonmain />,
     },
   ]
 
