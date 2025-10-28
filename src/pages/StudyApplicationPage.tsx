@@ -17,6 +17,7 @@ import {
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { ApplicationPageModal } from '../components/application/modal/ApplicationPageModal'
 import { buildDetailSkeleton } from '../utils/applications.adapters'
+// import { useApplicationsQuery } from '../hooks/applications/useApplicationsQuery'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -29,6 +30,15 @@ const StudyApplicationPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
   const debouncedSearchText = useDebouncedValue(searchText, 500)
   const [selectedRow, setSelectedRow] = useState<Application | null>(null)
+
+  // 나중에 이 부분만 주석해제하믄 됨
+  // const { data, isLoading, isError } = useApplicationsQuery({
+  //   searchText: debouncedSearchText,
+  //   statusFilter,
+  //   pageNumber: currentPage,
+  //   pageSize: PAGE_SIZE,
+  //   sortKey,
+  // })
 
   const mockApplications: AdminApplicationApi[] = useMemo(() => {
     const statuses: AdminApplicationStatus[] = [
@@ -107,6 +117,7 @@ const StudyApplicationPage = () => {
     1,
     Math.ceil(filteredApplications.length / PAGE_SIZE)
   )
+  // const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE))
 
   const paginatedApplications = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE
