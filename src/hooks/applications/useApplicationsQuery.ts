@@ -8,7 +8,7 @@ import { buildQueryParams } from './buildQueryParams'
 import {
   fetchApplications,
   type FetchApplicationsReturn,
-} from './fetchApplications'
+} from '../../api/fetchApplications'
 import type { ApplicationsParams } from './types.local'
 
 export const useApplicationsQuery = (

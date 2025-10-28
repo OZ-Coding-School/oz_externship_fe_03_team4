@@ -1,10 +1,10 @@
-import api from '../../lib/axios'
-import type { Application } from '../../types/applications'
-import type { ApplicationRequestParams } from './types.local'
+import api from '../lib/axios'
+import type { Application } from '../types/applications'
+import type { ApplicationRequestParams } from '../hooks/applications/types.local'
 import {
   mapApplicationsToUi,
   type ApplicationsListResponse,
-} from './mapApplicationsToUi'
+} from '../hooks/applications/mapApplicationsToUi'
 
 export type FetchApplicationsReturn = {
   items: Application[]
