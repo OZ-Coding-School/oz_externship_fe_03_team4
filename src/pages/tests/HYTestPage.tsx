@@ -115,6 +115,11 @@ const HYTestPage = () => {
                 file_name: '지정된 파일명(최종).pdf',
                 file_url: 'https://cdn.example.com/raw/file',
               },
+              {
+                file_name: '한글 보고서.pdf',
+                file_url:
+                  'https://cdn.example.com/files/%ED%95%9C%EA%B8%80%20%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf',
+              },
             ]}
           />
         </Section>
