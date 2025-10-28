@@ -38,3 +38,18 @@
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* g 요소에 포커스될 때의 테두리 제거 - 현진추가*/
+g:focus {
+  outline: none !important;
+}
+
+/* path 요소에 포커스될 때의 테두리 제거 - 현진추가*/
+path:focus {
+  outline: none !important;
+}
+
+/* 특정 Recharts 요소에만 적용하려면 -현진추가 */
+.recharts-wrapper * {
+  outline: none !important;
+}
