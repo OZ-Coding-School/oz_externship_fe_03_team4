@@ -104,10 +104,13 @@ const HYTestPage = () => {
         <Section title="File Attach List">
           <FileAttachList
             files={[
-              { url: '/api/download/123' },
-              { url: 'https://cdn.example.com/a/b/c.png' },
-              { url: ':::' },
-              { url: 'C:\\temp\\resume.pdf' },
+              { file_name: '123', file_url: '/api/download/123' },
+              {
+                file_name: 'c.png',
+                file_url: 'https://cdn.example.com/a/b/c.png',
+              },
+              { file_name: ':::', file_url: ':::' },
+              { file_name: 'resume.pdf', file_url: 'C:\\temp\\resume.pdf' },
             ]}
           />
         </Section>

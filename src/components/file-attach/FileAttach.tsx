@@ -1,9 +1,10 @@
 import { FileText } from 'lucide-react'
+import { type AttachmentFile } from '../../types/fileattach'
 
-type FileAttachProps = {
-  href: string
-  name?: string
-}
+// type FileAttachProps = {
+//   href: string
+//   name?: string
+// }
 
 // function getFileNameFromHref(href: string) {
 //   try {
@@ -36,17 +37,25 @@ function getFileNameFromHref(href: string) {
   }
 }
 
-export const FileAttach = ({ href, name }: FileAttachProps) => {
-  const fileName = name || getFileNameFromHref(href)
-  const isInvalid = fileName === '잘못된 파일명입니다'
+export const FileAttach = ({ file_name, file_url }: AttachmentFile) => {
+  // const fileName = file_name || getFileNameFromHref(file_url)
+  // const isInvalid = fileName === '잘못된 파일명입니다'
+  const isHttp = /^https?:\/\//i.test(file_url)
+  const fileName = isHttp
+    ? (file_name ?? getFileNameFromHref(file_url))
+    : '잘못된 파일명입니다'
+  const isInvalid = !isHttp || fileName === '잘못된 파일명입니다'
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (isInvalid) e.preventDefault() // ❌ 잘못된 파일은 다운로드 차단
+    if (isInvalid) {
+      e.preventDefault() // ❌ 잘못된 파일은 다운로드 차단
+      alert('잘못된 파일명입니다. 다운로드 할 수 없습니다.')
+    }
   }
 
   return (
     <a
-      href={href}
+      href={file_url}
       download={!isInvalid}
       onClick={handleClick}
       className="flex items-center gap-2 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100"
