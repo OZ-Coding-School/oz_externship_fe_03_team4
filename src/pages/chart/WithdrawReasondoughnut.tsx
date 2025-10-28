@@ -113,7 +113,7 @@ const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutCh
             <Pie
               data={REASON_DATA}
               dataKey="value"
-              cx="%"
+              cx="60%" //피드백 반영
               cy="50%"
               innerRadius="40%"
               outerRadius="75%"

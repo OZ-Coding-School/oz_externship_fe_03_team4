@@ -49,7 +49,7 @@ const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => 
         <YAxis />
         <Tooltip content={CustomTooltip} />
         <Legend />
-        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} isAnimationActive={isAnimationActive}fill="#FFD700"/>
+        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} isAnimationActive={isAnimationActive} fill="#FFD700"/> {/*피드백 반영*/}
       </BarChart>
     </ResponsiveContainer>
   );
