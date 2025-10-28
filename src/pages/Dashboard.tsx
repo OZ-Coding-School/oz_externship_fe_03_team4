@@ -3,7 +3,7 @@ import { Tabs, type TabItem } from '../components/tab/Tabs';
 import { useState } from 'react';
 import { Select } from '../components/FormUI/Select';
 import Withdrawtrend from '../pages/chart/Withdrawtrend'
-import WithdrawReason from '../pages/chart/WithdrawReason'
+import WithdrawReason from './chart/WithdrawReasonmain'
 
 
 type Period = 'monthly' | 'yearly'
