@@ -130,7 +130,7 @@ export const UserModalFooter = ({
       <Modal
         isOn={isDeleteConfirmOpen}
         onBackgroundClick={() => setIsDeleteConfirmOpen(false)}
-        className="w-[350px]"
+        className="w-[525px]"
       >
         <div className="p-6 text-center">
           <h2 className="text-lg font-bold mb-4">회원 삭제 확인</h2>
@@ -154,7 +154,7 @@ export const UserModalFooter = ({
       <Modal
         isOn={isAlertOpen}
         onBackgroundClick={() => setIsAlertOpen(false)}
-        className="w-[350px] max-h-[600px]"
+        className="w-[400px] max-h-[600px]"
       >
         <div className="p-6 text-center">
           <h2 className="text-lg font-bold mb-4">알림</h2>
