@@ -47,7 +47,7 @@ const Modal = ({
         {...props}
         onClick={handleContentClick}
         className={[
-          'relative z-[91] max-h-[85vh] w-[min(92vw,800px)]',
+          'relative z-[91] max-h-[85vh]',
           'flex flex-col rounded-2xl bg-white shadow-xl',
           className,
         ].join(' ')}
