@@ -104,8 +104,17 @@ const HYTestPage = () => {
         <Section title="File Attach List">
           <FileAttachList
             files={[
-              { url: '/api/download/123' },
-              { url: 'https://cdn.example.com/a/b/c.png' },
+              { file_name: '123', file_url: '/api/download/123' },
+              {
+                file_name: 'c.png',
+                file_url: 'https://cdn.example.com/a/b/c.png',
+              },
+              { file_name: ':::', file_url: ':::' },
+              { file_name: 'resume.pdf', file_url: 'C:\\temp\\resume.pdf' },
+              {
+                file_name: '지정된 파일명(최종).pdf',
+                file_url: 'https://cdn.example.com/raw/file',
+              },
             ]}
           />
         </Section>
