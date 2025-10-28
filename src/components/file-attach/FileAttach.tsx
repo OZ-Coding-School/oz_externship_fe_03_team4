@@ -3,11 +3,9 @@ import { type AttachmentFile } from '../../types/fileattach'
 import { getFileNameFromHref } from '../../utils/getFileNameFromHref'
 
 export const FileAttach = ({ file_name, file_url }: AttachmentFile) => {
-  const isHttp = /^https?:\/\//i.test(file_url)
-  const fileName = isHttp
-    ? (file_name ?? getFileNameFromHref(file_url))
-    : '잘못된 파일명입니다'
-  const isInvalid = !isHttp || fileName === '잘못된 파일명입니다'
+  const extractedName = getFileNameFromHref(file_url)
+  const isInvalid = extractedName === '잘못된 파일명입니다'
+  const fileName = isInvalid ? extractedName : (file_name ?? extractedName)
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isInvalid) {
