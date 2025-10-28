@@ -1,4 +1,4 @@
-import { StudyGroupManagementPage } from '../StudyGroupManagementPage'
+import StudyGroupManagementPage from '../StudyGroupManagementPage'
 
 export default function TestPage() {
   return (

@@ -1,0 +1,325 @@
+import type { StudyGroupDTO } from '../../types/studyGroup/types'
+
+export const mockStudyGroupsData: StudyGroupDTO[] = [
+  {
+    id: 1,
+    name: 'Spring Boot 실무 스터디',
+    current_headcount: 6,
+    max_headcount: 10,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200',
+    start_at: '2024-03-15',
+    end_at: '2024-06-15',
+    status: 'PENDING',
+    lectures: [
+      { id: 1, title: 'Spring Boot 기초', instructor: '김철수' },
+      { id: 2, title: 'Spring Security', instructor: '김철수' },
+      { id: 3, title: 'JPA 실전', instructor: '김철수' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'React 마스터 스터디',
+    current_headcount: 8,
+    max_headcount: 12,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=200',
+    start_at: '2024-02-01',
+    end_at: '2024-04-30',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 4, title: 'React 기초', instructor: '이영희' },
+      { id: 5, title: 'React Hooks', instructor: '이영희' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'AI 개발자 되기 스터디',
+    current_headcount: 15,
+    max_headcount: 15,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200',
+    start_at: '2024-01-01',
+    end_at: '2024-01-31',
+    status: 'COMPLETED',
+    lectures: [
+      { id: 6, title: 'Python ML 기초', instructor: '박민수' },
+      { id: 7, title: 'Deep Learning', instructor: '박민수' },
+      { id: 8, title: 'PyTorch 실전', instructor: '박민수' },
+    ],
+  },
+  {
+    id: 4,
+    name: 'JavaScript 심화 스터디',
+    current_headcount: 2,
+    max_headcount: 8,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=200',
+    start_at: '2024-03-01',
+    end_at: '2024-03-15',
+    status: 'CANCELLED',
+    lectures: [{ id: 9, title: 'ES6+ 문법', instructor: '최지훈' }],
+  },
+  {
+    id: 5,
+    name: 'Next.js 완전정복',
+    current_headcount: 5,
+    max_headcount: 10,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200',
+    start_at: '2024-04-01',
+    end_at: '2024-05-31',
+    status: 'PENDING',
+    lectures: [
+      { id: 10, title: 'Next.js 기초', instructor: '정수진' },
+      { id: 11, title: 'App Router', instructor: '정수진' },
+    ],
+  },
+  {
+    id: 6,
+    name: 'TypeScript 타입 마스터',
+    current_headcount: 7,
+    max_headcount: 10,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=200',
+    start_at: '2024-02-15',
+    end_at: '2024-04-15',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 12, title: 'TypeScript 기초', instructor: '강민지' },
+      { id: 13, title: '고급 타입', instructor: '강민지' },
+    ],
+  },
+
+  // ✅ 새로 추가: 7~20 (랜덤 생성)
+  {
+    id: 7,
+    name: 'Node.js 백엔드 심화 스터디',
+    current_headcount: 9,
+    max_headcount: 10,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=200',
+    start_at: '2024-05-01',
+    end_at: '2024-07-15',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 14, title: 'Express 구조 설계', instructor: '홍길동' },
+      { id: 15, title: 'JWT 인증', instructor: '홍길동' },
+    ],
+  },
+  {
+    id: 8,
+    name: 'Docker & Kubernetes 실전 스터디',
+    current_headcount: 4,
+    max_headcount: 8,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1581091870622-8a2f8de4a5f3?w=200',
+    start_at: '2024-05-20',
+    end_at: '2024-08-20',
+    status: 'PENDING',
+    lectures: [
+      { id: 16, title: 'Docker 기본', instructor: '박수현' },
+      { id: 17, title: 'Kubernetes 배포', instructor: '박수현' },
+    ],
+  },
+  {
+    id: 9,
+    name: '데이터 분석 입문 스터디',
+    current_headcount: 6,
+    max_headcount: 10,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200',
+    start_at: '2024-06-01',
+    end_at: '2024-08-30',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 18, title: 'Python 데이터 처리', instructor: '이정은' },
+      { id: 19, title: '시각화 실습', instructor: '이정은' },
+    ],
+  },
+  {
+    id: 10,
+    name: 'Java 마스터 클래스',
+    current_headcount: 12,
+    max_headcount: 15,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1522199710521-72d69614c702?w=200',
+    start_at: '2024-03-10',
+    end_at: '2024-05-20',
+    status: 'PENDING',
+    lectures: [
+      { id: 20, title: 'OOP 심화', instructor: '윤성호' },
+      { id: 21, title: '멀티스레드 프로그래밍', instructor: '윤성호' },
+    ],
+  },
+  {
+    id: 11,
+    name: 'Git 협업 마스터 스터디',
+    current_headcount: 3,
+    max_headcount: 6,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200',
+    start_at: '2024-06-10',
+    end_at: '2024-07-10',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 22, title: 'Git Branch 전략', instructor: '최유진' },
+      { id: 23, title: 'PR 리뷰 실습', instructor: '최유진' },
+    ],
+  },
+  {
+    id: 12,
+    name: 'Database SQL 스터디',
+    current_headcount: 10,
+    max_headcount: 12,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1581093588401-22e8c22eab21?w=200',
+    start_at: '2024-05-01',
+    end_at: '2024-06-30',
+    status: 'COMPLETED',
+    lectures: [
+      { id: 24, title: 'SQL 기본 문법', instructor: '이도현' },
+      { id: 25, title: 'JOIN 고급', instructor: '이도현' },
+    ],
+  },
+  {
+    id: 13,
+    name: 'Python 알고리즘 스터디',
+    current_headcount: 5,
+    max_headcount: 8,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1584697964403-7d88f0d6e9f9?w=200',
+    start_at: '2024-07-01',
+    end_at: '2024-09-30',
+    status: 'PENDING',
+    lectures: [
+      { id: 26, title: '기초 알고리즘', instructor: '김유나' },
+      { id: 27, title: 'DFS/BFS 심화', instructor: '김유나' },
+    ],
+  },
+  {
+    id: 14,
+    name: '웹 퍼포먼스 최적화 스터디',
+    current_headcount: 4,
+    max_headcount: 10,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=200',
+    start_at: '2024-08-01',
+    end_at: '2024-10-15',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 28, title: '웹 성능 측정', instructor: '오하늘' },
+      { id: 29, title: 'Lighthouse 분석', instructor: '오하늘' },
+    ],
+  },
+  {
+    id: 15,
+    name: 'Flutter 앱 개발 스터디',
+    current_headcount: 9,
+    max_headcount: 12,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1590608897129-79da98d1599a?w=200',
+    start_at: '2024-05-15',
+    end_at: '2024-07-15',
+    status: 'PENDING',
+    lectures: [
+      { id: 30, title: 'Flutter 위젯', instructor: '정민호' },
+      { id: 31, title: '상태관리 패턴', instructor: '정민호' },
+    ],
+  },
+  {
+    id: 16,
+    name: 'UI/UX 디자인 실무 스터디',
+    current_headcount: 6,
+    max_headcount: 10,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200',
+    start_at: '2024-09-01',
+    end_at: '2024-11-30',
+    status: 'PENDING',
+    lectures: [
+      { id: 32, title: '디자인 원칙', instructor: '이지은' },
+      { id: 33, title: '사용성 테스트', instructor: '이지은' },
+    ],
+  },
+  {
+    id: 17,
+    name: '정보보안 입문 스터디',
+    current_headcount: 3,
+    max_headcount: 6,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=200',
+    start_at: '2024-08-15',
+    end_at: '2024-10-01',
+    status: 'CANCELLED',
+    lectures: [
+      { id: 34, title: '해킹의 기초', instructor: '조민우' },
+      { id: 35, title: '네트워크 보안', instructor: '조민우' },
+    ],
+  },
+  {
+    id: 18,
+    name: 'AWS 클라우드 마스터',
+    current_headcount: 10,
+    max_headcount: 12,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=200',
+    start_at: '2024-04-10',
+    end_at: '2024-06-30',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 36, title: 'EC2 실습', instructor: '이승현' },
+      { id: 37, title: 'S3 관리', instructor: '이승현' },
+    ],
+  },
+  {
+    id: 19,
+    name: 'Vue.js 프론트엔드 스터디',
+    current_headcount: 7,
+    max_headcount: 10,
+    is_leader: false,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1581276879432-15a19d654956?w=200',
+    start_at: '2024-05-10',
+    end_at: '2024-07-20',
+    status: 'PENDING',
+    lectures: [
+      { id: 38, title: 'Vue 기본기', instructor: '손지현' },
+      { id: 39, title: 'Pinia 상태관리', instructor: '손지현' },
+    ],
+  },
+  {
+    id: 20,
+    name: 'Django 웹 개발 스터디',
+    current_headcount: 8,
+    max_headcount: 10,
+    is_leader: true,
+    profile_img_url:
+      'https://images.unsplash.com/photo-1526378722484-cc2c4a0b69f4?w=200',
+    start_at: '2024-07-05',
+    end_at: '2024-09-25',
+    status: 'ACTIVE',
+    lectures: [
+      { id: 40, title: 'Django ORM', instructor: '백예린' },
+      { id: 41, title: 'API 개발', instructor: '백예린' },
+    ],
+  },
+]
