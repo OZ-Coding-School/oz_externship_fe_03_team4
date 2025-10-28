@@ -86,11 +86,11 @@ const renderActiveShape = (props: unknown) => {
   );
 };
 
-interface WithdrawReasondoughnutChart {
+interface WithdrawReasondoughnutChartProps {
   isAnimationActive: boolean;
 }
 
-const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutChart) => {
+const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutChartProps) => {
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm">
       <h3 className="text-base font-semibold mb-4">탈퇴 사유 분포</h3>
