@@ -55,7 +55,40 @@ export const STUDY_GROUP_STATUS_MAP: Record<
   CANCELLED: '취소됨',
 } as const // 지정한 리터럴 타입으로 고정
 
-// API용을 UI용으로 변환
+// UI -> API (검색필터용)
+export const STUDY_GROUP_STATUS_REVERSE_MAP: Record<
+  StudyGroupUiStatus,
+  StudyGroupStatus
+> = {
+  대기중: 'PENDING',
+  진행중: 'ACTIVE',
+  완료: 'COMPLETED',
+  취소됨: 'CANCELLED',
+} as const
+
+// 상태 Badge variant 매핑
+export const STUDY_GROUP_STATUS_BADGE: Record<
+  StudyGroupUiStatus,
+  'success' | 'info' | 'warning' | 'danger'
+> = {
+  완료: 'success',
+  대기중: 'info',
+  진행중: 'warning',
+  취소됨: 'danger',
+} as const
+
+export const STUDY_GROUP_STATUS_OPTIONS: Array<{
+  value: StudyGroupUiStatus | 'ALL'
+  label: string
+}> = [
+  { value: 'ALL', label: '전체' },
+  { value: '대기중', label: '대기중' },
+  { value: '진행중', label: '진행중' },
+  { value: '완료', label: '완료' },
+  { value: '취소됨', label: '취소됨' },
+] as const
+
+// API-> UI
 export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
   return {
     id: dto.id,
