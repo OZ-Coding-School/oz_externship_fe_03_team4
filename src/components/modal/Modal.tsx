@@ -3,17 +3,17 @@ import RoundBox from './Roundbox'
 import { ModalHeader } from './ModalHeader'
 import { CloseModalFooter } from './CloseModalFooter'
 
-interface ModalProps extends Record<string, unknown> {
+interface ModalProps {
   isOn: boolean
   children: React.ReactNode
   className?: string
+  onBackgroundClick?: () => void // 커스텀 이벤트는 여기서만 사용
 }
 
 const Modal = ({
   isOn,
   children,
   className,
-  ...props
 }: ModalProps) => {
   if (!isOn) return null
 
@@ -43,8 +43,7 @@ const Modal = ({
       aria-modal="true"
     >
       <RoundBox
-        {...props}
-        onClick={handleContentClick}
+        onClick={handleContentClick} // 내용 클릭 시 모달 닫히지 않게
         className={[
           'relative z-[91] max-h-[85vh]',
           'flex flex-col rounded-2xl bg-white shadow-xl',
@@ -70,4 +69,4 @@ const Modal = ({
   )
 }
 
-export default Modal;
+export default Modal
