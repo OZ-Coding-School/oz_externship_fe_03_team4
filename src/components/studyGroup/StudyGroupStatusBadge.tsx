@@ -11,5 +11,9 @@ interface StudyGroupStatusBadgeProps {
 export const StudyGroupStatusBadge = ({
   status,
 }: StudyGroupStatusBadgeProps) => {
-  return <Badge label={status} variant={STUDY_GROUP_STATUS_BADGE[status]} />
+  return (
+    <div className="inline-block whitespace-nowrap">
+      <Badge label={status} variant={STUDY_GROUP_STATUS_BADGE[status]} />
+    </div>
+  )
 }
