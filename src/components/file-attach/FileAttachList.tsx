@@ -2,8 +2,6 @@
 import { FileAttach } from './FileAttach'
 import { type AttachmentFile } from '../../types/fileattach'
 
-// type FileItem = string | { url: string; name?: string }
-
 export const FileAttachList = ({ files = [] as AttachmentFile[] }) => {
   if (!files.length) {
     return (

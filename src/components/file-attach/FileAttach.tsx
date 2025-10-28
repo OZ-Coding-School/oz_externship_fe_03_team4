@@ -1,45 +1,8 @@
 import { FileText } from 'lucide-react'
 import { type AttachmentFile } from '../../types/fileattach'
-
-// type FileAttachProps = {
-//   href: string
-//   name?: string
-// }
-
-// function getFileNameFromHref(href: string) {
-//   try {
-//     const url = new URL(href, window.location.origin)
-//     const last = url.pathname.split('/').filter(Boolean).pop() || ''
-//     return decodeURIComponent(last)
-//   } catch {
-//     // const last = href.split('/').filter(Boolean).pop() || ''
-//     // return decodeURIComponent(last || 'unknown-file')
-//     return 'unknown-file'
-//   }
-// }
-
-function getFileNameFromHref(href: string) {
-  // 1️⃣ http/https 시작 여부 체크
-  const isHttp = /^https?:\/\//i.test(href)
-  if (!isHttp) return '잘못된 파일명입니다'
-
-  try {
-    const url = new URL(href)
-    const last = decodeURIComponent(
-      url.pathname.split('/').filter(Boolean).pop() || ''
-    )
-    const valid =
-      last.trim() !== '' &&
-      (/[A-Za-z0-9가-힣]/.test(last) || last.includes('.'))
-    return valid ? last : '잘못된 파일명입니다'
-  } catch {
-    return '잘못된 파일명입니다'
-  }
-}
+import { getFileNameFromHref } from '../../utils/getFileNameFromHref'
 
 export const FileAttach = ({ file_name, file_url }: AttachmentFile) => {
-  // const fileName = file_name || getFileNameFromHref(file_url)
-  // const isInvalid = fileName === '잘못된 파일명입니다'
   const isHttp = /^https?:\/\//i.test(file_url)
   const fileName = isHttp
     ? (file_name ?? getFileNameFromHref(file_url))
@@ -58,7 +21,11 @@ export const FileAttach = ({ file_name, file_url }: AttachmentFile) => {
       href={file_url}
       download={!isInvalid}
       onClick={handleClick}
-      className="flex items-center gap-2 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+      className={`flex items-center gap-2 rounded-lg p-3 transition-colors ${
+        isInvalid
+          ? 'cursor-not-allowed bg-red-50 text-red-600 hover:bg-red-100'
+          : 'bg-gray-50 text-gray-800 hover:bg-gray-100'
+      }`}
       title={fileName}
     >
       <FileText className="h-4 w-4 text-gray-600" />
