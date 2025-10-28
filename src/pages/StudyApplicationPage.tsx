@@ -39,6 +39,8 @@ const StudyApplicationPage = () => {
   //   pageSize: PAGE_SIZE,
   //   sortKey,
   // })
+  // if (isLoading) return <div className="p-6">로딩 중…</div>
+  // if (isError)   return <div className="p-6 text-red-500">불러오기에 실패했습니다.</div>
 
   const mockApplications: AdminApplicationApi[] = useMemo(() => {
     const statuses: AdminApplicationStatus[] = [
@@ -66,12 +68,13 @@ const StudyApplicationPage = () => {
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
     let filteredList = mockApplications
-
+    // let filteredList = data?.items ?? []
     if (statusFilter !== '전체') {
       // 전체가 아닌 경우
       const apiCode = uiStatusToApi[statusFilter] // 이 친구가 api상태 코드로 변환한 후 필터링합니당.
       filteredList = filteredList.filter(
         (application) => application.status === apiCode
+        // filteredList = filteredList.filter((application) => application.status === statusFilter)
       )
     }
     // 공고명, 닉네임, 이메일에 검색어 포함이면 결과 출력
@@ -88,6 +91,10 @@ const StudyApplicationPage = () => {
           application.applicant_email
             .toLowerCase()
             .includes(lowerCaseSearchText)
+        // filteredList = filteredList.filter((application) =>
+        //   application.postingTitle.toLowerCase().includes(lowerCaseSearchText) ||
+        //   application.applicant.name.toLowerCase().includes(lowerCaseSearchText) ||
+        //   application.applicant.email.toLowerCase().includes(lowerCaseSearchText)
       )
     }
 
@@ -101,23 +108,27 @@ const StudyApplicationPage = () => {
       const firstValue =
         sortTargetKey === 'created_at'
           ? Date.parse(firstItem.created_at)
-          : Date.parse(firstItem.updated_at)
+          : // ? Date.parse(firstItem.appliedAt)  - 서버에서 내려주는건 created_at이지만 ui에서 이렇게 사용하도록 정의했습니다~
+            Date.parse(firstItem.updated_at)
 
       const secondValue =
         sortTargetKey === 'created_at'
           ? Date.parse(secondItem.created_at)
-          : Date.parse(secondItem.updated_at)
+          : // ? Date.parse(secondItem.appliedAt) - 서버에서 내려주는건 created_at이지만 ui에서 이렇게 사용하도록 정의했습니다~
+            Date.parse(secondItem.updated_at)
 
       return isDescending ? secondValue - firstValue : firstValue - secondValue
     })
     return filteredList.map(mapAdminApiToUi)
+    // return filteredList
   }, [mockApplications, debouncedSearchText, statusFilter, sortKey])
+  // }, [data?.items, debouncedSearchText, statusFilter, sortKey])
 
   const totalPages = Math.max(
     1,
     Math.ceil(filteredApplications.length / PAGE_SIZE)
   )
-  // const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE))
+  // const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? filteredApplications.length) / PAGE_SIZE))
 
   const paginatedApplications = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE
