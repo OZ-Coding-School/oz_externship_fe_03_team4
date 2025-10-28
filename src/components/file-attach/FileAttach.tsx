@@ -10,7 +10,6 @@ export const FileAttach = ({ file_name, file_url }: AttachmentFile) => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isInvalid) {
       e.preventDefault() // ❌ 잘못된 파일은 다운로드 차단
-      alert('잘못된 파일명입니다. 다운로드 할 수 없습니다.')
     }
   }
 
