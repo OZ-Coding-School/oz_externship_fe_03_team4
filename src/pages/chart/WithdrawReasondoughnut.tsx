@@ -47,7 +47,7 @@ const renderActiveShape = (props: unknown) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={12}>
         {payload.name}
       </text>
       <Sector
@@ -70,7 +70,7 @@ const renderActiveShape = (props: unknown) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333" fontSize={11}>
         {`PV ${value}`}
       </text>
       <text
@@ -79,6 +79,7 @@ const renderActiveShape = (props: unknown) => {
         dy={18}
         textAnchor={textAnchor}
         fill="#999"
+        fontSize={10}
       >
         {`(Rate ${((percent ?? 0) * 100).toFixed(2)}%)`}
       </text>
