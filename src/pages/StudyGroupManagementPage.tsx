@@ -59,9 +59,9 @@ const StudyGroupManagementPage = () => {
     return filteredStudyGroups.slice(startIndex, endIndex)
   }, [filteredStudyGroups, currentPage])
 
-  const handleStudyGroupClick = (studyGroup: StudyGroup) => {
-    // TODO: 상세 페이지로 이동 또는 모달 열기
-  }
+  // const handleStudyGroupClick = (studyGroup: StudyGroup) => {
+  //   // TODO: 상세 페이지로 이동 또는 모달 열기
+  // }
 
   // 선택된 상태 라벨 계산
   const selectedStatusLabel =
@@ -86,7 +86,7 @@ const StudyGroupManagementPage = () => {
               value={searchKeyword}
               onChangeText={(nextSearchKeyword) => {
                 setSearchKeyword(nextSearchKeyword)
-                setCurrentPage(1) // 검색 시 첫 페이지로
+                setCurrentPage(1)
               }}
               clearable
             />
@@ -112,7 +112,7 @@ const StudyGroupManagementPage = () => {
                           option.value as StudyGroupUiStatus | 'ALL'
                         )
                         setAccordionValue('')
-                        setCurrentPage(1) // 필터 변경 시 첫 페이지로
+                        setCurrentPage(1)
                       }}
                       className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
                         selectedStatus === option.value
@@ -144,10 +144,10 @@ const StudyGroupManagementPage = () => {
         <>
           <StudyGroupTable
             studyGroups={paginatedStudyGroups}
-            onStudyGroupClick={handleStudyGroupClick}
+            // onStudyGroupClick={handleStudyGroupClick}
           />
 
-          {/* 페이지네이션 - 1페이지 이상일 경우에만 렌더링 */}
+          {/* 페이지네이션 */}
           {totalPages > 1 && (
             <div className="mt-6 flex justify-center">
               <Pagination
