@@ -5,7 +5,6 @@ import { CloseModalFooter } from './CloseModalFooter'
 
 interface ModalProps extends Record<string, unknown> {
   isOn: boolean
-  onBackgroundClick: () => void
   children: React.ReactNode
   className?: string
 }
