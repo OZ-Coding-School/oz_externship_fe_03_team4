@@ -12,6 +12,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-03-15',
     end_at: '2024-06-15',
     status: 'PENDING',
+    created_at: '2024-02-20T09:00:00Z',
+    updated_at: '2024-03-01T14:30:00Z',
     lectures: [
       { id: 1, title: 'Spring Boot 기초', instructor: '김철수' },
       { id: 2, title: 'Spring Security', instructor: '김철수' },
@@ -29,6 +31,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-02-01',
     end_at: '2024-04-30',
     status: 'ACTIVE',
+    created_at: '2024-01-15T10:20:00Z',
+    updated_at: '2024-02-10T16:45:00Z',
     lectures: [
       { id: 4, title: 'React 기초', instructor: '이영희' },
       { id: 5, title: 'React Hooks', instructor: '이영희' },
@@ -45,6 +49,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-01-01',
     end_at: '2024-01-31',
     status: 'COMPLETED',
+    created_at: '2023-12-10T08:00:00Z',
+    updated_at: '2024-01-31T18:00:00Z',
     lectures: [
       { id: 6, title: 'Python ML 기초', instructor: '박민수' },
       { id: 7, title: 'Deep Learning', instructor: '박민수' },
@@ -62,6 +68,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-03-01',
     end_at: '2024-03-15',
     status: 'CANCELLED',
+    created_at: '2024-02-15T11:30:00Z',
+    updated_at: '2024-02-28T09:15:00Z',
     lectures: [{ id: 9, title: 'ES6+ 문법', instructor: '최지훈' }],
   },
   {
@@ -75,6 +83,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-04-01',
     end_at: '2024-05-31',
     status: 'PENDING',
+    created_at: '2024-03-10T13:00:00Z',
+    updated_at: '2024-03-25T10:20:00Z',
     lectures: [
       { id: 10, title: 'Next.js 기초', instructor: '정수진' },
       { id: 11, title: 'App Router', instructor: '정수진' },
@@ -91,13 +101,13 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-02-15',
     end_at: '2024-04-15',
     status: 'ACTIVE',
+    created_at: '2024-02-01T09:45:00Z',
+    updated_at: '2024-02-20T15:30:00Z',
     lectures: [
       { id: 12, title: 'TypeScript 기초', instructor: '강민지' },
       { id: 13, title: '고급 타입', instructor: '강민지' },
     ],
   },
-
-  // ✅ 새로 추가: 7~20 (랜덤 생성)
   {
     id: 7,
     name: 'Node.js 백엔드 심화 스터디',
@@ -109,6 +119,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-05-01',
     end_at: '2024-07-15',
     status: 'ACTIVE',
+    created_at: '2024-04-10T14:00:00Z',
+    updated_at: '2024-04-28T11:20:00Z',
     lectures: [
       { id: 14, title: 'Express 구조 설계', instructor: '홍길동' },
       { id: 15, title: 'JWT 인증', instructor: '홍길동' },
@@ -125,6 +137,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-05-20',
     end_at: '2024-08-20',
     status: 'PENDING',
+    created_at: '2024-04-25T10:15:00Z',
+    updated_at: '2024-05-10T16:40:00Z',
     lectures: [
       { id: 16, title: 'Docker 기본', instructor: '박수현' },
       { id: 17, title: 'Kubernetes 배포', instructor: '박수현' },
@@ -141,6 +155,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-06-01',
     end_at: '2024-08-30',
     status: 'ACTIVE',
+    created_at: '2024-05-15T08:30:00Z',
+    updated_at: '2024-05-28T12:10:00Z',
     lectures: [
       { id: 18, title: 'Python 데이터 처리', instructor: '이정은' },
       { id: 19, title: '시각화 실습', instructor: '이정은' },
@@ -157,6 +173,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-03-10',
     end_at: '2024-05-20',
     status: 'PENDING',
+    created_at: '2024-02-25T13:45:00Z',
+    updated_at: '2024-03-08T09:25:00Z',
     lectures: [
       { id: 20, title: 'OOP 심화', instructor: '윤성호' },
       { id: 21, title: '멀티스레드 프로그래밍', instructor: '윤성호' },
@@ -173,6 +191,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-06-10',
     end_at: '2024-07-10',
     status: 'ACTIVE',
+    created_at: '2024-05-20T11:00:00Z',
+    updated_at: '2024-06-05T14:15:00Z',
     lectures: [
       { id: 22, title: 'Git Branch 전략', instructor: '최유진' },
       { id: 23, title: 'PR 리뷰 실습', instructor: '최유진' },
@@ -189,6 +209,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-05-01',
     end_at: '2024-06-30',
     status: 'COMPLETED',
+    created_at: '2024-04-15T09:30:00Z',
+    updated_at: '2024-06-30T17:00:00Z',
     lectures: [
       { id: 24, title: 'SQL 기본 문법', instructor: '이도현' },
       { id: 25, title: 'JOIN 고급', instructor: '이도현' },
@@ -205,6 +227,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-07-01',
     end_at: '2024-09-30',
     status: 'PENDING',
+    created_at: '2024-06-15T10:20:00Z',
+    updated_at: '2024-06-28T13:45:00Z',
     lectures: [
       { id: 26, title: '기초 알고리즘', instructor: '김유나' },
       { id: 27, title: 'DFS/BFS 심화', instructor: '김유나' },
@@ -221,6 +245,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-08-01',
     end_at: '2024-10-15',
     status: 'ACTIVE',
+    created_at: '2024-07-10T08:00:00Z',
+    updated_at: '2024-07-28T11:30:00Z',
     lectures: [
       { id: 28, title: '웹 성능 측정', instructor: '오하늘' },
       { id: 29, title: 'Lighthouse 분석', instructor: '오하늘' },
@@ -237,6 +263,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-05-15',
     end_at: '2024-07-15',
     status: 'PENDING',
+    created_at: '2024-04-20T12:00:00Z',
+    updated_at: '2024-05-10T15:20:00Z',
     lectures: [
       { id: 30, title: 'Flutter 위젯', instructor: '정민호' },
       { id: 31, title: '상태관리 패턴', instructor: '정민호' },
@@ -253,6 +281,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-09-01',
     end_at: '2024-11-30',
     status: 'PENDING',
+    created_at: '2024-08-05T14:30:00Z',
+    updated_at: '2024-08-25T10:15:00Z',
     lectures: [
       { id: 32, title: '디자인 원칙', instructor: '이지은' },
       { id: 33, title: '사용성 테스트', instructor: '이지은' },
@@ -269,6 +299,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-08-15',
     end_at: '2024-10-01',
     status: 'CANCELLED',
+    created_at: '2024-07-20T09:45:00Z',
+    updated_at: '2024-08-10T16:00:00Z',
     lectures: [
       { id: 34, title: '해킹의 기초', instructor: '조민우' },
       { id: 35, title: '네트워크 보안', instructor: '조민우' },
@@ -285,6 +317,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-04-10',
     end_at: '2024-06-30',
     status: 'ACTIVE',
+    created_at: '2024-03-25T11:20:00Z',
+    updated_at: '2024-04-08T14:40:00Z',
     lectures: [
       { id: 36, title: 'EC2 실습', instructor: '이승현' },
       { id: 37, title: 'S3 관리', instructor: '이승현' },
@@ -301,6 +335,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-05-10',
     end_at: '2024-07-20',
     status: 'PENDING',
+    created_at: '2024-04-18T10:00:00Z',
+    updated_at: '2024-05-05T13:25:00Z',
     lectures: [
       { id: 38, title: 'Vue 기본기', instructor: '손지현' },
       { id: 39, title: 'Pinia 상태관리', instructor: '손지현' },
@@ -317,6 +353,8 @@ export const mockStudyGroupsData: StudyGroupDTO[] = [
     start_at: '2024-07-05',
     end_at: '2024-09-25',
     status: 'ACTIVE',
+    created_at: '2024-06-20T15:30:00Z',
+    updated_at: '2024-07-02T09:50:00Z',
     lectures: [
       { id: 40, title: 'Django ORM', instructor: '백예린' },
       { id: 41, title: 'API 개발', instructor: '백예린' },

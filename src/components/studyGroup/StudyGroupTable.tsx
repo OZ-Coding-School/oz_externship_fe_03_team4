@@ -28,8 +28,8 @@ export const StudyGroupTable = ({
     headcount: `${group.currentHeadcount} / ${group.maxHeadcount}명`,
     period: `${group.startAt} ~ ${group.endAt}`,
     status: group.status,
-    createdAt: dto.created_at,
-    updatedAt: dto.updated_at,
+    createdAt: group.createdAt,
+    updatedAt: group.updatedAt,
     _original: group,
   }))
   const tableColumns = [
