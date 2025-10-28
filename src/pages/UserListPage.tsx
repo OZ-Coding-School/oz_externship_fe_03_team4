@@ -28,7 +28,7 @@ const UserListPage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   // 더미데이터
-  const dummyUsers: MappedUser[] = [
+  const [dummyUsers, setDummyUsers] = useState<MappedUser[]>([
     {
       id: "U001",
       email: "admin@example.com",
@@ -73,7 +73,7 @@ const UserListPage = () => {
       joinedAt: "2022-12-03",
       withdrawAt: "2024-09-01",
     },
-  ];
+  ]);
 
   // 클라이언트 필터링
   const filteredUsers = dummyUsers.filter((user) => {
@@ -227,6 +227,11 @@ const UserListPage = () => {
                 onEditToggle={() => setIsEditing(!isEditing)}
                 onClose={() => setIsModalOpen(false)}
                 onRoleChange={handleRoleChange}
+                onDelete={(userId: string) => {
+                  // dummyUsers 상태에서 해당 유저 삭제
+                  setDummyUsers(prev => prev.filter(user => String(user.id) !== userId));
+                  setIsModalOpen(false); // 모달 닫기
+                }}
               />
             </div>
           </Modal>
