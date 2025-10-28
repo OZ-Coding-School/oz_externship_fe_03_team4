@@ -11,11 +11,11 @@ export const buildQueryParams = (options: ApplicationsParams) => {
     offset,
     sort: options.sortKey,
   }
-
+  // UI라벨 -> 서버 코드로 변환하기
   if (options.statusFilter && options.statusFilter !== '전체') {
     requestParams.status = uiStatusToApi[options.statusFilter]
   }
-
+  // '@'가 포함될 경우 이메일, 없으면 닉네임으로 검색어 전송하기.
   const searchText = (options.searchText ?? '').trim()
   if (searchText) {
     const searchKey = searchText.includes('@') ? 'user_email' : 'user_nickname'

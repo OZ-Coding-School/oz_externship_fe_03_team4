@@ -3,7 +3,7 @@ import {
   type Application,
   mapAdminApiToUi,
 } from '../../types/applications'
-
+// 서버 응답 형태
 export type ApplicationsListResponse = {
   items: AdminApplicationApi[]
   total: number
