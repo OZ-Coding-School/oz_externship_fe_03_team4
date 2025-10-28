@@ -5,24 +5,50 @@ type FileAttachProps = {
   name?: string
 }
 
+// function getFileNameFromHref(href: string) {
+//   try {
+//     const url = new URL(href, window.location.origin)
+//     const last = url.pathname.split('/').filter(Boolean).pop() || ''
+//     return decodeURIComponent(last)
+//   } catch {
+//     // const last = href.split('/').filter(Boolean).pop() || ''
+//     // return decodeURIComponent(last || 'unknown-file')
+//     return 'unknown-file'
+//   }
+// }
+
 function getFileNameFromHref(href: string) {
+  // 1️⃣ http/https 시작 여부 체크
+  const isHttp = /^https?:\/\//i.test(href)
+  if (!isHttp) return '잘못된 파일명입니다'
+
   try {
-    const url = new URL(href, window.location.origin)
-    const last = url.pathname.split('/').filter(Boolean).pop() || ''
-    return decodeURIComponent(last)
+    const url = new URL(href)
+    const last = decodeURIComponent(
+      url.pathname.split('/').filter(Boolean).pop() || ''
+    )
+    const valid =
+      last.trim() !== '' &&
+      (/[A-Za-z0-9가-힣]/.test(last) || last.includes('.'))
+    return valid ? last : '잘못된 파일명입니다'
   } catch {
-    const last = href.split('/').filter(Boolean).pop() || ''
-    return decodeURIComponent(last)
+    return '잘못된 파일명입니다'
   }
 }
 
 export const FileAttach = ({ href, name }: FileAttachProps) => {
   const fileName = name || getFileNameFromHref(href)
+  const isInvalid = fileName === '잘못된 파일명입니다'
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isInvalid) e.preventDefault() // ❌ 잘못된 파일은 다운로드 차단
+  }
 
   return (
     <a
       href={href}
-      download
+      download={!isInvalid}
+      onClick={handleClick}
       className="flex items-center gap-2 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100"
       title={fileName}
     >

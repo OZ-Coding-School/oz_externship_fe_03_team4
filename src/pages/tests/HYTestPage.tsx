@@ -106,6 +106,8 @@ const HYTestPage = () => {
             files={[
               { url: '/api/download/123' },
               { url: 'https://cdn.example.com/a/b/c.png' },
+              { url: ':::' },
+              { url: 'C:\\temp\\resume.pdf' },
             ]}
           />
         </Section>
