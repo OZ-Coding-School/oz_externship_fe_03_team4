@@ -111,6 +111,10 @@ const HYTestPage = () => {
               },
               { file_name: ':::', file_url: ':::' },
               { file_name: 'resume.pdf', file_url: 'C:\\temp\\resume.pdf' },
+              {
+                file_name: '지정된 파일명(최종).pdf',
+                file_url: 'https://cdn.example.com/raw/file',
+              },
             ]}
           />
         </Section>
