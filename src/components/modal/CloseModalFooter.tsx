@@ -14,7 +14,7 @@ export const CloseModalFooter = ({
   return (
     <footer
       className={cn(
-        'mt-8 flex items-center justify-end border-t border-neutral-200 p-4',
+        'mt-8 flex items-center justify-end border-neutral-200 p-4',
         className
       )}
     >
