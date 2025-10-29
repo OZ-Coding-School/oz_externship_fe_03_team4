@@ -3,16 +3,7 @@ import { SearchInput } from '../components/search/SearchInput'
 import { useState } from 'react'
 import { Badge } from '../components/Badge'
 import { Table } from '../components/Data-Indicate/Table'
-
-type WithdrawalRow = {
-  id: string
-  email: string
-  name: string
-  role: '관리자' | '스태프' | '일반회원'
-  birthday: string
-  reason: string
-  created_at: string
-}
+import { type WithdrawalRow } from '../types/withdraw/types'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
