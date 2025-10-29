@@ -16,6 +16,11 @@ export const StudyGroupTableRow = ({
     onClick?.(studyGroup)
   }
 
+  const BASE_STYLE = 'px-6 py-3'
+  const TEXT_BASE = 'text-gray-900'
+  const TEXT_TD = `${BASE_STYLE} text-gray-700`
+  const DATE_TD = `${BASE_STYLE} text-gray-500`
+
   return (
     <tr
       onClick={handleClick}
@@ -24,10 +29,10 @@ export const StudyGroupTableRow = ({
       }`}
     >
       {/* ID */}
-      <td className="px-6 py-3 font-medium text-gray-900">{index}</td>
+      <td className={`${BASE_STYLE} font-medium ${TEXT_BASE}`}>{index}</td>
 
       {/* 대표 이미지 */}
-      <td className="px-6 py-3">
+      <td className={BASE_STYLE}>
         <img
           src={studyGroup.profileImg}
           alt={studyGroup.name}
@@ -36,32 +41,32 @@ export const StudyGroupTableRow = ({
       </td>
 
       {/* 그룹명 */}
-      <td className="px-6 py-3">
-        <span className="font-medium text-gray-900 hover:underline">
+      <td className={BASE_STYLE}>
+        <span className={`font-medium ${TEXT_BASE} hover:underline`}>
           {studyGroup.name}
         </span>
       </td>
 
       {/* 인원 현황 */}
-      <td className="px-6 py-3 text-gray-700">
+      <td className={`${BASE_STYLE} ${TEXT_TD}`}>
         {studyGroup.currentHeadcount} / {studyGroup.maxHeadcount}명
       </td>
 
       {/* 스터디 기간 */}
-      <td className="px-6 py-3 text-gray-700">
+      <td className={`${BASE_STYLE} ${TEXT_TD}`}>
         {studyGroup.startAt} ~ {studyGroup.endAt}
       </td>
 
       {/* 상태 */}
-      <td className="px-6 py-3">
+      <td className={BASE_STYLE}>
         <StudyGroupStatusBadge status={studyGroup.status} />
       </td>
 
       {/* 생성일시 */}
-      <td className="px-6 py-3 text-gray-500">{studyGroup.createdAt}</td>
+      <td className={`${BASE_STYLE} ${DATE_TD}`}>{studyGroup.createdAt}</td>
 
       {/* 수정일시 */}
-      <td className="px-6 py-3 text-gray-500">{studyGroup.updatedAt}</td>
+      <td className={`${BASE_STYLE} ${DATE_TD}`}>{studyGroup.updatedAt}</td>
     </tr>
   )
 }
