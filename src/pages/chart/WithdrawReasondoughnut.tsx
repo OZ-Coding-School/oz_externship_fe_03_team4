@@ -1,12 +1,35 @@
 import { Pie, PieChart, Cell, Tooltip, Sector } from 'recharts';
+import { mapDtoToWithdrawalReasonDistribution, type WithdrawalReasonDistributionDTO, type WithdrawalReasonChartData } from '../../types/Chart/WithdrawReasondoughnutChart/types';
+import { useEffect, useState } from 'react';
 
-const REASON_DATA = [
-  { name: '서비스 불만족', value: 35, color: '#0088FE' },
-  { name: '개인정보 우려', value: 25, color: '#00C49F' },
-  { name: '사용 빈도 낮음', value: 20, color: '#FFBB28' },
-  { name: '기타', value: 15, color: '#FF8042' },
-  { name: '경쟁 서비스 이용', value: 5, color: '#8884D8' },
-];
+//일단 api명세서 보고 수정
+const MOCK_DATA: WithdrawalReasonDistributionDTO = {
+  detail: "회원 탈퇴 사유 분포 조회에 성공하였습니다.",
+  data: {
+    scope: "all_time",
+    total_withdrawals: 1200,
+    items: [
+      { reason_code: "service", reason_label: "서비스 불만족", count: 450, percentage: 37.5 },
+      { reason_code: "privacy", reason_label: "개인정보 우려", count: 300, percentage: 25.0 },
+      { reason_code: "low_usage", reason_label: "사용 빈도 낮음", count: 240, percentage: 20.0 },
+      { reason_code: "competitor", reason_label: "경쟁 서비스 이용", count: 120, percentage: 10.0 },
+      { reason_code: "other", reason_label: "기타", count: 90, percentage: 7.5 }
+    ]
+  }
+};
+
+interface WithdrawReasondoughnutChartProps {
+  isAnimationActive: boolean;
+}
+//api나오면 여기까지 삭제
+
+const REASON_COLORS: Record<string, string> = {
+  '서비스 불만족': '#0088FE',
+  '개인정보 우려': '#00C49F',
+  '사용 빈도 낮음': '#FFBB28',
+  '경쟁 서비스 이용': '#8884D8',
+  '기타': '#FF8042'
+};
 
 const renderActiveShape = (props: unknown) => {
   const {
@@ -18,7 +41,6 @@ const renderActiveShape = (props: unknown) => {
     startAngle,
     endAngle,
     payload,
-    percent,
     value,
   } = props as {
     cx?: number;
@@ -28,8 +50,7 @@ const renderActiveShape = (props: unknown) => {
     outerRadius?: number;
     startAngle?: number;
     endAngle?: number;
-    payload: { name: string; value: number; color: string };
-    percent?: number;
+    payload: WithdrawalReasonChartData & { color: string };
     value: number;
   };
 
@@ -94,10 +115,6 @@ const renderActiveShape = (props: unknown) => {
     </g>
   );
 };
-
-interface WithdrawReasondoughnutChartProps {
-  isAnimationActive: boolean;
-}
 
 const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutChartProps) => {
   return (
