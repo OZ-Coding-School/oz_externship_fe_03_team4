@@ -46,6 +46,33 @@ export const TagsFilter = ({
           )}
         />
       </button>
+
+      {isOpen && (
+        <div className="absolute z-10 mt-2 w-full rounded-md border border-neutral-200 bg-white shadow-lg">
+          <ul className="max-h-48 overflow-y-auto p-2">
+            {availableTags.map((tag) => {
+              const isActive = selectedTags.includes(tag)
+              return (
+                <li
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={cn(
+                    'cursor-pointer rounded-md px-3 py-1 text-sm hover:bg-neutral-100',
+                    isActive && 'bg-primary/10 text-primary font-medium'
+                  )}
+                >
+                  {tag}
+                </li>
+              )
+            })}
+            {availableTags.length === 0 && (
+              <li className="px-3 py-2 text-sm text-neutral-400">
+                등록된 태그가 없습니다.
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
