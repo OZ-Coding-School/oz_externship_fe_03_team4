@@ -1,27 +1,48 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
+import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Signupchart/types';
+import { useEffect, useState } from 'react';
 
-const monthlyData = [
-  { month: '1월', count: 15 },
-  { month: '2월', count: 24 },
-  { month: '3월', count: 18 },
-  { month: '4월', count: 26 },
-  { month: '5월', count: 21 },
-  { month: '6월', count: 19 },
-  { month: '7월', count: 25 },
-  { month: '8월', count: 29 },
-  { month: '9월', count: 31 },
-  { month: '10월', count: 21 },
-  { month: '11월', count: 26 },
-  { month: '12월', count: 28 },
-];
+//일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
+const MOCK_MONTHLY_DATA: SignupStatisticsDTO{
+  "detail": "회원가입 통계 조회에 성공하였습니다.",
+  "data": {
+    "interval": "month", // 집계 단위 (month, year)
+    "from": "2024-11-01", // 조회 시작일
+    "to": "2025-10-31", // 조회 종료일
+    "total_signups": 120, // 조회 기간 내 총 회원가입 수
+    "items": [
+      { "period": "2024-11", "count": 9 },
+      { "period": "2024-12", "count": 14 },
+      { "period": "2025-01", "count": 8 },
+      { "period": "2025-02", "count": 11 },
+      { "period": "2025-03", "count": 13 },
+      { "period": "2025-04", "count": 10 },
+      { "period": "2025-05", "count": 9 },
+      { "period": "2025-06", "count": 12 },
+      { "period": "2025-07", "count": 7 },
+      { "period": "2025-08", "count": 6 },
+      { "period": "2025-09", "count": 11 },
+      { "period": "2025-10", "count": 10 }
+    ]
+  }
+}
 
-const yearlyData = [
-  { month: '2021년', count: 180 },
-  { month: '2022년', count: 245 },
-  { month: '2023년', count: 310 },
-  { month: '2024년', count: 285 },
-  { month: '2025년', count: 320 },
-];
+const MOCK_YEARLY_DATA: SignupStatisticsDTO = {
+  "detail": "회원가입 통계 조회에 성공하였습니다.",
+  "data": {
+    "interval": "year", // 집계 단위 (month, year)
+    "from": "2021-01-01", // 조회 시작일
+    "to": "2025-10-31", // 조회 종료일
+    "total_signups": 40, // 조회 기간 내 총 회원가입 수
+    "items": [
+      { "period": "2021", "count": 6 },
+      { "period": "2022", "count": 7 },
+      { "period": "2023", "count": 8 },
+      { "period": "2024", "count": 9 },
+      { "period": "2025", "count": 10 },
+    ]
+  }
+}
 
 interface SignupChartProps {
   isAnimationActive?: boolean;
