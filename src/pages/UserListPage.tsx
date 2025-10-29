@@ -9,21 +9,26 @@ import { ModalHeader } from "../components/modal/ModalHeader";
 import { UserModalOutlet } from "../components/User-Information/UserModalOutlet";
 import { UserModalFooter } from "../components/User-Information/UserModalFooter";
 import { useUsers } from "../hooks/useUsers";
+import { Pagination } from "../components/pagination/Pagination";
 
 const UserListPage = () => {
+  // 검색 및 필터 상태
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
-  const [page] = useState(1); // 추후 pagination 기능 추가 가능
+  const [page, setPage] = useState(1);
 
   // React Query 훅으로 API 데이터 가져오기
-  const { users, loading, error, } = useUsers({
+  const { users, pagination, loading, error, refetch } = useUsers({
     page,
     limit: 20,
     search,
     status: statusFilter,
     role: roleFilter,
   });
+
+  //Pagenation 정보
+  const totalPages = pagination?.total_pages ?? 1;
 
   // 모달 상태
   const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
@@ -73,13 +78,11 @@ const UserListPage = () => {
   // 권한 변경 핸들러
   const handleRoleChange = (role: "admin" | "staff" | "user") => {
     if (!selectedUser) return;
-
     const roleMap: Record<"admin" | "staff" | "user", "관리자" | "스태프" | "일반회원"> = {
       admin: "관리자",
       staff: "스태프",
       user: "일반회원",
     };
-
     setSelectedUser({ ...selectedUser, role: roleMap[role] });
   };
 
@@ -105,10 +108,7 @@ const UserListPage = () => {
           </div>
 
           <div className="w-40">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
+            <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
               <option value="">전체</option>
               <option value="active">활성</option>
               <option value="inactive">비활성</option>
@@ -117,10 +117,7 @@ const UserListPage = () => {
           </div>
 
           <div className="w-40">
-            <Select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-            >
+            <Select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
               <option value="">전체 권한</option>
               <option value="admin">관리자</option>
               <option value="staff">스태프</option>
@@ -131,10 +128,19 @@ const UserListPage = () => {
 
         {/* 테이블 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <Table<MappedUser>
-            data={users}
-            columns={columns}
-            onRowClick={handleRowClick}
+          <Table<MappedUser> data={users} columns={columns} onRowClick={handleRowClick} />
+        </div>
+
+        {/* 페이지네이션 */}
+        <div className="flex justify-center mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => {
+              setPage(newPage);
+              refetch();
+            }}
+            showFirstLast
           />
         </div>
 

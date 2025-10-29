@@ -11,7 +11,12 @@ interface UseUsersProps {
   role?: string;
 }
 
-// axios 기본 설정 (baseURL + 헤더 등)
+interface PaginationInfo {
+  total_pages: number;
+  total_items: number;
+  current_page: number;
+}
+
 const api = axios.create({
   baseURL: "https://api.ozcoding.site",
   headers: {
@@ -31,24 +36,29 @@ export const useUsers = ({
   const query = useQuery({
     queryKey: ["users", { page, limit, search, status, role }],
     queryFn: async () => {
-      const res = await api.get<{ data?: { users: ApiUser[] } }>(
-        "/api/v1/admin/users", // base url에서 api가 제거 되었으므로 여기 추가
-        {
-          params: { page, limit, search, status, role },
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        }
-      );
+      const res = await api.get<{
+        data?: { users: ApiUser[]; pagination?: PaginationInfo };
+      }>("/api/v1/admin/users", {
+        params: { page, limit, search, status, role },
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
 
-      return res.data.data?.users.map(mapUserResponse) ?? [];
+      const data = res.data.data;
+
+      return {
+        users: data?.users?.map(mapUserResponse) ?? [],
+        pagination: data?.pagination,
+      };
     },
-    staleTime: 1000 * 60 * 2, // 2분 캐시 유지
-    retry: 1, // 실패 시 한 번만 재시도
+    staleTime: 1000 * 60 * 2,
+    retry: 1,
   });
 
   return {
-    users: query.data ?? [],
+    users: query.data?.users ?? [],
+    pagination: query.data?.pagination,
     loading: query.isLoading,
     error:
       query.isError && query.error instanceof Error
