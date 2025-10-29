@@ -85,4 +85,29 @@ const RecruitmentManagementPage = () => {
     const endIndex = startIndex + PAGE_SIZE
     return filteredRecruitments.slice(startIndex, endIndex)
   }, [filteredRecruitments, currentPage])
+
+  return (
+    <div className="space-y-4 p-6">
+      <h1 className="text-lg font-semibold text-neutral-800">공고 관리</h1>
+
+      <RecruitmentFilterSection
+        searchText={searchText}
+        setSearchText={(nextSearchText) => {
+          setSearchText(nextSearchText)
+          setCurrentPage(1)
+        }}
+        statusFilter={statusFilter}
+        setStatusFilter={(nextStatusFilter) => {
+          setStatusFilter(nextStatusFilter)
+          setCurrentPage(1)
+        }}
+        selectedTags={selectedTags}
+        setSelectedTags={(nextSelectedTags) => {
+          setSelectedTags(nextSelectedTags)
+          setCurrentPage(1)
+        }}
+        availableTags={ALL_TAGS}
+      />
+    </div>
+  )
 }
