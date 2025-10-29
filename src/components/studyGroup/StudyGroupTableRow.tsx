@@ -24,7 +24,7 @@ export const StudyGroupTableRow = ({
   return (
     <tr
       onClick={handleClick}
-      className={`border-b border-gray-100 transition-colors ${
+      className={`border-b border-gray-100 whitespace-nowrap transition-colors ${
         onClick ? 'cursor-pointer hover:bg-gray-50' : ''
       }`}
     >

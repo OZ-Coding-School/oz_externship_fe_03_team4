@@ -18,6 +18,9 @@ type StudyGroupTableData = {
   _original: StudyGroup
 }
 
+const FALLBACK_IMAGE =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"%3E%3Crect width="48" height="48" fill="%23e5e7eb"/%3E%3Cpath d="M14 18h20M14 24h20M14 30h12" stroke="%239ca3af" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E'
+
 export const StudyGroupTable = ({
   studyGroups,
   onStudyGroupClick,
@@ -37,11 +40,16 @@ export const StudyGroupTable = ({
       key: 'profileImg',
       label: '대표 이미지',
       render: (value: unknown, row: StudyGroupTableData) => (
-        <img
-          src={String(value)}
-          alt={row.name}
-          className="h-12 w-12 rounded-lg object-cover"
-        />
+        <div className="min-w-[3rem] flex-none">
+          <img
+            src={String(value)}
+            alt={row.name}
+            className="h-12 w-12 flex-none rounded-lg object-cover"
+            onError={(e) => {
+              e.currentTarget.src = FALLBACK_IMAGE
+            }}
+          />
+        </div>
       ),
     },
     {
@@ -60,7 +68,7 @@ export const StudyGroupTable = ({
       key: 'headcount',
       label: '인원 현황',
       render: (value: unknown) => (
-        <span className="text-gray-700">{String(value)}</span>
+        <span className="whitespace-nowrap text-gray-700">{String(value)}</span>
       ),
     },
     {
