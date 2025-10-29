@@ -38,6 +38,13 @@ export const TagsFilter = ({
             ? selectedTags.join(', ')
             : '태그로 필터링 (선택 가능)'}
         </span>
+        <ChevronDown
+          size={16}
+          className={cn(
+            'transition-transform duration-150',
+            isOpen ? 'rotate-180' : 'rotate-0'
+          )}
+        />
       </button>
     </div>
   )
