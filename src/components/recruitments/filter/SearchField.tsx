@@ -4,20 +4,26 @@ interface SearchFieldProps {
   value: string
   onChange: (nextValue: string) => void
   placeholder?: string
+  className?: string
+  inputClassName?: string
 }
 
 export const SearchField = ({
   value,
   onChange,
   placeholder,
+  className,
+  inputClassName,
 }: SearchFieldProps) => {
   return (
-    <SearchInput
-      value={value}
-      onChangeText={onChange}
-      placeholder={placeholder ?? '검색어를 입력해주세요.'}
-      className="max-w-xl flex-1"
-      clearable
-    />
+    <div className={className}>
+      <SearchInput
+        value={value}
+        onChangeText={onChange}
+        placeholder={placeholder ?? '검색어를 입력해주세요.'}
+        className={`w-full ${inputClassName ?? ''}`}
+        clearable
+      />
+    </div>
   )
 }

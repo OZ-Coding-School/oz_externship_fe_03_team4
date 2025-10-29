@@ -25,23 +25,22 @@ export const RecruitmentFilterSection = ({
   return (
     <section className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <SearchField
-          value={searchText}
-          onChange={setSearchText}
-          placeholder="공고명 검색 키워드를 입력해주세요."
-        />
+        <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <SearchField
+            value={searchText}
+            onChange={setSearchText}
+            placeholder="공고명 검색 키워드를 입력해주세요."
+          />
+          <TagsFilter
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onChange={setSelectedTags}
+          />{' '}
+        </div>
 
-        <div className="flex w-full gap-3 sm:w-auto sm:gap-4 lg:gap-6">
+        <div className="flex w-full justify-end sm:w-auto">
           <StatusSelect value={statusFilter} onChange={setStatusFilter} />
         </div>
-      </div>
-
-      <div className="mt-3">
-        <TagsFilter
-          availableTags={availableTags}
-          selectedTags={selectedTags}
-          onChange={setSelectedTags}
-        />
       </div>
     </section>
   )
