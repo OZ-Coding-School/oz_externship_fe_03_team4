@@ -8,96 +8,27 @@ import Modal from "../components/modal/Modal";
 import { ModalHeader } from "../components/modal/ModalHeader";
 import { UserModalOutlet } from "../components/User-Information/UserModalOutlet";
 import { UserModalFooter } from "../components/User-Information/UserModalFooter";
-// import { useUsers } from "../hooks/useUsers"; // 나중에 API 연동 시 사용
+import { useUsers } from "../hooks/useUsers";
 
 const UserListPage = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+  const [page] = useState(1); // 추후 pagination 기능 추가 가능
 
-  // API 훅 주석 처리 (나중에 연동 시 주석 해제)
-  // const { users, loading, error } = useUsers({
-  //   search,
-  //   status: statusFilter,
-  //   role: roleFilter,
-  // });
+  // React Query 훅으로 API 데이터 가져오기
+  const { users, loading, error, } = useUsers({
+    page,
+    limit: 20,
+    search,
+    status: statusFilter,
+    role: roleFilter,
+  });
 
   // 모달 상태
   const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  // 더미데이터
-  const [dummyUsers, setDummyUsers] = useState<MappedUser[]>([
-    {
-      id: "U001",
-      email: "admin@example.com",
-      nickname: "관리자1",
-      name: "홍길동",
-      birthday: "1988-05-12",
-      role: "관리자",
-      status: "활성",
-      joinedAt: "2023-01-10",
-      withdrawAt: "-",
-    },
-    {
-      id: "U002",
-      email: "staff01@example.com",
-      nickname: "스태프A",
-      name: "이영희",
-      birthday: "1990-07-02",
-      role: "스태프",
-      status: "활성",
-      joinedAt: "2023-03-25",
-      withdrawAt: "-",
-    },
-    {
-      id: "U003",
-      email: "user99@example.com",
-      nickname: "초보유저",
-      name: "박철수",
-      birthday: "1995-11-08",
-      role: "일반회원",
-      status: "비활성",
-      joinedAt: "2023-04-17",
-      withdrawAt: "2023-06-17",
-    },
-    {
-      id: "U004",
-      email: "byeuser@example.com",
-      nickname: "탈퇴예정자",
-      name: "김민수",
-      birthday: "1992-09-21",
-      role: "일반회원",
-      status: "탈퇴요청",
-      joinedAt: "2022-12-03",
-      withdrawAt: "2024-09-01",
-    },
-  ]);
-
-  // 클라이언트 필터링
-  const filteredUsers = dummyUsers.filter((user) => {
-    const matchesSearch =
-      search === "" ||
-      user.email.includes(search) ||
-      user.nickname.includes(search) ||
-      user.name.includes(search) ||
-      String(user.id).includes(search);
-
-    const matchesStatus =
-      statusFilter === "" ||
-      (statusFilter === "active" && user.status === "활성") ||
-      (statusFilter === "inactive" && user.status === "비활성") ||
-      (statusFilter === "withdrawn" && user.status === "탈퇴요청");
-
-    const matchesRole =
-      roleFilter === "" ||
-      (roleFilter === "admin" && user.role === "관리자") ||
-      (roleFilter === "staff" && user.role === "스태프") ||
-      (roleFilter === "user" && user.role === "일반회원");
-
-    return matchesSearch && matchesStatus && matchesRole;
-  });
 
   // 테이블 컬럼 정의
   const columns = [
@@ -139,7 +70,7 @@ const UserListPage = () => {
     setIsEditing(false);
   };
 
-  // 권한 변경 핸들러 (UserModalFooter와 타입 매칭)
+  // 권한 변경 핸들러
   const handleRoleChange = (role: "admin" | "staff" | "user") => {
     if (!selectedUser) return;
 
@@ -151,6 +82,10 @@ const UserListPage = () => {
 
     setSelectedUser({ ...selectedUser, role: roleMap[role] });
   };
+
+  // 로딩 / 에러 상태 표시
+  if (loading) return <p className="p-6">회원 목록 불러오는 중...</p>;
+  if (error) return <p className="p-6 text-red-500">회원 목록을 불러오지 못했습니다.</p>;
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
@@ -197,7 +132,7 @@ const UserListPage = () => {
         {/* 테이블 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <Table<MappedUser>
-            data={filteredUsers}
+            data={users}
             columns={columns}
             onRowClick={handleRowClick}
           />
@@ -205,33 +140,21 @@ const UserListPage = () => {
 
         {/* 모달 */}
         {selectedUser && (
-          <Modal
-            isOn={isModalOpen}
-            onBackgroundClick={() => setIsModalOpen(false)}
-          >
+          <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
             <div className="p-6 w-[700px]">
-              <ModalHeader
-                title="회원 상세 정보"
-                onClose={() => setIsModalOpen(false)}
-              />
-
+              <ModalHeader title="회원 상세 정보" onClose={() => setIsModalOpen(false)} />
               <UserModalOutlet
                 user={selectedUser}
                 isEditing={isEditing}
                 onUserChange={setSelectedUser}
               />
-
               <UserModalFooter
                 user={selectedUser}
                 isEditing={isEditing}
                 onEditToggle={() => setIsEditing(!isEditing)}
                 onClose={() => setIsModalOpen(false)}
                 onRoleChange={handleRoleChange}
-                onDelete={(userId: string) => {
-                  // dummyUsers 상태에서 해당 유저 삭제
-                  setDummyUsers(prev => prev.filter(user => String(user.id) !== userId));
-                  setIsModalOpen(false); // 모달 닫기
-                }}
+                onDelete={() => setIsModalOpen(false)}
               />
             </div>
           </Modal>
