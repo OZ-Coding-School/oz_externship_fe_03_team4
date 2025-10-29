@@ -2,10 +2,50 @@ import { Select } from '../components/FormUI'
 import { SearchInput } from '../components/search/SearchInput'
 import { useState } from 'react'
 
+type WithdrawalRow = {
+  id: string
+  email: string
+  name: string
+  role: '관리자' | '스태프' | '일반회원'
+  birthday: string
+  reason: string
+  created_at: string
+}
+
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
+
+  const rows: WithdrawalRow[] = [
+    {
+      id: 'W001',
+      email: 'byeuser@example.com',
+      name: '김민수',
+      role: '일반회원',
+      birthday: '1992-09-21',
+      reason: '서비스 불만족',
+      created_at: '2025-10-03 14:10',
+    },
+    {
+      id: 'W002',
+      email: 'quit@example.com',
+      name: '이영희',
+      role: '스태프',
+      birthday: '1990-07-02',
+      reason: '개인정보 우려',
+      created_at: '2025-10-04 09:30',
+    },
+    {
+      id: 'W003',
+      email: 'bye@example.com',
+      name: '박철수',
+      role: '일반회원',
+      birthday: '1995-11-08',
+      reason: '사용 빈도 낮음',
+      created_at: '2025-10-05 12:00',
+    },
+  ]
 
   return (
     <div className="flex min-h-screen bg-gray-50">
