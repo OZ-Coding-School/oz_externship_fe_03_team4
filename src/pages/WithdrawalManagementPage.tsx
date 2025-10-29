@@ -1,6 +1,8 @@
 import { Select } from '../components/FormUI'
 import { SearchInput } from '../components/search/SearchInput'
 import { useState } from 'react'
+import { Badge } from '../components/Badge'
+import { Table } from '../components/Data-Indicate/Table'
 
 type WithdrawalRow = {
   id: string
@@ -76,6 +78,26 @@ export const WithdrawalManagementPage = () => {
     return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
   })
 
+  // 테이블 컬럼 정의
+  const columns = [
+    { key: 'id', label: '요청 ID' },
+    { key: 'email', label: '이메일' },
+    { key: 'name', label: '이름' },
+    {
+      key: 'role',
+      label: '권한',
+      render: (value: unknown) => {
+        const v = value as WithdrawalRow['role']
+        const variant: 'info' | 'primary' | 'default' =
+          v === '관리자' ? 'info' : v === '스태프' ? 'primary' : 'default'
+        return <Badge variant={variant} label={v} />
+      },
+    },
+    { key: 'birthday', label: '생년월일' },
+    { key: 'reason', label: '탈퇴 사유' },
+    { key: 'created_at', label: '탈퇴일시' },
+  ]
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <main className="flex-1 p-8">
@@ -98,7 +120,7 @@ export const WithdrawalManagementPage = () => {
               value={withdrawReasonFilter}
               onChange={(e) => setWithdrawReasonFilter(e.target.value)}
             >
-              <option value="">전체</option>
+              <option value="">전체 탈퇴 사유</option>
               <option value="서비스 불만족">서비스 불만족</option>
               <option value="개인정보 우려">개인정보 우려</option>
               <option value="사용 빈도 낮음">사용 빈도 낮음</option>
@@ -118,6 +140,13 @@ export const WithdrawalManagementPage = () => {
               <option value="user">일반회원</option>
             </Select>
           </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+          <Table<WithdrawalRow>
+            data={filtererWithdrawUsers}
+            columns={columns}
+          />
         </div>
       </main>
     </div>
