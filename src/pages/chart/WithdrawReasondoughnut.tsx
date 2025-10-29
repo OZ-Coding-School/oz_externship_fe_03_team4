@@ -77,7 +77,7 @@ const renderActiveShape = (props: unknown) => {
         fontSize={20}
         style={{ fontWeight: 600 }}
       >
-        {payload.name}
+        {payload.reason}
       </text>
       <Sector
         cx={cx}
@@ -110,13 +110,62 @@ const renderActiveShape = (props: unknown) => {
         fill="#888"
         fontSize={15}
       >
-        {`${((percent ?? 0) * 100).toFixed(1)}%`}
+        {`${payload.percentage.toFixed(1)}%`}
       </text>
     </g>
   );
 };
 
 const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutChartProps) => {
+  const [data, setData] = useState<(WithdrawalReasonChartData & { color: string })[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchReasonData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
+        const statistics = mapDtoToWithdrawalReasonDistribution(MOCK_DATA);
+        const chartDataWithColors = statistics.chartData.map(item => ({
+          ...item,
+          color: REASON_COLORS[item.reason] || '#CCCCCC'
+        }));
+        setData(chartDataWithColors);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReasonData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center h-[500px]">
+          <p className="text-gray-500">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center h-[500px]">
+          <p className="text-red-500">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm">
       <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
@@ -128,8 +177,8 @@ const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutCh
             margin={{ top: 10, right: 40, bottom: 10, left: 40 }}
           >
             <Pie
-              data={REASON_DATA}
-              dataKey="value"
+              data={data}
+              dataKey="count"
               cx="60%" //피드백 반영
               cy="50%"
               innerRadius="40%"
@@ -137,7 +186,7 @@ const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutCh
               activeShape={renderActiveShape}
               isAnimationActive={isAnimationActive}
             >
-              {REASON_DATA.map((entry, index) => (
+              {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
@@ -146,16 +195,16 @@ const ReasonDistributionChart = ({ isAnimationActive }: WithdrawReasondoughnutCh
         </div>
 
         <div className="flex flex-col justify-center" style={{ minWidth: '180px' }}>
-          {REASON_DATA.map((item) => (
-            <div key={item.name} className="flex items-center mb-2 text-sm">
+          {data.map((item) => (
+            <div key={item.reason} className="flex items-center mb-2 text-sm">
               <div className="flex items-center flex-1">
                 <div
                   className="w-3.5 h-3.5 rounded-full mr-2 flex-shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="whitespace-nowrap">{item.name}</span>
+                <span className="whitespace-nowrap">{item.reason}</span>
               </div>
-              <span className="text-neutral-500 ml-3 whitespace-nowrap">{item.value}명</span>
+              <span className="text-neutral-500 ml-3 whitespace-nowrap">{item.count}명</span>
             </div>
           ))}
         </div>
