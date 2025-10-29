@@ -4,16 +4,17 @@ import type { RecruitmentStatusApi } from '../../../types/recruitments'
 interface StatusSelectProps {
   value: RecruitmentStatusApi | '전체'
   onChange: (nextValue: RecruitmentStatusApi | '전체') => void
+  className?: string
 }
 
-export const StatusSelect = ({ value, onChange }: StatusSelectProps) => {
+export const StatusSelect = ({ value, onChange, className }: StatusSelectProps) => {
   return (
     <Select
       value={value}
       onChange={(event) =>
         onChange(event.target.value as RecruitmentStatusApi | '전체')
       }
-      className="w-48"
+      className={className}
     >
       <option value="전체">전체 상태</option>
       <option value="모집중">모집중</option>
