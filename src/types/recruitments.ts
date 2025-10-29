@@ -21,3 +21,15 @@ export interface RecruitmentListResponseDTO {
   total_count: number
 }
 
+// ui에서 사용할 값들
+export interface Recruitment {
+  id: number
+  title: string
+  tags: string[]
+  closeAt: string
+  status: RecruitmentStatusApi
+  viewCount: number
+  bookmarksCount: number
+  createdAt: string
+  updatedAt: string
+}
