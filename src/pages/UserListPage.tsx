@@ -27,7 +27,6 @@ const UserListPage = () => {
     role: roleFilter,
   });
 
-  //Pagenation 정보
   const totalPages = pagination?.total_pages ?? 1;
 
   // 모달 상태
@@ -86,10 +85,6 @@ const UserListPage = () => {
     setSelectedUser({ ...selectedUser, role: roleMap[role] });
   };
 
-  // 로딩 / 에러 상태 표시
-  if (loading) return <p className="p-6">회원 목록 불러오는 중...</p>;
-  if (error) return <p className="p-6 text-red-500">회원 목록을 불러오지 못했습니다.</p>;
-
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <main className="flex-1 p-8">
@@ -128,7 +123,13 @@ const UserListPage = () => {
 
         {/* 테이블 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <Table<MappedUser> data={users} columns={columns} onRowClick={handleRowClick} />
+          {loading ? (
+            <p className="p-6 text-center text-gray-500">회원 목록 불러오는 중...</p>
+          ) : error ? (
+            <p className="p-6 text-center text-red-500">회원 목록을 불러오지 못했습니다.</p>
+          ) : (
+            <Table<MappedUser> data={users} columns={columns} onRowClick={handleRowClick} />
+          )}
         </div>
 
         {/* 페이지네이션 */}
