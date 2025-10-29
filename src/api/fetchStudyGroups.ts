@@ -1,11 +1,11 @@
-import api from '../../lib/axios'
+import api from '../lib/axios'
 import {
   mapStudyGroupDTO,
   type StudyGroup,
   type StudyGroupListResponse,
-} from '../../types/studyGroup/types'
-import { buildQueryParams } from './buildQueryParams'
-import type { StudyGroupsParams } from './types.local'
+} from '../types/studyGroup/types'
+import { buildQueryParams } from '../hooks/studyGroup/buildQueryParams'
+import type { StudyGroupsParams } from '../hooks/studyGroup/types.local'
 
 export type FetchStudyGroupsParams = Record<string, string | number>
 

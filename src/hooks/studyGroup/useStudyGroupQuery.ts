@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchStudyGroups } from './fetchStudyGroups'
+import { fetchStudyGroups } from '../../api/fetchStudyGroups'
 import { buildQueryParams } from './buildQueryParams'
 import type { StudyGroupsParams } from './types.local'
 
