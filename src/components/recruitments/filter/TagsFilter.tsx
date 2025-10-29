@@ -68,11 +68,11 @@ export const TagsFilter = ({
       {isOpen && (
         <div
           className={cn(
-            'absolute right-0 left-0 z-20 mt-2 rounded-md border border-neutral-200 bg-white shadow-lg',
+            'absolute left-0 z-20 mt-2 w-48 rounded-md border border-neutral-200 bg-white shadow-lg',
             controlClassName
           )}
         >
-          <ul className="scrollbar-hide max-h-48 overflow-y-auto p-2">
+          <ul className="scrollbar-hide scrollbar-hide grid max-h-48 grid-cols-2 gap-2 overflow-y-auto p-2">
             {availableTags.map((tag) => {
               const isActive = selectedTags.includes(tag)
               return (
@@ -80,8 +80,11 @@ export const TagsFilter = ({
                   key={tag}
                   onClick={() => toggleTag(tag)}
                   className={cn(
-                    'cursor-pointer rounded-md px-3 py-1 text-sm hover:bg-neutral-100',
-                    isActive && 'bg-primary/10 text-primary font-medium'
+                    'h-8 w-full cursor-pointer rounded-full border text-xs transition-all duration-150',
+                    'flex items-center justify-center px-2 text-center',
+                    isActive
+                      ? 'scale-[1.03] border-gray-900 bg-gray-900 text-white shadow-sm'
+                      : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
                   )}
                 >
                   {tag}
