@@ -6,12 +6,16 @@ interface TagsFilterProps {
   availableTags: string[]
   selectedTags: string[]
   onChange: (nextValue: string[]) => void
+  className?: string
+  controlClassName?: string
 }
 
 export const TagsFilter = ({
   availableTags,
   selectedTags,
   onChange,
+  className,
+  controlClassName,
 }: TagsFilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -24,7 +28,7 @@ export const TagsFilter = ({
   }
 
   return (
-    <div className="relative w-full sm:w-64">
+    <div className={className}>
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -48,7 +52,7 @@ export const TagsFilter = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-full rounded-md border border-neutral-200 bg-white shadow-lg">
+        <div className={controlClassName}>
           <ul className="max-h-48 overflow-y-auto p-2">
             {availableTags.map((tag) => {
               const isActive = selectedTags.includes(tag)
