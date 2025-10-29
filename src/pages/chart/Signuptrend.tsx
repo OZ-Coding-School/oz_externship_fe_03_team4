@@ -4,50 +4,50 @@ import { useEffect, useState } from 'react';
 
 //일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: SignupStatisticsDTO = {
-  "detail": "회원가입 통계 조회에 성공하였습니다.",
-  "data": {
-    "interval": "month", // 집계 단위 (month, year)
-    "from": "2024-11-01", // 조회 시작일
-    "to": "2025-10-31", // 조회 종료일
-    "total_signups": 120, // 조회 기간 내 총 회원가입 수
-    "items": [
-      { "period": "2024-11", "count": 9 },
-      { "period": "2024-12", "count": 14 },
-      { "period": "2025-01", "count": 8 },
-      { "period": "2025-02", "count": 11 },
-      { "period": "2025-03", "count": 13 },
-      { "period": "2025-04", "count": 10 },
-      { "period": "2025-05", "count": 9 },
-      { "period": "2025-06", "count": 12 },
-      { "period": "2025-07", "count": 7 },
-      { "period": "2025-08", "count": 6 },
-      { "period": "2025-09", "count": 11 },
-      { "period": "2025-10", "count": 10 }
+  detail: "회원가입 통계 조회에 성공하였습니다.",
+  data: {
+    interval: "month",
+    from: "2024-11-01",
+    to: "2025-10-31",
+    total_signups: 120,
+    items: [
+      { period: "2024-11", count: 9 },
+      { period: "2024-12", count: 14 },
+      { period: "2025-01", count: 8 },
+      { period: "2025-02", count: 11 },
+      { period: "2025-03", count: 13 },
+      { period: "2025-04", count: 10 },
+      { period: "2025-05", count: 9 },
+      { period: "2025-06", count: 12 },
+      { period: "2025-07", count: 7 },
+      { period: "2025-08", count: 6 },
+      { period: "2025-09", count: 11 },
+      { period: "2025-10", count: 10 }
     ]
   }
 }
 
 const MOCK_YEARLY_DATA: SignupStatisticsDTO = {
-  "detail": "회원가입 통계 조회에 성공하였습니다.",
-  "data": {
-    "interval": "year", // 집계 단위 (month, year)
-    "from": "2021-01-01", // 조회 시작일
-    "to": "2025-10-31", // 조회 종료일
-    "total_signups": 40, // 조회 기간 내 총 회원가입 수
-    "items": [
-      { "period": "2021", "count": 6 },
-      { "period": "2022", "count": 7 },
-      { "period": "2023", "count": 8 },
-      { "period": "2024", "count": 9 },
-      { "period": "2025", "count": 10 },
+  detail: "회원가입 통계 조회에 성공하였습니다.",
+  data: {
+    interval: "year",
+    from: "2021-01-01",
+    to: "2025-10-31",
+    total_signups: 40,
+    items: [
+      { period: "2021", count: 6 },
+      { period: "2022", count: 7 },
+      { period: "2023", count: 8 },
+      { period: "2024", count: 9 },
+      { period: "2025", count: 10 },
     ]
   }
 }
 
 interface SignupChartProps {
-  isAnimationActive?: boolean;
   period: 'monthly' | 'yearly';
 }
+//api나오면 여기까지 삭제
 
 const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | number, string>) => {
   if (!active || !payload || !payload.length) return null;
@@ -59,7 +59,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | 
   );
 };
 
-const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => {
+const SignupChart = ({ period }: SignupChartProps) => {
   const [data, setData] = useState<SignupChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,25 +69,8 @@ const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => 
       setLoading(true);
       setError(null);
 
-   try {
-        // TODO: API 나오면 주석 해제
-        // const interval = period === 'yearly' ? 'year' : 'month';
-        // const token = localStorage.getItem('access_token');
-        // const response = await fetch(
-        //   `/api/v1/users/statistics/signups?interval=${interval}`,
-        //   {
-        //     method: 'GET',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Authorization': `Bearer ${token}`,
-        //     },
-        //   }
-        // );
-        // if (!response.ok) {
-        //   throw new Error(`API 오류: ${response.status}`);
-        //}
-        // const dto: SignupStatisticsDTO = await response.json();
-        
+      try {
+        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
         const mockDto = period === 'yearly' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA;
         const statistics = mapDtoToSignupStatistics(mockDto);
         setData(statistics.chartData);
@@ -125,7 +108,7 @@ const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => 
         <YAxis />
         <Tooltip content={CustomTooltip} />
         <Legend />
-        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} isAnimationActive={isAnimationActive} fill="#FFD700"/> {/*피드백 반영*/}
+        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} fill="#FFD700" />
       </BarChart>
     </ResponsiveContainer>
   );
