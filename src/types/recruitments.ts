@@ -28,8 +28,20 @@ export interface Recruitment {
   tags: string[]
   closeAt: string
   status: RecruitmentStatusApi
-  viewCount: number
+  viewsCount: number
   bookmarksCount: number
   createdAt: string
-  updatedAt: string
+  updatedAt: string | null
 }
+
+export const mapRecruitmentDTO = (dto: RecruitmentDTO): Recruitment => ({
+  id: dto.id,
+  title: dto.title,
+  tags: dto.tags,
+  closeAt: dto.close_at,
+  status: dto.status,
+  viewsCount: dto.views_count,
+  bookmarksCount: dto.bookmarks_count,
+  createdAt: dto.created_at,
+  updatedAt: dto.updated_at,
+})
