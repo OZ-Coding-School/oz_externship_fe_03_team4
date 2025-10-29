@@ -1,5 +1,5 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
-import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Signupchart/types';
+import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Chart/SignupChart/types';
 import { useEffect, useState } from 'react';
 
 //일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
