@@ -45,3 +45,12 @@ export const mapRecruitmentDTO = (dto: RecruitmentDTO): Recruitment => ({
   createdAt: dto.created_at,
   updatedAt: dto.updated_at,
 })
+
+export interface AdminRecruitmentsParams {
+  searchText?: string
+  statusFilter?: RecruitmentStatusApi
+  selectedTags?: string[]
+  ordering?: RecruitmentOrderingApi
+  pageSize?: number
+  pageNumber?: number
+}
