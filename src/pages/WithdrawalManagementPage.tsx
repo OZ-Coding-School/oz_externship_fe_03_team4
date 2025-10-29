@@ -47,6 +47,35 @@ export const WithdrawalManagementPage = () => {
     },
   ]
 
+  // 탈퇴 유저 필터링
+  const filtererWithdrawUsers = rows.filter((user) => {
+    const matchesWithdrawSearch =
+      search === '' ||
+      user.id.includes(search) ||
+      user.email.includes(search) ||
+      user.name.includes(search)
+
+    const matchesWithdrawReason =
+      withdrawReasonFilter === '' ||
+      (withdrawReasonFilter === '서비스 불만족' &&
+        user.reason === '서비스 불만족') ||
+      (withdrawReasonFilter === '개인정보 우려' &&
+        user.reason === '개인정보 우려') ||
+      (withdrawReasonFilter === '사용 빈도 낮음' &&
+        user.reason === '사용 빈도 낮음') ||
+      (withdrawReasonFilter === '경쟁 서비스 이용' &&
+        user.reason === '경쟁 서비스 이용') ||
+      (withdrawReasonFilter === '기타' && user.reason === '기타')
+
+    const matchedWithdrawRole =
+      withdrawRoleFilter === '' ||
+      (withdrawRoleFilter === 'admin' && user.role === '관리자') ||
+      (withdrawRoleFilter === 'staff' && user.role === '스태프') ||
+      (withdrawRoleFilter === 'user' && user.role === '일반회원')
+
+    return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
+  })
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <main className="flex-1 p-8">
@@ -70,11 +99,11 @@ export const WithdrawalManagementPage = () => {
               onChange={(e) => setWithdrawReasonFilter(e.target.value)}
             >
               <option value="">전체</option>
-              <option value="">서비스 불만족</option>
-              <option value="">개인정보 우려</option>
-              <option value="">사용 빈도 낮음</option>
-              <option value="">경쟁 서비스 이용</option>
-              <option value="">기타</option>
+              <option value="서비스 불만족">서비스 불만족</option>
+              <option value="개인정보 우려">개인정보 우려</option>
+              <option value="사용 빈도 낮음">사용 빈도 낮음</option>
+              <option value="경쟁 서비스 이용">경쟁 서비스 이용</option>
+              <option value="기타">기타</option>
             </Select>
           </div>
 
