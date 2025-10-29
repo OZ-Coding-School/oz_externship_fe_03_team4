@@ -1,0 +1,88 @@
+import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router' // 여기는 나중에 탱스택으로 바꿀예정입니닷
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
+import { Pagination } from '../components/pagination/Pagination'
+import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
+import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
+
+const PAGE_SIZE = 10
+
+const TAGS = [
+  // 가짜 목데이터
+  ['React', 'Frontend'],
+  ['Python', 'Django'],
+  ['TypeScript', 'Frontend'],
+  ['Java', 'Spring'],
+  ['Next.js', 'Fullstack'],
+]
+
+const STATUSES: RecruitmentStatusApi[] = ['모집중', '마감']
+
+const mockRecruitments: Recruitment[] = Array.from({ length: 15 }).map(
+  (_, index) => ({
+    id: index + 1,
+    title: `스터디 구인 공고 ${index + 1}`,
+    tags: TAGS[index % TAGS.length],
+    closeAt: `2025-11-${String((index % 28) + 1).padStart(2, '0')}T23:59:59Z`,
+    status: STATUSES[index % STATUSES.length],
+    viewsCount: Math.floor(Math.random() * 300 + 50),
+    bookmarksCount: Math.floor(Math.random() * 50 + 10),
+    createdAt: `2025-10-${String((index % 20) + 1).padStart(2, '0')}T12:00:00Z`,
+    updatedAt: `2025-10-${String((index % 20) + 2).padStart(2, '0')}T15:00:00Z`,
+  })
+)
+
+const ALL_TAGS = Array.from(new Set(mockRecruitments.flatMap((r) => r.tags))) // 전체 태그 목록
+
+const RecruitmentManagementPage = () => {
+  const [searchParams] = useSearchParams()
+  const initialPageNumber = Number(searchParams.get('page') ?? '1')
+
+  const [searchText, setSearchText] = useState('')
+  const debouncedSearchText = useDebouncedValue(searchText, 400)
+  const [statusFilter, setStatusFilter] = useState<
+    RecruitmentStatusApi | '전체'
+  >('전체')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+
+  const filteredRecruitments = useMemo(() => {
+    let filteredRecruitmentList = mockRecruitments
+
+    if (statusFilter !== '전체') {
+      filteredRecruitmentList = filteredRecruitmentList.filter(
+        (recruitment) => recruitment.status === statusFilter
+      )
+    }
+    if (debouncedSearchText.trim()) {
+      const lowerSearchText = debouncedSearchText.toLowerCase().trim()
+      filteredRecruitmentList = filteredRecruitmentList.filter(
+        (recruitment) =>
+          recruitment.title.toLowerCase().includes(lowerSearchText) ||
+          recruitment.tags.some((tag) =>
+            tag.toLowerCase().includes(lowerSearchText)
+          )
+      )
+    }
+
+    if (selectedTags.length > 0) {
+      const selectedTagSet = new Set(selectedTags)
+      filteredRecruitmentList = filteredRecruitmentList.filter((recruitment) =>
+        recruitment.tags.some((tag) => selectedTagSet.has(tag))
+      )
+    }
+
+    return filteredRecruitmentList
+  }, [statusFilter, debouncedSearchText, selectedTags])
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredRecruitments.length / PAGE_SIZE)
+  )
+
+  const paginatedRecruitments = useMemo(() => {
+    const startIndex = (currentPage - 1) * PAGE_SIZE
+    const endIndex = startIndex + PAGE_SIZE
+    return filteredRecruitments.slice(startIndex, endIndex)
+  }, [filteredRecruitments, currentPage])
+}
