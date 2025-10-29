@@ -15,7 +15,7 @@ export type SignupStatisticsDTO = {
 }
 
 export type SignupChartData = {
-  month: string
+  period: string
   count: number
 }
 
@@ -35,7 +35,7 @@ export const mapDtoToSignupStatistics = (dto: SignupStatisticsDTO): SignupStatis
   toDate: dto.data.to,
   totalSignups: dto.data.total_signups,
   chartData: dto.data.items.map(item => ({
-    month: item.period,
+    period: item.period,
     count: item.count,
   })),
 })

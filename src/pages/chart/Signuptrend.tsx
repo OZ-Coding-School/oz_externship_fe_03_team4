@@ -104,7 +104,7 @@ const SignupChart = ({ period }: SignupChartProps) => {
     <ResponsiveContainer width="100%" height={400}>
       <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" />
+        <XAxis dataKey="period" />
         <YAxis />
         <Tooltip content={CustomTooltip} />
         <Legend />
