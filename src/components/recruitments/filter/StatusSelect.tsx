@@ -7,14 +7,14 @@ interface StatusSelectProps {
   className?: string
 }
 
-export const StatusSelect = ({ value, onChange, className }: StatusSelectProps) => {
+export const StatusSelect = ({ value, onChange }: StatusSelectProps) => {
   return (
     <Select
       value={value}
       onChange={(event) =>
         onChange(event.target.value as RecruitmentStatusApi | '전체')
       }
-      className={className}
+      className="w-48"
     >
       <option value="전체">전체 상태</option>
       <option value="모집중">모집중</option>

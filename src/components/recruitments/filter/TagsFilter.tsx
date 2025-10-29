@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { cn } from '../../../utils/cn'
 
 interface TagsFilterProps {
@@ -18,6 +18,7 @@ export const TagsFilter = ({
   controlClassName,
 }: TagsFilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
 
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -27,20 +28,33 @@ export const TagsFilter = ({
     }
   }
 
+  useEffect(() => {
+    if (!isOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (!rootRef.current) return
+      if (!rootRef.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    window.addEventListener('mousedown', onClick)
+    return () => window.removeEventListener('mousedown', onClick)
+  }, [isOpen])
+
   return (
-    <div className={className}>
+    <div ref={rootRef} className={cn('relative inline-block w-64', className)}>
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
-          'flex w-full items-center justify-between rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm',
-          'focus:ring-primary/50 hover:border-neutral-400 focus:ring-2 focus:outline-none'
+          'flex h-11 w-48 items-center justify-between px-3 text-sm',
+          'rounded-lg border border-neutral-200 bg-white',
+          'focus:ring-primary/50 hover:border-neutral-400 focus:ring-2'
         )}
       >
         <span className="truncate">
           {selectedTags.length > 0
             ? selectedTags.join(', ')
-            : '태그로 필터링 (선택 가능)'}
+            : '태그를 선택하세요.'}
         </span>
         <ChevronDown
           size={16}
@@ -52,8 +66,13 @@ export const TagsFilter = ({
       </button>
 
       {isOpen && (
-        <div className={controlClassName}>
-          <ul className="max-h-48 overflow-y-auto p-2">
+        <div
+          className={cn(
+            'absolute right-0 left-0 z-20 mt-2 rounded-md border border-neutral-200 bg-white shadow-lg',
+            controlClassName
+          )}
+        >
+          <ul className="scrollbar-hide max-h-48 overflow-y-auto p-2">
             {availableTags.map((tag) => {
               const isActive = selectedTags.includes(tag)
               return (

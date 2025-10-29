@@ -30,16 +30,23 @@ export const RecruitmentFilterSection = ({
             value={searchText}
             onChange={setSearchText}
             placeholder="공고명 검색 키워드를 입력해주세요."
+            className="w-80"
+            inputClassName="h-10"
           />
           <TagsFilter
             availableTags={availableTags}
             selectedTags={selectedTags}
             onChange={setSelectedTags}
-          />{' '}
+            className="h-10"
+          />
         </div>
 
         <div className="flex w-full justify-end sm:w-auto">
-          <StatusSelect value={statusFilter} onChange={setStatusFilter} />
+          <StatusSelect
+            value={statusFilter}
+            onChange={setStatusFilter}
+            className="h-10 w-40"
+          />
         </div>
       </div>
     </section>
