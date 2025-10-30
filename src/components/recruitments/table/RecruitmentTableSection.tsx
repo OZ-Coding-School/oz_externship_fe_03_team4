@@ -11,7 +11,7 @@ export const RecruitmentTableSection = ({
   data,
   onRowClick,
 }: RecruitmentTableSectionProps) => {
-  const rows = data as unknown as RecruitmentRow[]
+  const rows = data as RecruitmentRow[]
   return (
     <section className="rounded-xl border border-neutral-200 bg-white shadow-sm">
       <div className="rounded-xl">
