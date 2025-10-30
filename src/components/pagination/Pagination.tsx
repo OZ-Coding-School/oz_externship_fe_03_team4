@@ -1,3 +1,4 @@
+// 페이지네이션 사용 시 이 컴포넌트를 import 해주시면 됩니다.
 import {
   ChevronsLeft,
   ChevronLeft,
