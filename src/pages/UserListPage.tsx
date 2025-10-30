@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDebouncedValue } from "../hooks/useDebouncedValue" // hook 추가
 import { Table } from "../components/Data-Indicate/Table";
 import { Badge } from "../components/Badge";
 import type { MappedUser } from "../types/user";
@@ -18,11 +19,13 @@ const UserListPage = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [page, setPage] = useState(1);
 
+  const debouncedSearch = useDebouncedValue(search, 500); // 500ms 디바운스
+
   // React Query 훅으로 API 데이터 가져오기
-  const { users, pagination, loading, error, refetch } = useUsers({
+  const { users, pagination, loading, error } = useUsers({
     page,
     limit: 20,
-    search,
+    search: debouncedSearch,
     status: statusFilter,
     role: roleFilter,
   });
@@ -103,7 +106,13 @@ const UserListPage = () => {
           </div>
 
           <div className="w-40">
-            <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <Select
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1); // 필터 변경 시 페이지 1로 초기화
+              }}
+            >
               <option value="">전체</option>
               <option value="active">활성</option>
               <option value="inactive">비활성</option>
@@ -112,7 +121,13 @@ const UserListPage = () => {
           </div>
 
           <div className="w-40">
-            <Select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+            <Select
+              value={roleFilter}
+              onChange={(e) => {
+                setRoleFilter(e.target.value);
+                setPage(1); // 필터 변경 시 페이지 1로 초기화
+              }}
+            >
               <option value="">전체 권한</option>
               <option value="admin">관리자</option>
               <option value="staff">스태프</option>
@@ -137,10 +152,7 @@ const UserListPage = () => {
           <Pagination
             currentPage={page}
             totalPages={totalPages}
-            onPageChange={(newPage) => {
-              setPage(newPage);
-              refetch();
-            }}
+            onPageChange={setPage} // 간단하게 수정
             showFirstLast
           />
         </div>
