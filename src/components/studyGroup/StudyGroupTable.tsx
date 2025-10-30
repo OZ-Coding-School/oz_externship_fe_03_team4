@@ -1,10 +1,13 @@
 import { Table } from '../Data-Indicate/Table'
 import type { StudyGroup } from '../../types/studyGroup/types'
 import { StudyGroupStatusBadge } from './StudyGroupStatusBadge'
+import { ArrowUpDown } from 'lucide-react'
 
 type StudyGroupTableProps = {
   studyGroups: StudyGroup[]
   onStudyGroupClick?: (StudyGroup: StudyGroup) => void
+  sortKey?: string
+  onSortChange?: (key: string) => void
 }
 
 type StudyGroupTableData = {
@@ -24,7 +27,20 @@ const FALLBACK_IMAGE =
 export const StudyGroupTable = ({
   studyGroups,
   onStudyGroupClick,
+  sortKey,
+  onSortChange,
 }: StudyGroupTableProps) => {
+  const handleSort = (key: string) => {
+    if (!onSortChange) return
+    if (sortKey === key) {
+      onSortChange(`-${key}`)
+    } else if (sortKey === `-${key}`) {
+      onSortChange(key)
+    } else {
+      onSortChange(key)
+    }
+  }
+
   const tableData: StudyGroupTableData[] = studyGroups.map((group) => ({
     profileImg: group.profileImg,
     name: group.name,
@@ -54,7 +70,20 @@ export const StudyGroupTable = ({
     },
     {
       key: 'name',
-      label: '그룹명',
+      label: (
+        <div className="flex items-center gap-2">
+          <span>그룹명</span>
+          {onSortChange && (
+            <button
+              onClick={() => handleSort('name')}
+              className="flex-shrink-0 text-gray-400 transition-colors hover:text-gray-600"
+              aria-label="그룹명 정렬"
+            >
+              <ArrowUpDown size={16} />
+            </button>
+          )}
+        </div>
+      ),
       render: (value: unknown, row: StudyGroupTableData) => (
         <button
           onClick={() => onStudyGroupClick?.(row._original)}
@@ -87,7 +116,20 @@ export const StudyGroupTable = ({
     },
     {
       key: 'createdAt',
-      label: '생성일시',
+      label: (
+        <div className="flex items-center gap-2">
+          <span>생성일시</span>
+          {onSortChange && (
+            <button
+              onClick={() => handleSort('createdAt')}
+              className="flex-shrink-0 text-gray-400 transition-colors hover:text-gray-600"
+              aria-label="생성일시 정렬"
+            >
+              <ArrowUpDown size={16} />
+            </button>
+          )}
+        </div>
+      ),
       render: (value: unknown) => (
         <span className="text-gray-500">{String(value)}</span>
       ),

@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 
 interface TableColumn<T> {
   key: keyof T | string
-  label?: string
+  label?: React.ReactNode // String-> React.ReactNode
   render?: (value: unknown, row: T) => React.ReactNode
 }
 
