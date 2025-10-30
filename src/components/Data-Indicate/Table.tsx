@@ -45,7 +45,7 @@ export const Table = <T extends Record<string, unknown>>({
                 scope="col"
                 className="border-b border-gray-200 px-6 py-3 text-left whitespace-nowrap"
               >
-                {col.label || col.key.toString()}
+                {col.label}
               </th>
             ))}
           </tr>

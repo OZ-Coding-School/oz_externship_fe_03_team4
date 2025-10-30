@@ -77,7 +77,6 @@ export const StudyGroupTable = ({
             <button
               onClick={() => handleSort('name')}
               className="flex-shrink-0 text-gray-400 transition-colors hover:text-gray-600"
-              aria-label="그룹명 정렬"
             >
               <ArrowUpDown size={16} />
             </button>
@@ -123,7 +122,6 @@ export const StudyGroupTable = ({
             <button
               onClick={() => handleSort('createdAt')}
               className="flex-shrink-0 text-gray-400 transition-colors hover:text-gray-600"
-              aria-label="생성일시 정렬"
             >
               <ArrowUpDown size={16} />
             </button>
