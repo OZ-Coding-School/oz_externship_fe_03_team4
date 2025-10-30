@@ -44,7 +44,9 @@ export const RecruitmentFilterSection = ({
         <div className="flex w-full justify-end sm:w-auto">
           <StatusSelect
             value={statusFilter}
-            onChange={setStatusFilter}
+            onChange={(nextStatus) => {
+              setStatusFilter(nextStatus)
+            }}
             className="h-10 w-40"
           />
         </div>
