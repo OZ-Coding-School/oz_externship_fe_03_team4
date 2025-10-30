@@ -1,3 +1,5 @@
+import { formatDate } from '../../utils/formatDate'
+
 // API용 상태 타입
 export type StudyGroupStatus = 'PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'
 
@@ -105,7 +107,7 @@ export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
     status: STUDY_GROUP_STATUS_MAP[dto.status],
     isLeader: dto.is_leader,
     lectures: dto.lectures,
-    createdAt: dto.created_at,
-    updatedAt: dto.updated_at,
+    createdAt: formatDate(dto.created_at),
+    updatedAt: formatDate(dto.updated_at),
   }
 }
