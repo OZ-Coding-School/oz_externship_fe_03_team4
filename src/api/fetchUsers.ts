@@ -44,7 +44,7 @@ export async function fetchUsers({
   status = "",
   accessToken,
 }: FetchUsersParams): Promise<FetchUsersResponse> {
-  const response = await axios.get("/api/v1/admin/users", {
+  const response = await axios.get("/v1/admin/users", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,

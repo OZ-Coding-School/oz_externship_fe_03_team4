@@ -38,7 +38,7 @@ export const useUsers = ({
     queryFn: async () => {
       const res = await api.get<{
         data?: { users: ApiUser[]; pagination?: PaginationInfo };
-      }>("/api/v1/admin/users", {
+      }>("/v1/admin/users", {
         params: { page, limit, search, status, role },
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
