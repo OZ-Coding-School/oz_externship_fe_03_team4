@@ -13,7 +13,7 @@ export default function Layout(): ReactElement {
           <Sidebar />
         </aside>
 
-        <main className="min-h-[70vh] flex-1 rounded-2xl border border-black/5 bg-white">
+        <main className="min-h-[70vh] flex-1 rounded-2xl border border-black/5 bg-gray-50">
           <div className="p-6">
             <Outlet />
           </div>
