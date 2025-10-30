@@ -4,6 +4,11 @@ import { useState } from 'react'
 import { Badge } from '../components/Badge'
 import { Table } from '../components/Data-Indicate/Table'
 import { type WithdrawalRow } from '../types/withdraw/types'
+import {
+  ROLE_CODE_TO_LABEL,
+  ROLE_LABEL_TO_CODE,
+  WITHDRAW_REASONS,
+} from '../constants/withdrawal'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -41,7 +46,7 @@ export const WithdrawalManagementPage = () => {
   ]
 
   // 탈퇴 유저 필터링
-  const filtererWithdrawUsers = rows.filter((user) => {
+  const filteredWithdrawUsers = rows.filter((user) => {
     const matchesWithdrawSearch =
       search === '' ||
       user.id.includes(search) ||
@@ -49,22 +54,11 @@ export const WithdrawalManagementPage = () => {
       user.name.includes(search)
 
     const matchesWithdrawReason =
-      withdrawReasonFilter === '' ||
-      (withdrawReasonFilter === '서비스 불만족' &&
-        user.reason === '서비스 불만족') ||
-      (withdrawReasonFilter === '개인정보 우려' &&
-        user.reason === '개인정보 우려') ||
-      (withdrawReasonFilter === '사용 빈도 낮음' &&
-        user.reason === '사용 빈도 낮음') ||
-      (withdrawReasonFilter === '경쟁 서비스 이용' &&
-        user.reason === '경쟁 서비스 이용') ||
-      (withdrawReasonFilter === '기타' && user.reason === '기타')
+      withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
 
     const matchedWithdrawRole =
       withdrawRoleFilter === '' ||
-      (withdrawRoleFilter === 'admin' && user.role === '관리자') ||
-      (withdrawRoleFilter === 'staff' && user.role === '스태프') ||
-      (withdrawRoleFilter === 'user' && user.role === '일반회원')
+      ROLE_LABEL_TO_CODE[user.role] === withdrawRoleFilter
 
     return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
   })
@@ -90,56 +84,53 @@ export const WithdrawalManagementPage = () => {
   ]
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <main className="flex-1 p-8">
-        <h1 className="mb-6 text-2xl font-semibold">탈퇴 관리</h1>
+    <main className="bg-gray-50 p-8">
+      <h1 className="mb-6 text-2xl font-semibold">탈퇴 관리</h1>
 
-        {/* 검색 / 필터 */}
-        <div className="mb-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-center">
-          <div className="max-w-full min-w-[200px] flex-1">
-            <SearchInput
-              placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
-              value={search}
-              onChangeText={setSearch}
-              clearable
-              className="w-full"
-            />
-          </div>
-
-          <div className="w-40">
-            <Select
-              value={withdrawReasonFilter}
-              onChange={(e) => setWithdrawReasonFilter(e.target.value)}
-            >
-              <option value="">전체 탈퇴 사유</option>
-              <option value="서비스 불만족">서비스 불만족</option>
-              <option value="개인정보 우려">개인정보 우려</option>
-              <option value="사용 빈도 낮음">사용 빈도 낮음</option>
-              <option value="경쟁 서비스 이용">경쟁 서비스 이용</option>
-              <option value="기타">기타</option>
-            </Select>
-          </div>
-
-          <div className="w-40">
-            <Select
-              value={withdrawRoleFilter}
-              onChange={(e) => setWithdrawRoleFilter(e.target.value)}
-            >
-              <option value="">전체 권한</option>
-              <option value="admin">관리자</option>
-              <option value="staff">스태프</option>
-              <option value="user">일반회원</option>
-            </Select>
-          </div>
-        </div>
-
-        <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-          <Table<WithdrawalRow>
-            data={filtererWithdrawUsers}
-            columns={columns}
+      {/* 검색 / 필터 */}
+      <div className="mb-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-center">
+        <div className="max-w-full min-w-[200px] flex-1">
+          <SearchInput
+            placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
+            value={search}
+            onChangeText={setSearch}
+            clearable
+            className="w-full"
           />
         </div>
-      </main>
-    </div>
+
+        <div className="w-40">
+          <Select
+            value={withdrawReasonFilter}
+            onChange={(e) => setWithdrawReasonFilter(e.target.value)}
+          >
+            <option value="">전체 탈퇴 사유</option>
+            {WITHDRAW_REASONS.map((reason) => (
+              <option key={reason} value={reason}>
+                {reason}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div className="w-40">
+          <Select
+            value={withdrawRoleFilter}
+            onChange={(e) => setWithdrawRoleFilter(e.target.value)}
+          >
+            <option value="">전체 권한</option>
+            {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
+              <option key={code} value={code}>
+                {label}
+              </option>
+            ))}
+          </Select>
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+        <Table<WithdrawalRow> data={filteredWithdrawUsers} columns={columns} />
+      </div>
+    </main>
   )
 }
