@@ -19,20 +19,21 @@ api.interceptors.response.use(
   async (err: AxiosError) => {
     if (err.response?.status === 401) {
       try {
-        const refreshRes = await axios.post(
-          '/auth/refresh', // 엔드포인트 추후 수정
+        const refreshRes = await api.post(
+          '/v1/auth/refresh', // 엔드포인트 추후 수정
           {},
           { withCredentials: true }
         )
-        const newToken = refreshRes.data.accessToken
+        const newToken = refreshRes.data.access
+        if (!newToken)
+          throw new Error('다시 로그인해 주시면 계속 이용하실 수 있어요.')
         setAccessToken(newToken)
 
         if (err.config?.headers) {
           err.config.headers.Authorization = `Bearer ${newToken}`
         }
-
         return api(err.config!)
-      } catch { // 변수제거
+      } catch {
         removeAccessToken()
         window.location.href = '/login'
       }

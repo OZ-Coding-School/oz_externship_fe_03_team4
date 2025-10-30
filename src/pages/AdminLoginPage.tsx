@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { AdminLoginButton } from '../components/login/AdminLoginButton'
 import { BrandLogo } from '../components/login/BrandLogo'
 import { FormField, TextField } from '../components/FormUI'
+import api from '../lib/axios'
+import { setAccessToken } from '../lib/token'
 
 export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,6 +19,21 @@ export default function AdminLoginPage() {
     // setPwError(undefined)
 
     try {
+      const formData = new FormData(e.currentTarget as HTMLFormElement)
+      const emailValue = String(formData.get('email') ?? '')
+      const passwordValue = String(formData.get('password') ?? '')
+      const loginResponse = await api.post('/v1/auth/login', {
+        email: emailValue,
+        password: passwordValue,
+      })
+      const accessToken =
+        loginResponse.data?.data?.access ?? loginResponse.data?.access
+      if (accessToken) {
+        setAccessToken(accessToken)
+        window.location.href = '/userlist'
+      } else {
+        alert('세션이 만료되어 다시 로그인해 주세요.')
+      }
       // await api.post("v1/auth/login", {email, password});
     } catch {
       /* 에러제거하자제발 */
@@ -47,6 +64,7 @@ export default function AdminLoginPage() {
             >
               <TextField
                 id="email"
+                name="email"
                 type="email"
                 placeholder="example@company.com"
                 leftIcon={<Mail className="h-5 w-5 text-amber-700" />}
@@ -62,6 +80,7 @@ export default function AdminLoginPage() {
             >
               <TextField
                 id="password"
+                name="password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="비밀번호를 입력하세요"
                 leftIcon={<Lock className="h-5 w-5 text-amber-700" />}
