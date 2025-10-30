@@ -1,71 +1,83 @@
-import type { ReactNode } from 'react'
 import type { Recruitment } from '../../../types/recruitments'
 import { RecruitmentStatusBadge } from './RecruitmentStatusBadge'
 import { TagPills } from './TagPills'
 import { formatDate } from '../../../utils/formatDate'
+import { defineColumns } from '../../../types/column'
 
 const numberFormatter = new Intl.NumberFormat('ko-KR')
 
-export const recruitmentColumns = [
+export const recruitmentColumns = defineColumns<Recruitment>([
   { key: 'id' as const, label: 'ID' },
   {
     key: 'title' as const,
     label: '공고 제목',
-    render: (title: string) => (
+    render: (titleValue: Recruitment['title'], _fullRow: Recruitment) => (
       <div className="min-w-[16rem] truncate font-medium text-neutral-900">
-        {title}
+        {titleValue}
       </div>
     ),
   },
   {
     key: 'tags' as const,
     label: '태그',
-    render: (tags: string[]) => <TagPills tags={tags} />,
+    render: (tagsValue: Recruitment['tags'], _fullRow: Recruitment) => (
+      <TagPills tags={tagsValue} />
+    ),
   },
   {
     key: 'closeAt' as const,
     label: '마감 기한',
-    render: (closeAt: string) => (
-      <span className="text-neutral text-[12px]">{formatDate(closeAt)}</span>
+    render: (closeAtValue: Recruitment['closeAt'], _fullRow: Recruitment) => (
+      <span className="text-neutral text-[12px]">
+        {formatDate(closeAtValue)}
+      </span>
     ),
   },
   {
     key: 'status' as const,
     label: '상태',
-    render: (status: Recruitment['status']) => (
-      <RecruitmentStatusBadge status={status} />
+    render: (statusValue: Recruitment['status'], _fullRow: Recruitment) => (
+      <RecruitmentStatusBadge status={statusValue} />
     ),
   },
   {
     key: 'viewsCount' as const,
     label: '조회수',
-    render: (viewsCount: number) => numberFormatter.format(viewsCount),
+    render: (
+      viewsCountValue: Recruitment['viewsCount'],
+      _fullRow: Recruitment
+    ) => numberFormatter.format(viewsCountValue),
   },
   {
     key: 'bookmarksCount' as const,
     label: '북마크',
-    render: (bookmarksCount: number) => numberFormatter.format(bookmarksCount),
+    render: (
+      bookmarksCountValue: Recruitment['bookmarksCount'],
+      _fullRow: Recruitment
+    ) => numberFormatter.format(bookmarksCountValue),
   },
   {
     key: 'createdAt' as const,
     label: '생성일시',
-    render: (createdAt: string) => (
+    render: (
+      createdAtValue: Recruitment['createdAt'],
+      _fullRow: Recruitment
+    ) => (
       <span className="text-[12px] text-neutral-700">
-        {formatDate(createdAt)}
+        {formatDate(createdAtValue)}
       </span>
     ),
   },
   {
     key: 'updatedAt' as const,
     label: '수정일시',
-    render: (updatedAt: string | null) => (
+    render: (
+      updatedAtValue: Recruitment['updatedAt'],
+      _fullRow: Recruitment
+    ) => (
       <span className="text-[12px] text-neutral-700">
-        {formatDate(updatedAt ?? undefined)}
+        {formatDate(updatedAtValue ?? undefined)}
       </span>
     ),
   },
-] satisfies Array<{
-  key: keyof Recruitment
-  label?: string
-  render?: (value: unknown, row: Recruitment) => ReactNode
-}>
+])
