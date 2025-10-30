@@ -18,7 +18,7 @@ interface PaginationInfo {
 }
 
 const api = axios.create({
-  baseURL: "https://api.ozcoding.site",
+  baseURL: import.meta.env.VITE_API_BASE_URL, //.env 환경 변수
   headers: {
     "Content-Type": "application/json",
   },
