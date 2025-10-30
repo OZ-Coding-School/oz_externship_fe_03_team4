@@ -8,6 +8,7 @@ export interface MappedUser {
   status: "활성" | "비활성" | "탈퇴요청";
   joinedAt: string;
   withdrawAt: string;
+  avatar?: string | null;
   [key: string]: unknown; // Table 제네릭 호환용
 }
 
