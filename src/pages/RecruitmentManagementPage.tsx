@@ -5,6 +5,7 @@ import { Pagination } from '../components/pagination/Pagination'
 import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
 import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
+import { Inbox } from 'lucide-react'
 
 const PAGE_SIZE = 10
 
@@ -76,6 +77,8 @@ const RecruitmentManagementPage = () => {
     return filteredRecruitmentList
   }, [statusFilter, debouncedSearchText, selectedTags])
 
+  const hasNoData = filteredRecruitments.length === 0
+
   const totalPages = Math.max(
     1,
     Math.ceil(filteredRecruitments.length / PAGE_SIZE)
@@ -86,6 +89,13 @@ const RecruitmentManagementPage = () => {
     const endIndex = startIndex + PAGE_SIZE
     return filteredRecruitments.slice(startIndex, endIndex)
   }, [filteredRecruitments, currentPage])
+
+  const resetFilters = () => {
+    setSearchText('')
+    setStatusFilter('전체')
+    setSelectedTags([])
+    setCurrentPage(1)
+  }
 
   return (
     <div className="space-y-4 p-6">
@@ -117,21 +127,50 @@ const RecruitmentManagementPage = () => {
         </span>
         건
       </div>
-      <RecruitmentTableSection
-        data={paginatedRecruitments}
-        onRowClick={(row) => {
-          console.log('row clicked:', row.id)
-        }}
-      />
 
-      {totalPages > 1 && (
-        <div className="flex justify-center">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
+      {hasNoData ? (
+        <section className="rounded-xl border border-neutral-200 bg-white shadow-sm">
+          <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
+            <Inbox className="mb-2 h-10 w-10 text-neutral-400" />
+            <h3 className="text-base font-semibold text-neutral-800">
+              조건에 맞는 공고가 없습니다.
+            </h3>
+            <p className="max-w-prose text-sm text-neutral-500">
+              검색어 또는 태그를 조정해보세요.
+            </p>
+            {(searchText.trim() ||
+              selectedTags.length ||
+              statusFilter !== '전체') && (
+              <div className="mt-4">
+                <button
+                  onClick={resetFilters}
+                  className="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-50"
+                >
+                  초기화
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      ) : (
+        <>
+          <RecruitmentTableSection
+            data={paginatedRecruitments}
+            onRowClick={(row) => {
+              console.log('row clicked:', row.id)
+            }}
           />
-        </div>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   )
