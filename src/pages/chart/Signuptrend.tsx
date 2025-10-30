@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Chart/SignupChart/types';
 import { useQuery } from '@tanstack/react-query';
+import api from '../../api/axios';
 
 //일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: SignupStatisticsDTO = {
@@ -71,27 +72,14 @@ const SignupChart = ({ period }: SignupChartProps) => {
           resolve(interval === 'year' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA);
         }, 500);
       });
-        //api나오면 여기까지 삭제 
+      //api나오면 여기까지 삭제 
 
       //실제 API 호출 API 나오면 아래 주석 삭제
-      // const token = localStorage.getItem('access_token');
-      // const response = await fetch(
-      //   `${API_BASE_URL}/api/v1/users/statistics/signups?interval=${interval}`,
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Authorization': `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-
-      // if (!response.ok) {
-      //   throw new Error('회원가입 통계 조회에 실패했습니다.');
-      // }
-
-      // return response.json();
-      //실제 API 호출 API 나오면 아래 주석 삭제
+      // const response = await api.get('/v1/users/statistics/signups', {
+      //   params: { interval }
+      // });
+      // return response.data;
+      //실제 API 호출 끝
     },
   });
 
