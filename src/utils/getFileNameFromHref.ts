@@ -10,7 +10,9 @@ export const getFileNameFromHref = (href: string) => {
     )
     const valid =
       last.trim() !== '' &&
-      (/[A-Za-z0-9가-힣]/.test(last) || last.includes('.'))
+      /^(?!\.)(?!.*\.\.)[가-힣a-zA-Z0-9 _\-()[\]·]+?\.[a-zA-Z0-9]{1,5}$/.test(
+        last
+      )
     return valid ? last : '잘못된 파일명입니다'
   } catch {
     return '잘못된 파일명입니다'
