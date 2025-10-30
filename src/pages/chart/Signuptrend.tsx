@@ -1,6 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Chart/SignupChart/types';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 //일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: SignupStatisticsDTO = {
@@ -60,31 +60,46 @@ const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | 
 };
 
 const SignupChart = ({ period }: SignupChartProps) => {
-  const [data, setData] = useState<SignupChartData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const interval = period === 'yearly' ? 'year' : 'month';
+  
+  const { data: responseData, isLoading, error } = useQuery({
+    queryKey: ['signupStatistics', interval],
+    queryFn: async (): Promise<SignupStatisticsDTO> => {
+      //일단 api명세서 목업
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(interval === 'year' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA);
+        }, 500);
+      });
+        //api나오면 여기까지 삭제 
 
-  useEffect(() => {
-    const fetchSignupData = async () => {
-      setLoading(true);
-      setError(null);
+      //실제 API 호출 API 나오면 아래 주석 삭제
+      // const token = localStorage.getItem('access_token');
+      // const response = await fetch(
+      //   `${API_BASE_URL}/api/v1/users/statistics/signups?interval=${interval}`,
+      //   {
+      //     method: 'GET',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'Authorization': `Bearer ${token}`,
+      //     },
+      //   }
+      // );
 
-      try {
-        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
-        const mockDto = period === 'yearly' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA;
-        const statistics = mapDtoToSignupStatistics(mockDto);
-        setData(statistics.chartData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
+      // if (!response.ok) {
+      //   throw new Error('회원가입 통계 조회에 실패했습니다.');
+      // }
 
-    fetchSignupData();
-  }, [period]);
+      // return response.json();
+      //실제 API 호출 API 나오면 아래 주석 삭제
+    },
+  });
 
-  if (loading) {
+  const data: SignupChartData[] = responseData 
+    ? mapDtoToSignupStatistics(responseData).chartData 
+    : [];
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-[400px]">
         <p className="text-gray-500">로딩 중...</p>
@@ -95,7 +110,7 @@ const SignupChart = ({ period }: SignupChartProps) => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-[400px]">
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500">{error instanceof Error ? error.message : '데이터를 불러오는데 실패했습니다.'}</p>
       </div>
     );
   }
