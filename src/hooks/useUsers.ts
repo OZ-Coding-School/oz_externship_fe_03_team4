@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import type { ApiUser } from "../types/user";
 import { mapUserResponse } from "../utils/user";
+import api from "../lib/axios";
+import { getAccessToken } from "../lib/token";
 
 interface UseUsersProps {
   page?: number;
@@ -17,13 +18,6 @@ interface PaginationInfo {
   current_page: number;
 }
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, //.env 환경 변수
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 export const useUsers = ({
   page = 1,
   limit = 1000,
@@ -31,7 +25,7 @@ export const useUsers = ({
   status = "",
   role = "",
 }: UseUsersProps) => {
-  const token = localStorage.getItem("access_token");
+  const accessToken = getAccessToken();
 
   const query = useQuery({
     queryKey: ["users", { page, limit, search, status, role }],
@@ -41,7 +35,7 @@ export const useUsers = ({
       }>("/v1/admin/users", {
         params: { page, limit, search, status, role },
         headers: {
-          Authorization: token ? `Bearer ${token}` : "",
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
