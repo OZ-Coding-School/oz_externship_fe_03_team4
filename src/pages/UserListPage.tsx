@@ -151,7 +151,7 @@ const UserListPage = () => {
             <div className="p-6 w-[700px]">
               <ModalHeader title="회원 상세 정보" onClose={() => setIsModalOpen(false)} />
               <UserModalOutlet
-                user={selectedUser}
+                userId={selectedUser.id}
                 isEditing={isEditing}
                 onUserChange={setSelectedUser}
               />
