@@ -1,4 +1,3 @@
-import { Select } from '../components/FormUI'
 import { SearchInput } from '../components/search/SearchInput'
 import { useState } from 'react'
 import { Badge } from '../components/Badge'
@@ -10,11 +9,16 @@ import {
   WITHDRAW_REASONS,
 } from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
+import { Accordion } from '../components/Accordion/Accordion'
+import { AccordionItem } from '../components/Accordion/AccordionType'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
+
+  const [reasonAccordion, setReasonAccordion] = useState<string>('')
+  const [roleAccordion, setRoleAccordion] = useState<string>('')
 
   const rows: WithdrawalRow[] = [
     {
@@ -102,32 +106,82 @@ export const WithdrawalManagementPage = () => {
           />
         </div>
 
-        <div className="w-40">
-          <Select
-            value={withdrawReasonFilter}
-            onChange={(e) => setWithdrawReasonFilter(e.target.value)}
+        <div className="relative w-40">
+          <Accordion
+            value={reasonAccordion}
+            onValueChange={setReasonAccordion}
+            selectedLabels={{ '0': withdrawReasonFilter || '전체 탈퇴 사유' }}
           >
-            <option value="">전체 탈퇴 사유</option>
-            {WITHDRAW_REASONS.map((reason) => (
-              <option key={reason} value={reason}>
-                {reason}
-              </option>
-            ))}
-          </Select>
+            <AccordionItem title="탈퇴 사유">
+              {reasonAccordion === '0' && (
+                <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
+                  <button
+                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
+                    onClick={() => {
+                      setWithdrawReasonFilter('')
+                      setReasonAccordion('')
+                    }}
+                  >
+                    전체 탈퇴 사유
+                  </button>
+                  {WITHDRAW_REASONS.map((reason) => (
+                    <button
+                      key={reason}
+                      className={`w-full px-3 py-2 text-left text-sm ${withdrawReasonFilter === reason ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
+                      onClick={() => {
+                        setWithdrawReasonFilter(reason)
+                        setReasonAccordion('')
+                      }}
+                    >
+                      {reason}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </AccordionItem>
+          </Accordion>
         </div>
 
-        <div className="w-40">
-          <Select
-            value={withdrawRoleFilter}
-            onChange={(e) => setWithdrawRoleFilter(e.target.value)}
+        <div className="relative w-40">
+          <Accordion
+            value={roleAccordion}
+            onValueChange={setRoleAccordion}
+            selectedLabels={{
+              '0': withdrawRoleFilter
+                ? ROLE_CODE_TO_LABEL[
+                    withdrawRoleFilter as keyof typeof ROLE_CODE_TO_LABEL
+                  ]
+                : '전체 권한',
+            }}
           >
-            <option value="">전체 권한</option>
-            {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
-              <option key={code} value={code}>
-                {label}
-              </option>
-            ))}
-          </Select>
+            <AccordionItem title="권한">
+              {roleAccordion === '0' && (
+                <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
+                  <button
+                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
+                    onClick={() => {
+                      setWithdrawRoleFilter('')
+                      setRoleAccordion('')
+                    }}
+                  >
+                    전체 권한
+                  </button>
+                  {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
+                    <button
+                      key={code}
+                      className={`w-full px-3 py-2 text-left text-sm ${withdrawRoleFilter === code ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
+                      onClick={() => {
+                        setWithdrawRoleFilter(code)
+                        setRoleAccordion('')
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
 
