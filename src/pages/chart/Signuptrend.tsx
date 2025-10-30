@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Chart/SignupChart/types';
-import { useQuery } from '@tanstack/react-query';
-import api from '../../api/axios';
+import { useEffect, useState } from 'react'; //api연결하면 삭제
+//api 나오면 주석 삭제 import { useSignupStatistics } from '../../hooks/queries/useSignupStatistics';
 
 //일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: SignupStatisticsDTO = {
@@ -61,33 +61,64 @@ const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | 
 };
 
 const SignupChart = ({ period }: SignupChartProps) => {
-  const interval = period === 'yearly' ? 'year' : 'month';
+  const [data, setData] = useState<SignupChartData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // api연동 하면 주석삭제
+  // const interval = period === 'yearly' ? 'year' : 'month';
+  // const { data: responseData, isLoading, error: queryError } = useSignupStatistics(interval);
   
-  const { data: responseData, isLoading, error } = useQuery({
-    queryKey: ['signupStatistics', interval],
-    queryFn: async (): Promise<SignupStatisticsDTO> => {
-      //일단 api명세서 목업
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(interval === 'year' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA);
-        }, 500);
-      });
-      //api나오면 여기까지 삭제 
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">로딩 중...</p>
+  //     </div>
+  //   );
+  // }
 
-      //실제 API 호출 API 나오면 아래 주석 삭제
-      // const response = await api.get('/v1/users/statistics/signups', {
-      //   params: { interval }
-      // });
-      // return response.data;
-      //실제 API 호출 끝
-    },
-  });
+  // if (queryError) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-red-500">
+  //         {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
-  const data: SignupChartData[] = responseData 
-    ? mapDtoToSignupStatistics(responseData).chartData 
-    : [];
+  // if (!responseData) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">데이터가 없습니다.</p>
+  //     </div>
+  //   );
+  // }
 
-  if (isLoading) {
+  // const statistics = mapDtoToSignupStatistics(responseData);
+  // api연동 하면 주석삭제
+
+  useEffect(() => {
+    const fetchSignupData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
+        const mockDto = period === 'yearly' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA;
+        const statistics = mapDtoToSignupStatistics(mockDto);
+        setData(statistics.chartData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSignupData();
+  }, [period]);
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-[400px]">
         <p className="text-gray-500">로딩 중...</p>
@@ -98,7 +129,7 @@ const SignupChart = ({ period }: SignupChartProps) => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-[400px]">
-        <p className="text-red-500">{error instanceof Error ? error.message : '데이터를 불러오는데 실패했습니다.'}</p>
+        <p className="text-red-500">{error}</p>
       </div>
     );
   }
