@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router'
 import {
   STUDY_GROUP_STATUS_OPTIONS,
   type StudyGroup,
+  type StudyGroupDetail,
   type StudyGroupUiStatus,
   mapStudyGroupDTO,
+  mapStudyGroupDetailDTO,
 } from '../types/studyGroup/types'
 import { SearchInput } from '../components/search/SearchInput'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
@@ -13,8 +15,12 @@ import { StudyGroupTable } from '../components/studyGroup/StudyGroupTable'
 import { AccordionItem } from '../components/Accordion/AccordionType'
 import { Accordion } from '../components/Accordion/Accordion'
 import { Pagination } from '../components/pagination/Pagination'
+import { StudyGroupModal } from '../components/studyGroup/StudyGroupModal'
+import { fetchStudyGroupDetail } from '../api/fetchStudyGroups'
 
 const PAGE_SIZE = 10
+const USE_MOCK_DATA = true // 환경변수
+
 const StudyGroupManagementPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
@@ -27,9 +33,15 @@ const StudyGroupManagementPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
   const [sortKey, setSortKey] = useState<string>('')
 
+  const [selectedStudyGroup, setSelectedStudyGroup] =
+    useState<StudyGroupDetail | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false)
+
   const debouncedSearch = useDebouncedValue(searchKeyword, 500)
 
   const studyGroups = useMemo(() => {
+    // React Query로 API 호출하는 부분
     return mockStudyGroupsData.map(mapStudyGroupDTO)
   }, [])
 
@@ -79,6 +91,7 @@ const StudyGroupManagementPage = () => {
     1,
     Math.ceil(sortedStudyGroups.length / PAGE_SIZE)
   )
+
   const paginatedStudyGroups = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE
     const endIndex = startIndex + PAGE_SIZE
@@ -90,11 +103,52 @@ const StudyGroupManagementPage = () => {
     setCurrentPage(1)
   }
 
-  // const handleStudyGroupClick = (studyGroup: StudyGroup) => {
-  //   // TODO: 상세 페이지로 이동 또는 모달 열기
-  // }
+  const handleStudyGroupClick = async (studyGroup: StudyGroup) => {
+    setIsLoadingDetail(true)
+    setIsModalOpen(true)
 
-  // 선택된 상태 라벨 계산
+    try {
+      if (USE_MOCK_DATA) {
+        const { getMockStudyGroupDetail, generateMockDetailFromList } =
+          await import('../components/studyGroup/mockStudyGroupDetail')
+
+        let detailDTO = getMockStudyGroupDetail(studyGroup.id)
+        if (!detailDTO) {
+          const listData = mockStudyGroupsData.find(
+            (g) => g.id === studyGroup.id
+          )
+          if (listData) {
+            detailDTO = generateMockDetailFromList(listData)
+          }
+        }
+
+        if (detailDTO) {
+          const detail = mapStudyGroupDetailDTO(detailDTO)
+          setSelectedStudyGroup(detail)
+        } else {
+          console.error('상세 데이터를 찾을 수 없습니다.')
+          setIsModalOpen(false)
+        }
+      } else {
+        // 실제 API 호출
+        const detailDTO = await fetchStudyGroupDetail(studyGroup.id)
+        const detail = mapStudyGroupDetailDTO(detailDTO)
+        setSelectedStudyGroup(detail)
+      }
+    } catch (error) {
+      console.error('상세 정보 로딩 실패:', error)
+      setIsModalOpen(false)
+      setSelectedStudyGroup(null)
+    } finally {
+      setIsLoadingDetail(false)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedStudyGroup(null)
+  }
+
   const selectedStatusLabel =
     STUDY_GROUP_STATUS_OPTIONS.find((opt) => opt.value === selectedStatus)
       ?.label || '전체'
@@ -177,7 +231,7 @@ const StudyGroupManagementPage = () => {
             studyGroups={paginatedStudyGroups}
             sortKey={sortKey}
             onSortChange={handleSortChange}
-            // onStudyGroupClick={handleStudyGroupClick}
+            onStudyGroupClick={handleStudyGroupClick}
           />
 
           {/* 페이지네이션 */}
@@ -201,6 +255,14 @@ const StudyGroupManagementPage = () => {
           </div>
         </div>
       )}
+
+      {/* 모달 */}
+      <StudyGroupModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        studyGroup={selectedStudyGroup}
+        isLoading={isLoadingDetail}
+      />
     </div>
   )
 }

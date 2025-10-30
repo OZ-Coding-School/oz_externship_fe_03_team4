@@ -2,6 +2,8 @@ import api from '../lib/axios'
 import {
   mapStudyGroupDTO,
   type StudyGroup,
+  type StudyGroupDetailDTO,
+  type StudyGroupDetailResponse,
   type StudyGroupListResponse,
 } from '../types/studyGroup/types'
 import { buildQueryParams } from '../hooks/studyGroup/buildQueryParams'
@@ -30,7 +32,6 @@ export const fetchStudyGroups = async (
   )
 
   const data = response.data
-  // 상세모달때 detail 관련 부분 추가 필요!
   return {
     items: data.results.map(mapStudyGroupDTO),
     totalCount: data.count ?? 0,
@@ -39,4 +40,13 @@ export const fetchStudyGroups = async (
     hasNext: !!data.next,
     hasPrevious: !!data.previous,
   }
+}
+
+export const fetchStudyGroupDetail = async (
+  uuid: number
+): Promise<StudyGroupDetailDTO> => {
+  const response = await api.get<StudyGroupDetailResponse>(
+    `/api/v1/studies/admin/groups/${uuid}`
+  )
+  return response.data.data
 }
