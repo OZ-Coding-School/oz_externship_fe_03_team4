@@ -4,6 +4,7 @@ import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Pagination } from '../components/pagination/Pagination'
 import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
 import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
+import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 
 const PAGE_SIZE = 10
 
@@ -109,36 +110,19 @@ const RecruitmentManagementPage = () => {
         availableTags={ALL_TAGS}
       />
 
-      <div className="rounded-lg border border-neutral-200 bg-white p-4">
-        <div className="mb-2 text-sm text-neutral-600">
-          총{' '}
-          <span className="font-medium text-neutral-900">
-            {filteredRecruitments.length}
-          </span>
-          건
-        </div>
-        {/* 나중에 테이블 넣을거에유~ 지금은 임시로 제작*/}
-        <div className="grid gap-2 text-sm text-neutral-700 md:grid-cols-2 lg:grid-cols-3">
-          {paginatedRecruitments.map((recruitment) => (
-            <div
-              key={recruitment.id}
-              className="rounded-md border border-neutral-200 p-3 hover:bg-neutral-50"
-            >
-              <div className="font-medium text-neutral-900">
-                {recruitment.title}
-              </div>
-              <div className="mt-1 text-xs text-neutral-500">
-                상태: {recruitment.status} · 태그: {recruitment.tags.join(', ')}
-              </div>
-            </div>
-          ))}
-          {paginatedRecruitments.length === 0 && (
-            <div className="col-span-full grid h-32 place-items-center text-neutral-500">
-              검색/필터 조건에 해당하는 결과가 없습니다.
-            </div>
-          )}
-        </div>
+      <div className="mb-3 text-sm text-neutral-600">
+        총{' '}
+        <span className="font-medium text-neutral-900">
+          {filteredRecruitments.length}
+        </span>
+        건
       </div>
+      <RecruitmentTableSection
+        data={paginatedRecruitments}
+        onRowClick={(row) => {
+          console.log('row clicked:', row.id)
+        }}
+      />
 
       {totalPages > 1 && (
         <div className="flex justify-center">
