@@ -9,6 +9,7 @@ import {
   ROLE_LABEL_TO_CODE,
   WITHDRAW_REASONS,
 } from '../constants/withdrawal'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -45,13 +46,15 @@ export const WithdrawalManagementPage = () => {
     },
   ]
 
+  const debouncedSearch = useDebouncedValue(search, 300)
+
   // 탈퇴 유저 필터링
   const filteredWithdrawUsers = rows.filter((user) => {
     const matchesWithdrawSearch =
       search === '' ||
-      user.id.includes(search) ||
-      user.email.includes(search) ||
-      user.name.includes(search)
+      user.id.includes(debouncedSearch) ||
+      user.email.includes(debouncedSearch) ||
+      user.name.includes(debouncedSearch)
 
     const matchesWithdrawReason =
       withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
