@@ -1,4 +1,5 @@
 import { formatDate } from '../../utils/formatDate'
+import { UserIcon } from 'lucide-react'
 
 export type WithdrawalDetail = {
   withdrawal_id: number
@@ -29,7 +30,7 @@ export const WithdrawalModalOutlet = ({
     <div className="space-y-4 text-sm">
       {/* 사용자 */}
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+        <div className="h-20 w-20 overflow-hidden rounded-full bg-gray-100">
           {user.profile_img_url ? (
             <img
               src={user.profile_img_url}
@@ -38,43 +39,106 @@ export const WithdrawalModalOutlet = ({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-gray-400">
-              U
+              <UserIcon className="h-10 w-10" />
             </div>
           )}
         </div>
         <div className="min-w-0">
           <div className="truncate font-medium text-gray-900">
-            {user.name} ({user.nickname}) · {user.email}
+            <p className="text-lg font-semibold">{user.name}</p>
           </div>
           <div className="truncate text-xs text-gray-500">
-            ID: {user.id} · {user.role} · {user.status} · 가입일{' '}
-            {formatDate(user.created_at)}
+            <p className="text-sm text-gray-500">{user.email}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 사용자 정보 */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="mb-1 text-xs text-gray-500">사용자 ID</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.id}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">이름</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.name}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">닉네임</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.nickname}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">이메일</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.email}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">성별</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.gender}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">권한</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.role}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">상태</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.status}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">가입일</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{formatDate(user.created_at)}</p>
           </div>
         </div>
       </div>
 
       {/* 탈퇴 상세 */}
-      <div className="grid grid-cols-3 gap-2">
-        <span className="text-gray-500">요청 ID</span>
-        <span className="col-span-2 font-medium text-gray-900">
-          {detail.withdrawal_id}
-        </span>
-
-        <span className="text-gray-500">탈퇴 사유</span>
-        <span className="col-span-2 text-gray-900">{detail.reason}</span>
-
-        <span className="text-gray-500">상세 사유</span>
-        <span className="col-span-2 text-gray-900">{detail.reason_detail}</span>
-
-        <span className="text-gray-500">요청 일시</span>
-        <span className="col-span-2 text-gray-900">
-          {formatDate(detail.requested_at)}
-        </span>
-
-        <span className="text-gray-500">삭제 예정 일시</span>
-        <span className="col-span-2 text-gray-900">
-          {formatDate(detail.scheduled_deletion_at)}
-        </span>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="mb-1 text-xs text-gray-500">요청 ID</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{detail.withdrawal_id}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">탈퇴 사유</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{detail.reason}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">요청 일시</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{formatDate(detail.requested_at)}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">삭제 예정 일시</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">
+              {formatDate(detail.scheduled_deletion_at)}
+            </p>
+          </div>
+        </div>
+        <div className="col-span-2">
+          <p className="mb-1 text-xs text-gray-500">상세 사유</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{detail.reason_detail}</p>
+          </div>
+        </div>
       </div>
     </div>
   )
