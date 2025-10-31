@@ -76,7 +76,7 @@ export const WithdrawalManagementPage = () => {
   // 탈퇴 유저 필터링
   const filteredWithdrawUsers = rows.filter((user) => {
     const matchesWithdrawSearch =
-      search === '' ||
+      debouncedSearch === '' ||
       user.id.includes(debouncedSearch) ||
       user.email.includes(debouncedSearch) ||
       user.name.includes(debouncedSearch)
