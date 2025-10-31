@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent } from "react";
 import { useUserDetail } from "../../hooks/useUserDeatil";
 import type { MappedUser } from "../../types/user";
+import { formatPhone } from "../../utils/formatPhone";
 
 interface UserModalOutletProps {
   userId: string | number;
@@ -160,7 +161,7 @@ export const UserModalOutlet = ({
             />
           ) : (
             <div className="p-3 rounded-lg bg-gray-50 border-none">
-              <p className="font-medium">{user.phone}</p>
+              <p className="font-medium">{formatPhone(user.phone)}</p>
             </div>
           )}
         </div>
