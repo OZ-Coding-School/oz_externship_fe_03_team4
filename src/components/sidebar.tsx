@@ -9,7 +9,9 @@ import {
   Megaphone,
   ChevronDown,
   ChartBar,
+  LogOut,
 } from "lucide-react";
+import { logout } from "../lib/logout";
 
 // 메뉴 데이터 타입 정의
 interface MenuItem {
@@ -114,6 +116,13 @@ const Sidebar = () => {
           </div>
         ))}
       </nav>
+      <button
+        onClick={logout}
+        className="mt-4 flex items-center gap-2 rounded-md px-3 py-2 text-red-600 hover:bg-red-100"
+      >
+        <LogOut size={18} />
+        로그아웃
+      </button>
     </aside>
   );
 };
