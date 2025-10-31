@@ -4,7 +4,7 @@ import type { WithdrawalRow } from '../../types/withdraw/types'
 export const buildMockWithdrawalDetail = (
   row: WithdrawalRow
 ): WithdrawalDetail => ({
-  withdrawal_id: Number(row.id.replace(/\D/g, '')) || 101,
+  withdrawal_id: Number(row.id.replace(/\D/g, '')),
   user: {
     id: 58,
     name: '홍길동',
