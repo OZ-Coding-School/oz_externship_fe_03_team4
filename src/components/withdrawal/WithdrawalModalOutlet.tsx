@@ -6,9 +6,9 @@ export type WithdrawalDetail = {
   user: {
     id: number
     name: string
-    gender: string
     nickname: string
     email: string
+    gender: string
     role: string
     status: string
     created_at: string
@@ -27,9 +27,9 @@ export const WithdrawalModalOutlet = ({
 }) => {
   const user = detail.user
   return (
-    <div className="space-y-4 text-sm">
+    <div className="grow overflow-y-auto">
       {/* 사용자 */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4 pb-6">
         <div className="h-20 w-20 overflow-hidden rounded-full bg-gray-100">
           {user.profile_img_url ? (
             <img
@@ -54,17 +54,17 @@ export const WithdrawalModalOutlet = ({
       </div>
 
       {/* 사용자 정보 */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <p className="mb-1 text-xs text-gray-500">사용자 ID</p>
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="font-medium">{user.id}</p>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-4 pb-8">
         <div>
           <p className="mb-1 text-xs text-gray-500">이름</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{user.name}</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">성별</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{user.gender}</p>
           </div>
         </div>
         <div>
@@ -80,12 +80,6 @@ export const WithdrawalModalOutlet = ({
           </div>
         </div>
         <div>
-          <p className="mb-1 text-xs text-gray-500">성별</p>
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="font-medium">{user.gender}</p>
-          </div>
-        </div>
-        <div>
           <p className="mb-1 text-xs text-gray-500">권한</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{user.role}</p>
@@ -98,7 +92,7 @@ export const WithdrawalModalOutlet = ({
           </div>
         </div>
         <div>
-          <p className="mb-1 text-xs text-gray-500">가입일</p>
+          <p className="mb-1 text-xs text-gray-500">회원가입 일시</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{formatDate(user.created_at)}</p>
           </div>
@@ -106,25 +100,27 @@ export const WithdrawalModalOutlet = ({
       </div>
 
       {/* 탈퇴 상세 */}
+      <p className="pb-4 text-lg font-semibold">탈퇴 정보</p>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <p className="mb-1 text-xs text-gray-500">요청 ID</p>
+          <p className="mb-1 text-xs text-gray-500">탈퇴요청 고유 ID</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{detail.withdrawal_id}</p>
           </div>
         </div>
         <div>
-          <p className="mb-1 text-xs text-gray-500">탈퇴 사유</p>
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="font-medium">{detail.reason}</p>
-          </div>
-        </div>
-        <div>
-          <p className="mb-1 text-xs text-gray-500">요청 일시</p>
+          <p className="mb-1 text-xs text-gray-500">탈퇴요청 일시</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{formatDate(detail.requested_at)}</p>
           </div>
         </div>
+        <div>
+          <p className="mb-1 text-xs text-gray-500">탈퇴사유</p>
+          <div className="rounded-lg bg-gray-50 p-3">
+            <p className="font-medium">{detail.reason}</p>
+          </div>
+        </div>
+
         <div>
           <p className="mb-1 text-xs text-gray-500">삭제 예정 일시</p>
           <div className="rounded-lg bg-gray-50 p-3">
@@ -134,7 +130,7 @@ export const WithdrawalModalOutlet = ({
           </div>
         </div>
         <div className="col-span-2">
-          <p className="mb-1 text-xs text-gray-500">상세 사유</p>
+          <p className="mb-1 text-xs text-gray-500">탈퇴 상세 사유</p>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="font-medium">{detail.reason_detail}</p>
           </div>
