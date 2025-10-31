@@ -73,6 +73,38 @@ export const RecruitmentModalOutlet = ({
               value={<RecruitmentStatusBadge status={status} />}
             />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <ModalPair label="조회수" value={viewsCount.toLocaleString()} />
+            <ModalPair
+              label="북마크 수"
+              value={bookmarksCount.toLocaleString()}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <ModalPair label="등록일시" value={createdAt} />
+            <ModalPair label="마지막 수정일시" value={updatedAt ?? '-'} />
+          </div>
+          <div>
+            <div className="mb-2 text-sm font-semibold text-neutral-700">
+              사용자 정의 태그
+            </div>
+            <div className="min-h-[44px] rounded-md border border-neutral-200 bg-white p-2">
+              {tags.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tagLabel) => (
+                    <span
+                      key={tagLabel}
+                      className="inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[11px] font-medium text-neutral-700"
+                    >
+                      {tagLabel}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-neutral-500">태그가 없습니다.</p>
+              )}
+            </div>
+          </div>
         </section>
       </div>
     </div>
