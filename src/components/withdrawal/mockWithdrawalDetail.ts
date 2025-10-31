@@ -8,7 +8,7 @@ export const buildMockWithdrawalDetail = (
   user: {
     id: 58,
     name: row.name,
-    gender: 'M',
+    gender: '남성',
     nickname: '길동',
     email: row.email,
     role: row.role,
