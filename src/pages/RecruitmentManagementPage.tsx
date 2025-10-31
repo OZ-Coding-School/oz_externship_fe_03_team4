@@ -6,6 +6,7 @@ import { RecruitmentFilterSection } from '../components/recruitments/filter/Recr
 import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox } from 'lucide-react'
+import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
 
 const PAGE_SIZE = 10
 
@@ -47,6 +48,9 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+
+  const [selectedRecruitment, setSelectedRecruitment] =
+    useState<Recruitment | null>(null)
 
   const filteredRecruitments = useMemo(() => {
     let filteredRecruitmentList = mockRecruitments
@@ -156,9 +160,7 @@ const RecruitmentManagementPage = () => {
         <>
           <RecruitmentTableSection
             data={paginatedRecruitments}
-            onRowClick={(row) => {
-              console.log('row clicked:', row.id)
-            }}
+            onRowClick={(row) => setSelectedRecruitment(row)}
           />
 
           {totalPages > 1 && (
@@ -171,6 +173,25 @@ const RecruitmentManagementPage = () => {
             </div>
           )}
         </>
+      )}
+
+      {selectedRecruitment && (
+        <RecruitmentModal
+          open
+          onClose={() => setSelectedRecruitment(null)}
+          onDelete={() => setSelectedRecruitment(null)}
+          detail={{
+            ...selectedRecruitment,
+            uuid: '',
+            expectedHeadcount: 0,
+            estimatedFee: 0,
+            attachments: [],
+            lectures: [],
+            applications: [],
+            content: '',
+            isClosed: false,
+          }}
+        />
       )}
     </div>
   )
