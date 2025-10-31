@@ -5,19 +5,34 @@ import { Button } from '../buttons/Buttons'
 interface CloseModalFooterProps {
   onClose: () => void
   className?: string
+  onDelete?: () => void
+  showDelete?: boolean
 }
 
 export const CloseModalFooter = ({
   onClose,
   className,
+  onDelete,
+  showDelete = false,
 }: CloseModalFooterProps) => {
   return (
     <footer
       className={cn(
-        'mt-8 flex items-center justify-end border-neutral-200 p-4',
+        'mt-8 flex items-center justify-between border-neutral-200 p-4',
         className
       )}
     >
+      {showDelete ? (
+        <Button
+          size="medium"
+          onClick={onDelete}
+          className="bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-300 active:bg-red-700"
+        >
+          공고 삭제
+        </Button>
+      ) : (
+        <span />
+      )}
       <Button
         size="medium"
         onClick={onClose}

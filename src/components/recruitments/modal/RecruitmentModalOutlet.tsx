@@ -37,12 +37,8 @@ export const RecruitmentModalOutlet = ({
   }))
 
   return (
-    <div className="max-h-[78vh] overflow-y-auto p-1">
-      <h2 className="mb-5 text-lg font-semibold text-neutral-900">
-        스터디 구인 공고 상세 정보
-      </h2>
-
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px,1fr]">
+    <div className="scrollbar-hide max-h-[78vh] overflow-y-auto p-1">
+      <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
         <section className="space-y-4">
           <ModalPair label="공고 ID" value={`#${id}`} />
           <ModalPair

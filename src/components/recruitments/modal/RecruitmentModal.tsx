@@ -2,7 +2,7 @@ import Modal from '../../modal/Modal'
 import type { RecruitmentDetail } from '../../../types/recruitments'
 import { ModalHeader } from '../../modal/ModalHeader'
 import { RecruitmentModalOutlet } from './RecruitmentModalOutlet'
-import { RecruitmentModalFooter } from './RecruitmentModalFooter'
+import { CloseModalFooter } from '../../modal/CloseModalFooter'
 
 interface RecruitmentModalProps {
   open: boolean
@@ -21,7 +21,7 @@ export const RecruitmentModal = ({
     <Modal isOn={open} onBackgroundClick={onClose}>
       <ModalHeader title="스터디 구인 공고 상세" onClose={onClose} />
       <RecruitmentModalOutlet detail={detail} />
-      <RecruitmentModalFooter onClose={onClose} onDelete={onDelete} />
+      <CloseModalFooter onClose={onClose} showDelete onDelete={onDelete} />
     </Modal>
   )
 }
