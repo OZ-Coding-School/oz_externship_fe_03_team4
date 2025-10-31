@@ -108,6 +108,23 @@ export const RecruitmentModalOutlet = ({
 
           <FileAttachList files={attachmentFiles} />
         </section>
+        <section className="flex min-w-0 flex-col gap-6">
+          <div>
+            <div className="mb-2 text-sm font-semibold text-neutral-800">
+              공고 내용
+            </div>
+            {/* 마크다운 쓴다고 해서 넣었어유~ */}
+            <div
+              className="prose prose-sm max-w-none rounded-lg border border-neutral-200 bg-white p-4"
+              dangerouslySetInnerHTML={{
+                __html:
+                  content && content.trim().length > 0
+                    ? content
+                    : '<p class="text-neutral-500">내용이 없습니다.</p>',
+              }}
+            />
+          </div>
+        </section>
       </div>
     </div>
   )
