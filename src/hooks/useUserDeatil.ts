@@ -1,13 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import type { MappedUser } from "../types/user";
+import api from "../lib/axios";
+import { getAccessToken } from "../lib/token"; // token 가져오기
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: { "Content-Type": "application/json" },
-});
-
-// API 타입 (백엔드 응답 기반)
+// 백엔드 응답 타입
 interface ApiUserDetail {
   id: number;
   email: string;
@@ -17,12 +13,13 @@ interface ApiUserDetail {
   is_active: boolean;
   is_staff: boolean;
   is_superuser: boolean;
-  status: string;
+  status: "active" | "inactive" | "withdrawn";
   created_at: string;
   profile_img_url: string;
+  birthday?: string;
 }
 
-// API → MappedUser 변환
+// ApiUserDetail → MappedUser 변환
 const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
   id: data.id.toString(),
   email: data.email,
@@ -37,7 +34,7 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
       : "비활성",
   joinedAt: new Date(data.created_at).toLocaleDateString(),
   withdrawAt: "",
-  birthday: "",
+  birthday: data.birthday ?? "",
   role: data.is_superuser
     ? "관리자"
     : data.is_staff
@@ -47,19 +44,19 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
 });
 
 export const useUserDetail = (userId?: string | number) => {
-  const token = localStorage.getItem("access_token");
+  const token = getAccessToken(); // lib/token 사용
 
   return useQuery({
     queryKey: ["userDetail", userId],
     queryFn: async () => {
-      const res = await api.get<ApiUserDetail>(
-        `/api/v1/admin/users/${userId}`,
-        {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        }
-      );
+      if (!userId) throw new Error("userId is required");
+
+      const res = await api.get<ApiUserDetail>(`/v1/admin/users/${userId}`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
+
       return mapUserDetail(res.data);
     },
     enabled: !!userId, // userId가 있을 때만 실행
