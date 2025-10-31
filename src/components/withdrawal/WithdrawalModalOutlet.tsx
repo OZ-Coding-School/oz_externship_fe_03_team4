@@ -24,17 +24,40 @@ export const WithdrawalModalOutlet = ({
 }: {
   detail: WithdrawalDetail
 }) => {
+  const user = detail.user
   return (
-    <div className="space-y-3 text-sm">
+    <div className="space-y-4 text-sm">
+      {/* 사용자 */}
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+          {user.profile_img_url ? (
+            <img
+              src={user.profile_img_url}
+              alt={user.nickname || user.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-gray-400">
+              U
+            </div>
+          )}
+        </div>
+        <div className="min-w-0">
+          <div className="truncate font-medium text-gray-900">
+            {user.name} ({user.nickname}) · {user.email}
+          </div>
+          <div className="truncate text-xs text-gray-500">
+            ID: {user.id} · {user.role} · {user.status} · 가입일{' '}
+            {formatDate(user.created_at)}
+          </div>
+        </div>
+      </div>
+
+      {/* 탈퇴 상세 */}
       <div className="grid grid-cols-3 gap-2">
         <span className="text-gray-500">요청 ID</span>
         <span className="col-span-2 font-medium text-gray-900">
           {detail.withdrawal_id}
-        </span>
-
-        <span className="text-gray-500">사용자 ID</span>
-        <span className="col-span-2 font-medium text-gray-900">
-          {detail.user.id}
         </span>
 
         <span className="text-gray-500">탈퇴 사유</span>

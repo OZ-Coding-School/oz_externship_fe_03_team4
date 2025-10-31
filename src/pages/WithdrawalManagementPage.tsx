@@ -13,6 +13,12 @@ import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
 import Modal from '../components/modal/Modal'
 import { ModalHeader } from '../components/modal/ModalHeader'
+import {
+  WithdrawalModalOutlet,
+  // type WithdrawalDetail,
+} from '../components/withdrawal/WithdrawalModalOutlet'
+import { WithdrawalModalFooter } from '../components/withdrawal/WithdrawalModalFooter'
+import { buildMockWithdrawalDetail } from '../components/withdrawal/mockWithdrawalDetail'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -217,6 +223,12 @@ export const WithdrawalManagementPage = () => {
           <div className="w-[700px] p-6">
             <ModalHeader
               title="회원 탈퇴 상세 정보"
+              onClose={() => setIsWithdrawModalOpen(false)}
+            />
+            <WithdrawalModalOutlet
+              detail={buildMockWithdrawalDetail(selectedWithdrawUser)}
+            />
+            <WithdrawalModalFooter
               onClose={() => setIsWithdrawModalOpen(false)}
             />
           </div>
