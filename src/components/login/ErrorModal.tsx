@@ -13,8 +13,6 @@ export const LoginErrorModal = ({
   message,
   onClose,
 }: LoginErrorModalProps) => {
-  if (!isOn) return null
-
   return (
     <Modal isOn={isOn} onBackgroundClick={onClose}>
       <RoundBox
