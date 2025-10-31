@@ -36,7 +36,7 @@ export const recruitmentColumns = [
     render: (cellValue: unknown, _fullRow: Recruitment) => {
       const closeAtValue = (cellValue as Recruitment['closeAt']) ?? ''
       return (
-        <span className="text-neutral text-[12px]">
+        <span className="text-[12px] text-neutral-700">
           {formatDate(closeAtValue)}
         </span>
       )

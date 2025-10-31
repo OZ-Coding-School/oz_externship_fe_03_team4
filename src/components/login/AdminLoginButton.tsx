@@ -1,6 +1,5 @@
 import { forwardRef } from 'react'
 import { Button, type ButtonProps } from '../buttons/Buttons'
-import { Spinner } from '../Spinner'
 import { cn } from '../../utils/cn'
 
 type AdminLoginButtonProps = Omit<
@@ -45,7 +44,6 @@ export const AdminLoginButton = forwardRef<
         )}
         {...rest}
       >
-        {isLoading && <Spinner size={18} />}
         <span className={isLoading ? 'opacity-90' : ''}>
           {children ?? '접속하기'}
         </span>

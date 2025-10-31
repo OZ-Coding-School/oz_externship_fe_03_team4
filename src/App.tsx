@@ -13,13 +13,22 @@ import Dashboard from './pages/Dashboard'
 import StudyApplicationPage from './pages/StudyApplicationPage'
 import { LectureManagementPage } from './pages/LectureManagementPage'
 import RecruitmentManagementPage from './pages/RecruitmentManagementPage'
+import { AdminProtectedRoute } from './components/AdminProtectedRoute'
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route index element={<AdminLoginPage />} />
-        <Route element={<Layout />}>
+        <Route path="login" element={<AdminLoginPage />} />
+
+        <Route
+          element={
+            <AdminProtectedRoute>
+              <Layout />
+            </AdminProtectedRoute>
+          }
+        >
           <Route path="danbi" element={<DanbiTestPage />} />
           <Route path="wonhee" element={<WonheeTestPage />} />
           <Route path="hy" element={<HYTestPage />} />

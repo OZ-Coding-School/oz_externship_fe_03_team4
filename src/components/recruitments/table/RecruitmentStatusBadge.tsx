@@ -1,11 +1,13 @@
 import { Badge } from '../../Badge'
 import type { RecruitmentStatusApi } from '../../../types/recruitments'
 
-interface Props {
+interface RecruitmentStatusBadgeProps {
   status: RecruitmentStatusApi
 }
 
-export const RecruitmentStatusBadge = ({ status }: Props) => {
+export const RecruitmentStatusBadge = ({
+  status,
+}: RecruitmentStatusBadgeProps) => {
   const variant: 'success' | 'default' =
     status === '모집중' ? 'success' : 'default'
 
