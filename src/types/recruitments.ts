@@ -1,3 +1,15 @@
+import {
+  type StudyGroupDTO,
+  type StudyGroup,
+  mapStudyGroupDTO,
+} from './studyGroup/types'
+
+import {
+  type ApplicationApi,
+  type Application,
+  mapApplicationApiToUi,
+} from './applications'
+
 export type RecruitmentStatusApi = '모집중' | '마감' // API에서 내려오는 값
 export type RecruitmentOrderingApi = 'latest' | 'oldest' | 'views' | 'bookmarks' // 정렬 키값
 
@@ -12,6 +24,19 @@ export interface RecruitmentDTO {
   bookmarks_count: number
   created_at: string
   updated_at: string | null
+}
+export interface RecruitmentAttachmentDTO {
+  file_name: string
+  file_url: string
+}
+export interface RecruitmentLectureDTO {
+  thumbnail_url: string
+  name: string
+  instructor: string
+  link: string
+}
+export interface RecruitmentTagDTO {
+  name: string
 }
 
 export interface RecruitmentListResponseDTO {
