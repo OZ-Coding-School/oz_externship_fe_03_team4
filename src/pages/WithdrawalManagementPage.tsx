@@ -11,6 +11,8 @@ import {
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
+import Modal from '../components/modal/Modal'
+import { ModalHeader } from '../components/modal/ModalHeader'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -19,6 +21,19 @@ export const WithdrawalManagementPage = () => {
 
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
+
+  // 탈퇴 관리 모달 상태
+  const [selectedWithdrawUser, setSelectedWithdrawUser] =
+    useState<WithdrawalRow | null>(null)
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false)
+  // const [isWithdrawEditing, setIsWithdrawEditing] = useState(false)
+
+  // 유저 클릭시 모달 열기
+  const handleWithdrawRowClick = (user: WithdrawalRow) => {
+    setSelectedWithdrawUser(user)
+    setIsWithdrawModalOpen(true)
+    // setIsWithdrawEditing(false)
+  }
 
   const rows: WithdrawalRow[] = [
     {
@@ -186,8 +201,27 @@ export const WithdrawalManagementPage = () => {
       </div>
 
       <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-        <Table<WithdrawalRow> data={filteredWithdrawUsers} columns={columns} />
+        <Table<WithdrawalRow>
+          data={filteredWithdrawUsers}
+          columns={columns}
+          onRowClick={handleWithdrawRowClick}
+        />
       </div>
+
+      {/* 모달 */}
+      {selectedWithdrawUser && (
+        <Modal
+          isOn={isWithdrawModalOpen}
+          onBackgroundClick={() => setIsWithdrawModalOpen(false)}
+        >
+          <div className="w-[700px] p-6">
+            <ModalHeader
+              title="회원 탈퇴 상세 정보"
+              onClose={() => setIsWithdrawModalOpen(false)}
+            />
+          </div>
+        </Modal>
+      )}
     </main>
   )
 }
