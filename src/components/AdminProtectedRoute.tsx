@@ -1,6 +1,7 @@
-import { Navigate, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import { useAdminAuthGuard } from '../hooks/auth/useAdminAuthGuard'
-import type { PropsWithChildren } from 'react'
+import { useEffect, type PropsWithChildren } from 'react'
+import { removeAccessToken } from '../lib/token'
 
 export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
   const currentLocation = useLocation()
@@ -10,6 +11,19 @@ export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
     endpointPath: '/users/',
   })
 
+  useEffect(() => {
+    if (
+      adminGuardStatus === 'unauthorized' ||
+      adminGuardStatus === 'forbidden'
+    ) {
+      removeAccessToken()
+      const timer = setTimeout(() => {
+        window.location.replace('/login')
+      }, 2500)
+      return () => clearTimeout(timer)
+    }
+  }, [adminGuardStatus])
+
   if (adminGuardStatus === 'loading') {
     return (
       <div className="grid min-h-[40vh] place-items-center p-6 text-sm text-gray-600">
@@ -18,11 +32,7 @@ export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
     )
   }
 
-  if (adminGuardStatus === 'unauthorized') {
-    return <Navigate to="/login" replace state={{ from: currentLocation }} />
-  }
-
-  if (adminGuardStatus === 'forbidden') {
+  if (adminGuardStatus === 'unauthorized' || adminGuardStatus === 'forbidden') {
     return (
       <div className="grid min-h-[40vh] place-items-center p-6">
         <div className="rounded-xl border border-gray-200/70 bg-white p-6 text-center">
@@ -30,7 +40,7 @@ export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
             접근 권한이 없습니다
           </p>
           <p className="mt-1 text-xs text-gray-500">
-            관리자에게 권한을 요청하거나, 다른 페이지로 이동해주세요.
+            잠시 후 이전 화면으로 이동합니다.
           </p>
         </div>
       </div>
