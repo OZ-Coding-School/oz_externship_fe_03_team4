@@ -105,6 +105,8 @@ export const RecruitmentModalOutlet = ({
               )}
             </div>
           </div>
+
+          <FileAttachList files={attachmentFiles} />
         </section>
       </div>
     </div>
