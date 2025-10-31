@@ -1,4 +1,5 @@
-import axios from "axios";
+import api from "../lib/axios";
+import { getAccessToken } from "../lib/token";
 
 export interface FetchUsersParams {
   page?: number;
@@ -6,7 +7,6 @@ export interface FetchUsersParams {
   search?: string;
   role?: string;
   status?: string;
-  accessToken: string;
 }
 
 export interface FetchedUser {
@@ -35,20 +35,17 @@ export interface FetchUsersResponse {
   };
 }
 
-// 실제 호출 함수
+// 실제 호출 함수 (axios 인스턴스 및 getAccessToken 적용)
 export async function fetchUsers({
   page = 1,
   limit = 20,
   search = "",
   role = "",
   status = "",
-  accessToken,
 }: FetchUsersParams): Promise<FetchUsersResponse> {
-  const response = await axios.get("/api/v1/admin/users", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
+  const accessToken = getAccessToken();
+
+  const response = await api.get("/v1/admin/users", {
     params: {
       page,
       limit,
@@ -56,6 +53,10 @@ export async function fetchUsers({
       role: role || undefined,
       status: status || undefined,
     },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
+
   return response.data;
 }
