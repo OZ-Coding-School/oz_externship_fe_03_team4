@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import { useUserDetail } from "../../hooks/useUserDeatil"
+import { useUserDetail } from "../../hooks/useUserDeatil";
 import type { MappedUser } from "../../types/user";
 
 interface UserModalOutletProps {
@@ -22,10 +22,12 @@ export const UserModalOutlet = ({
     return <p className="p-6 text-center text-red-500">회원 정보를 불러오지 못했습니다.</p>;
   if (!user) return null;
 
+  // 필드 변경 핸들러
   const handleChange = (field: keyof MappedUser, value: string) => {
     onUserChange({ ...user, [field]: value });
   };
 
+  // 아바타 변경
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -46,11 +48,11 @@ export const UserModalOutlet = ({
       <div className="flex items-center gap-4 mb-6">
         <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
           {previewAvatar || user.avatar ? (
-          <img
-            src={previewAvatar || user.avatar || ""}
-            alt="avatar"
-            className="w-full h-full object-cover rounded-full"
-          />
+            <img
+              src={previewAvatar || user.avatar || ""}
+              alt="avatar"
+              className="w-full h-full object-cover rounded-full"
+            />
           ) : (
             <span className="text-2xl font-bold text-gray-500">
               {user.nickname.charAt(0)}
@@ -127,6 +129,81 @@ export const UserModalOutlet = ({
               <p className="font-medium">{user.status}</p>
             </div>
           )}
+        </div>
+
+        {/* 닉네임 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">닉네임</p>
+          {isEditing ? (
+            <input
+              type="text"
+              className="p-3 rounded-lg w-full border border-gray-300"
+              value={user.nickname}
+              onChange={(e) => handleChange("nickname", e.target.value)}
+            />
+          ) : (
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
+              <p className="font-medium">{user.nickname}</p>
+            </div>
+          )}
+        </div>
+
+        {/* 전화번호 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">전화번호</p>
+          {isEditing ? (
+            <input
+              type="text"
+              className="p-3 rounded-lg w-full border border-gray-300"
+              value={user.phone}
+              onChange={(e) => handleChange("phone", e.target.value)}
+            />
+          ) : (
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
+              <p className="font-medium">{user.phone}</p>
+            </div>
+          )}
+        </div>
+
+        {/* 생년월일 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">생년월일</p>
+          {isEditing ? (
+            <input
+              type="date"
+              className="p-3 rounded-lg w-full border border-gray-300"
+              value={user.birthday}
+              onChange={(e) => handleChange("birthday", e.target.value)}
+            />
+          ) : (
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
+              <p className="font-medium">{user.birthday}</p>
+            </div>
+          )}
+        </div>
+
+        {/* 가입일 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">가입일</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{user.joinedAt}</p>
+          </div>
+        </div>
+
+        {/* 탈퇴 요청일 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">탈퇴요청일</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{user.withdrawAt}</p>
+          </div>
+        </div>
+
+        {/* 권한 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">권한</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{user.role}</p>
+          </div>
         </div>
       </div>
     </div>
