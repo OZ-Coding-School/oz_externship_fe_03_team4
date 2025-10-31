@@ -1,9 +1,5 @@
 import { ExternalLink } from 'lucide-react'
-import {
-  mapRecruitmentDetailDTO,
-  mapRecruitmentDTO,
-  type RecruitmentDetail,
-} from '../../../types/recruitments'
+import { type RecruitmentDetail } from '../../../types/recruitments'
 import { ModalPair } from '../../reviews/ModalPair'
 import { RecruitmentStatusBadge } from '../table/RecruitmentStatusBadge'
 import { FileAttachList } from '../../file-attach/FileAttachList'
@@ -124,6 +120,52 @@ export const RecruitmentModalOutlet = ({
               }}
             />
           </div>
+          <div>
+            <div className="mb-3 text-sm font-semibold text-neutral-900">
+              스터디 강의 목록
+            </div>
+            <div className="space-y-3">
+              {lectures.length > 0 ? (
+                lectures.map((lectureItem, lectureIndex) => (
+                  <div
+                    key={`${lectureItem.title}-${lectureIndex}`}
+                    className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-white p-4"
+                  >
+                    <div className="h-20 w-28 flex-shrink-0 overflow-hidden rounded border border-neutral-200 bg-neutral-100">
+                      <img
+                        src={lectureItem.thumbnail}
+                        alt={lectureItem.title}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[15px] font-semibold text-neutral-900">
+                        {lectureItem.title}
+                      </p>
+                      <p className="mt-1 text-[13px] text-neutral-600">
+                        강사: {lectureItem.instructor}
+                      </p>
+                      {lectureItem.link && (
+                        <a
+                          href={lectureItem.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 text-[12px] text-amber-600 hover:underline"
+                        >
+                          강의 바로가기 <ExternalLink size={12} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-lg border border-dashed border-neutral-200 p-6 text-center text-sm text-neutral-500">
+                  연결된 강의가 없습니다.
+                </div>
+              )}
+            </div>
+          </div>
+          <ApplyList applications={applications} />
         </section>
       </div>
     </div>
