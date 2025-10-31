@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router'
 import {
   STUDY_GROUP_STATUS_OPTIONS,
   type StudyGroup,
+  type StudyGroupDetail,
   type StudyGroupUiStatus,
   mapStudyGroupDTO,
+  mapStudyGroupDetailDTO,
 } from '../types/studyGroup/types'
 import { SearchInput } from '../components/search/SearchInput'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
@@ -13,8 +15,12 @@ import { StudyGroupTable } from '../components/studyGroup/StudyGroupTable'
 import { AccordionItem } from '../components/Accordion/AccordionType'
 import { Accordion } from '../components/Accordion/Accordion'
 import { Pagination } from '../components/pagination/Pagination'
+import { StudyGroupModal } from '../components/studyGroup/StudyGroupModal'
+import { fetchStudyGroupDetail } from '../api/fetchStudyGroups'
 
 const PAGE_SIZE = 10
+const USE_MOCK_DATA = true // 환경변수
+
 const StudyGroupManagementPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
@@ -25,13 +31,21 @@ const StudyGroupManagementPage = () => {
   >('ALL')
   const [accordionValue, setAccordionValue] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+  const [sortKey, setSortKey] = useState<string>('')
+
+  const [selectedStudyGroup, setSelectedStudyGroup] =
+    useState<StudyGroupDetail | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false)
 
   const debouncedSearch = useDebouncedValue(searchKeyword, 500)
 
   const studyGroups = useMemo(() => {
+    // React Query로 API 호출하는 부분
     return mockStudyGroupsData.map(mapStudyGroupDTO)
   }, [])
 
+  // 필터링
   const filteredStudyGroups = useMemo((): StudyGroup[] => {
     let filtered = studyGroups
 
@@ -49,21 +63,92 @@ const StudyGroupManagementPage = () => {
     return filtered
   }, [studyGroups, debouncedSearch, selectedStatus])
 
+  // 오름차순 내림차순
+  const sortedStudyGroups = useMemo(() => {
+    if (!sortKey) return filteredStudyGroups
+
+    const isDescending = sortKey.startsWith('-')
+    const key = isDescending ? sortKey.slice(1) : sortKey
+
+    return [...filteredStudyGroups].sort((a, b) => {
+      const aValue = a[key as keyof StudyGroup]
+      const bValue = b[key as keyof StudyGroup]
+
+      if (aValue === null || bValue === null) return 0
+
+      let comparison = 0
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        comparison = aValue.localeCompare(bValue)
+      } else if (typeof aValue === 'number' && typeof bValue === 'number') {
+        comparison = aValue - bValue
+      }
+
+      return isDescending ? -comparison : comparison
+    })
+  }, [filteredStudyGroups, sortKey])
+
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredStudyGroups.length / PAGE_SIZE)
+    Math.ceil(sortedStudyGroups.length / PAGE_SIZE)
   )
+
   const paginatedStudyGroups = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE
     const endIndex = startIndex + PAGE_SIZE
-    return filteredStudyGroups.slice(startIndex, endIndex)
-  }, [filteredStudyGroups, currentPage])
+    return sortedStudyGroups.slice(startIndex, endIndex)
+  }, [sortedStudyGroups, currentPage])
 
-  // const handleStudyGroupClick = (studyGroup: StudyGroup) => {
-  //   // TODO: 상세 페이지로 이동 또는 모달 열기
-  // }
+  const handleSortChange = (key: string) => {
+    setSortKey(key)
+    setCurrentPage(1)
+  }
 
-  // 선택된 상태 라벨 계산
+  const handleStudyGroupClick = async (studyGroup: StudyGroup) => {
+    setIsLoadingDetail(true)
+    setIsModalOpen(true)
+
+    try {
+      if (USE_MOCK_DATA) {
+        const { getMockStudyGroupDetail, generateMockDetailFromList } =
+          await import('../components/studyGroup/mockStudyGroupDetail')
+
+        let detailDTO = getMockStudyGroupDetail(studyGroup.id)
+        if (!detailDTO) {
+          const listData = mockStudyGroupsData.find(
+            (g) => g.id === studyGroup.id
+          )
+          if (listData) {
+            detailDTO = generateMockDetailFromList(listData)
+          }
+        }
+
+        if (detailDTO) {
+          const detail = mapStudyGroupDetailDTO(detailDTO)
+          setSelectedStudyGroup(detail)
+        } else {
+          console.error('상세 데이터를 찾을 수 없습니다.')
+          setIsModalOpen(false)
+        }
+      } else {
+        // 실제 API 호출
+        const detailDTO = await fetchStudyGroupDetail(studyGroup.id)
+        const detail = mapStudyGroupDetailDTO(detailDTO)
+        setSelectedStudyGroup(detail)
+      }
+    } catch (error) {
+      console.error('상세 정보 로딩 실패:', error)
+      setIsModalOpen(false)
+      setSelectedStudyGroup(null)
+    } finally {
+      setIsLoadingDetail(false)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedStudyGroup(null)
+  }
+
   const selectedStatusLabel =
     STUDY_GROUP_STATUS_OPTIONS.find((opt) => opt.value === selectedStatus)
       ?.label || '전체'
@@ -133,7 +218,7 @@ const StudyGroupManagementPage = () => {
         <div className="text-sm text-gray-600">
           총{' '}
           <span className="font-semibold text-gray-900">
-            {filteredStudyGroups.length}
+            {sortedStudyGroups.length}
           </span>
           개의 스터디 그룹
         </div>
@@ -144,7 +229,9 @@ const StudyGroupManagementPage = () => {
         <>
           <StudyGroupTable
             studyGroups={paginatedStudyGroups}
-            // onStudyGroupClick={handleStudyGroupClick}
+            sortKey={sortKey}
+            onSortChange={handleSortChange}
+            onStudyGroupClick={handleStudyGroupClick}
           />
 
           {/* 페이지네이션 */}
@@ -168,6 +255,14 @@ const StudyGroupManagementPage = () => {
           </div>
         </div>
       )}
+
+      {/* 모달 */}
+      <StudyGroupModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        studyGroup={selectedStudyGroup}
+        isLoading={isLoadingDetail}
+      />
     </div>
   )
 }
