@@ -220,17 +220,25 @@ export const WithdrawalManagementPage = () => {
           isOn={isWithdrawModalOpen}
           onBackgroundClick={() => setIsWithdrawModalOpen(false)}
         >
-          <div className="w-[700px] p-6">
-            <ModalHeader
-              title="회원 탈퇴 상세 정보"
-              onClose={() => setIsWithdrawModalOpen(false)}
-            />
-            <WithdrawalModalOutlet
-              detail={buildMockWithdrawalDetail(selectedWithdrawUser)}
-            />
-            <WithdrawalModalFooter
-              onClose={() => setIsWithdrawModalOpen(false)}
-            />
+          <div className="flex max-h-[80vh] w-[700px] flex-col">
+            <div className="shrink-0 px-6">
+              <ModalHeader
+                title="회원 탈퇴 상세 정보"
+                onClose={() => setIsWithdrawModalOpen(false)}
+              />
+            </div>
+
+            <div className="grow overflow-y-auto p-6">
+              <WithdrawalModalOutlet
+                detail={buildMockWithdrawalDetail(selectedWithdrawUser)}
+              />
+            </div>
+
+            <div className="shrink-0 p-6">
+              <WithdrawalModalFooter
+                onClose={() => setIsWithdrawModalOpen(false)}
+              />
+            </div>
           </div>
         </Modal>
       )}

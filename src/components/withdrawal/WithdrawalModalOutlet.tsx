@@ -2,7 +2,7 @@ import { formatDate } from '../../utils/formatDate'
 import { UserIcon } from 'lucide-react'
 
 export type WithdrawalDetail = {
-  withdrawal_id: number
+  withdrawal_id: number | string
   user: {
     id: number
     name: string
