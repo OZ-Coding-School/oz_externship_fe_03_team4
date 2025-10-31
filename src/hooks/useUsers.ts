@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ApiUser } from "../types/user";
 import { mapUserResponse } from "../utils/user";
 import api from "../lib/axios";
 import { getAccessToken } from "../lib/token";
@@ -12,15 +11,9 @@ interface UseUsersProps {
   role?: string;
 }
 
-interface PaginationInfo {
-  total_pages: number;
-  total_items: number;
-  current_page: number;
-}
-
 export const useUsers = ({
   page = 1,
-  limit = 1000,
+  limit = 20,
   search = "",
   status = "",
   role = "",
@@ -30,20 +23,27 @@ export const useUsers = ({
   const query = useQuery({
     queryKey: ["users", { page, limit, search, status, role }],
     queryFn: async () => {
-      const res = await api.get<{
-        data?: { users: ApiUser[]; pagination?: PaginationInfo };
-      }>("/v1/admin/users", {
+      const res = await api.get("/v1/admin/users", {
         params: { page, limit, search, status, role },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      const data = res.data.data;
+      // 응답이 배열인 경우 처리
+      const raw = Array.isArray(res.data)
+        ? { users: res.data, pagination: null }
+        : res.data.data || res.data;
+
+      const users = (raw.users ?? []).map(mapUserResponse);
 
       return {
-        users: data?.users?.map(mapUserResponse) ?? [],
-        pagination: data?.pagination,
+        users,
+        pagination: raw.pagination ?? {
+          total_pages: 1,
+          total_items: users.length,
+          current_page: page,
+        },
       };
     },
     staleTime: 1000 * 60 * 2,
