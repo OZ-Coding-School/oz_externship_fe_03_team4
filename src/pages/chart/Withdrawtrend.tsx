@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 import { mapDtoToWithdrawalStatistics, type WithdrawalStatisticsDTO, type WithdrawalChartData } from '../../types/Chart/WithdrawChart/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; //api연결하면 삭제
+// import { useWithdrawalStatistics } from '../../hooks/queries/useWithdrawalStatistics';
 
 //이거도 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: WithdrawalStatisticsDTO = {
@@ -40,7 +41,9 @@ const MOCK_YEARLY_DATA: WithdrawalStatisticsDTO = {
       { period: "2023", count: 8 },
       { period: "2024", count: 9 },
       { period: "2025", count: 10 },
-    ]  }}
+    ]  
+  }
+}
 
 interface WithdrawtrencChartdProps {
   period: 'monthly' | 'yearly';
@@ -61,6 +64,39 @@ const Withdrawtrend = ({ period }: WithdrawtrencChartdProps) => {
   const [data, setData] = useState<WithdrawalChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // ========== API 연동 준비 (주석 처리) ==========
+  // const interval = period === 'yearly' ? 'year' : 'month';
+  // const { data: responseData, isLoading, error: queryError } = useWithdrawalStatistics(interval);
+  
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">로딩 중...</p>
+  //     </div>
+  //   );
+  // }
+
+  // if (queryError) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-red-500">
+  //         {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+  //       </p>
+  //     </div>
+  //   );
+  // }
+
+  // if (!responseData) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">데이터가 없습니다.</p>
+  //     </div>
+  //   );
+  // }
+
+  // const statistics = mapDtoToWithdrawalStatistics(responseData);
+  // ========== API 연동 준비 끝 ==========
 
   useEffect(() => {
     const fetchSignupData = async () => {
