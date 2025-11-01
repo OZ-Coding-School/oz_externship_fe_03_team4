@@ -75,7 +75,7 @@ export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
   instructor: dto.instructor,
   description: dto.description,
   platform: PLATFORM_MAP[dto.platform],
-  categories: dto.categories.map((category) => category.name),
+  categories: (dto.categories ?? []).map((c) => c.name),
   difficulty: DIFFICULTY_MAP[dto.difficulty],
   duration: dto.duration,
   originalPrice: dto.original_price,

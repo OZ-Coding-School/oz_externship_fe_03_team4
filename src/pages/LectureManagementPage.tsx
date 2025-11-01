@@ -1,18 +1,17 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router'
 import type { Lecture } from '../types/lectureManagement/types'
-import { mockLectures } from '../components/Lecture/mockLecture'
 import { SearchInput } from '../components/search/SearchInput'
 import { LectureTable } from '../components/Lecture/LectureTable'
 import { LectureModal } from '../components/Lecture/LectureModal'
 import { Pagination } from '../components/pagination/Pagination'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
+import { useLecturesQuery } from '../hooks/Lecture/useLecturesQuery'
 
 const PAGE_SIZE = 10
-const USE_MOCK_DATA = true // 환경변수
 
 export const LectureManagementPage = () => {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
 
   const [searchKeyword, setSearchKeyword] = useState<string>('')
@@ -22,41 +21,25 @@ export const LectureManagementPage = () => {
 
   const debouncedSearch = useDebouncedValue(searchKeyword, 500)
 
-  const lectures = useMemo(() => {
-    //  API 호출하는 부분
-    return mockLectures
-  }, [])
+  // React Query로 API 호출
+  const { data, isLoading, isError, error } = useLecturesQuery({
+    searchText: debouncedSearch,
+    pageNumber: currentPage,
+    pageSize: PAGE_SIZE,
+  })
 
-  const filteredLectures = useMemo((): Lecture[] => {
-    if (!debouncedSearch.trim()) return lectures
+  // fetchLectures는 { items, totalCount } 형태로 반환
+  const lectures = data?.items ?? []
+  const totalCount = data?.totalCount ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
 
-    const lowerSearch = debouncedSearch.trim().toLowerCase()
-    return lectures.filter(
-      (lecture) =>
-        lecture.title.toLowerCase().includes(lowerSearch) ||
-        lecture.instructor.toLowerCase().includes(lowerSearch)
-    )
-  }, [lectures, debouncedSearch])
-
-  const totalPages = Math.max(1, Math.ceil(filteredLectures.length / PAGE_SIZE))
-
-  // 페이지네이션
-  const paginatedLectures = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE
-    const endIndex = startIndex + PAGE_SIZE
-    return filteredLectures.slice(startIndex, endIndex)
-  }, [filteredLectures, currentPage])
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    setSearchParams({ page: page.toString() })
+  }
 
   const handleLectureClick = (lecture: Lecture) => {
-    const lectureDetail: Lecture = {
-      ...lecture,
-      duration: lecture.duration || 7200,
-      urlLink:
-        lecture.urlLink ||
-        `https://www.${lecture.platform.toLowerCase()}.com/course/${lecture.uuid}`,
-    }
-
-    setSelectedLecture(lectureDetail)
+    setSelectedLecture(lecture)
     setIsModalOpen(true)
   }
 
@@ -81,50 +64,72 @@ export const LectureManagementPage = () => {
             onChangeText={(nextSearchKeyword) => {
               setSearchKeyword(nextSearchKeyword)
               setCurrentPage(1)
+              setSearchParams({ page: '1' })
             }}
             clearable
           />
         </div>
 
         {/* 결과 개수 표시 */}
-        <div className="text-sm text-gray-600">
-          총{' '}
-          <span className="font-semibold text-gray-900">
-            {filteredLectures.length}
-          </span>
-          개의 강의
-        </div>
+        {!isLoading && (
+          <div className="text-sm text-gray-600">
+            총 <span className="font-semibold text-gray-900">{totalCount}</span>
+            개의 강의
+          </div>
+        )}
       </div>
 
-      {/* 테이블 */}
-      {paginatedLectures.length > 0 ? (
-        <>
-          <LectureTable
-            lectures={paginatedLectures}
-            onLectureClick={handleLectureClick}
-          />
-
-          {/* 페이지네이션 */}
-          {totalPages > 1 && (
-            <div className="mt-6 flex justify-center">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </div>
-          )}
-        </>
-      ) : (
+      {/* 로딩 상태 */}
+      {isLoading && (
         <div className="flex h-64 items-center justify-center rounded-lg border border-gray-200 bg-white">
           <div className="text-center">
-            <p className="text-gray-500">검색 결과가 없습니다.</p>
-            <p className="mt-1 text-sm text-gray-400">
-              다른 검색어를 입력해보세요.
+            <p className="text-gray-500">로딩 중...</p>
+          </div>
+        </div>
+      )}
+
+      {/* 에러 상태 */}
+      {isError && (
+        <div className="flex h-64 items-center justify-center rounded-lg border border-red-200 bg-red-50">
+          <div className="text-center">
+            <p className="text-red-600">데이터를 불러오는데 실패했습니다.</p>
+            <p className="mt-1 text-sm text-red-500">
+              {error?.message || '알 수 없는 오류가 발생했습니다.'}
             </p>
           </div>
         </div>
       )}
+
+      {/* 테이블 */}
+      {!isLoading &&
+        !isError &&
+        (lectures.length > 0 ? (
+          <>
+            <LectureTable
+              lectures={lectures}
+              onLectureClick={handleLectureClick}
+            />
+
+            {totalPages > 1 && (
+              <div className="mt-6 flex justify-center">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex h-64 items-center justify-center rounded-lg border border-gray-200 bg-white">
+            <div className="text-center">
+              <p className="text-gray-500">검색 결과가 없습니다.</p>
+              <p className="mt-1 text-sm text-gray-400">
+                다른 검색어를 입력해보세요.
+              </p>
+            </div>
+          </div>
+        ))}
 
       {/* 모달 */}
       {selectedLecture && (
