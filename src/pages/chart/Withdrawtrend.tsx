@@ -65,7 +65,7 @@ const Withdrawtrend = ({ period }: WithdrawtrencChartdProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ========== API 연동 준비 (주석 처리) ==========
+  //  api연동 하면 주석삭제
   // const interval = period === 'yearly' ? 'year' : 'month';
   // const { data: responseData, isLoading, error: queryError } = useWithdrawalStatistics(interval);
   
@@ -96,7 +96,7 @@ const Withdrawtrend = ({ period }: WithdrawtrencChartdProps) => {
   // }
 
   // const statistics = mapDtoToWithdrawalStatistics(responseData);
-  // ========== API 연동 준비 끝 ==========
+  //  api연동 하면 주석삭제
 
   useEffect(() => {
     const fetchSignupData = async () => {
