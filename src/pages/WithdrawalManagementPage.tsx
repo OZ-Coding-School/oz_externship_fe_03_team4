@@ -11,14 +11,8 @@ import {
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
-import Modal from '../components/modal/Modal'
-import { ModalHeader } from '../components/modal/ModalHeader'
-import {
-  WithdrawalModalOutlet,
-  // type WithdrawalDetail,
-} from '../components/withdrawal/WithdrawalModalOutlet'
-import { WithdrawalModalFooter } from '../components/withdrawal/WithdrawalModalFooter'
 import { buildMockWithdrawalDetail } from '../components/withdrawal/mockWithdrawalDetail'
+import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -216,25 +210,20 @@ export const WithdrawalManagementPage = () => {
 
       {/* 모달 */}
       {selectedWithdrawUser && (
-        <Modal
-          isOn={isWithdrawModalOpen}
-          onBackgroundClick={() => setIsWithdrawModalOpen(false)}
-        >
-          <div className="flex max-h-[70vh] w-[700px] flex-col p-6">
-            <ModalHeader
-              title="회원 탈퇴 상세 정보"
-              onClose={() => setIsWithdrawModalOpen(false)}
-            />
-
-            <WithdrawalModalOutlet
-              detail={buildMockWithdrawalDetail(selectedWithdrawUser)}
-            />
-
-            <WithdrawalModalFooter
-              onClose={() => setIsWithdrawModalOpen(false)}
-            />
-          </div>
-        </Modal>
+        <WithdrawalModal
+          open={isWithdrawModalOpen}
+          detail={
+            selectedWithdrawUser
+              ? buildMockWithdrawalDetail(selectedWithdrawUser)
+              : null
+          }
+          loading={false}
+          error={undefined}
+          onClose={() => setIsWithdrawModalOpen(false)}
+          onRestore={async () => {
+            // TODO: 복구 API 호출 후 목록 갱신
+          }}
+        />
       )}
     </main>
   )
