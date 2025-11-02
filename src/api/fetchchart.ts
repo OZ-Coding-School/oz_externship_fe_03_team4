@@ -2,7 +2,7 @@ import api from '../lib/axios';
 import type { SignupStatisticsDTO } from '../types/Chart/SignupChart/types';
 import type { WithdrawalStatisticsDTO } from '../types/Chart/WithdrawChart/types';
 import type { WithdrawalReasonDistributionDTO } from '../types/Chart/WithdrawReasondoughnutChart/types';
-import type { WithdrawalReasonTrendDTO } from '../types/Chart/WithdrawReasonstick/types';
+import type { WithdrawalReasonStatisticsDTO } from '../types/Chart/WithdrawReasonstick/types';
 
 export const fetchSignupStatistics = async (interval: 'month' | 'year'): Promise<SignupStatisticsDTO> => {
   const response = await api.get('/api/v1/users/statistics/signups', {
@@ -23,8 +23,7 @@ export const fetchWithdrawalReasons = async (): Promise<WithdrawalReasonDistribu
   return response.data;
 };
 
-// 탈퇴 사유추세 조회 추가
-export const fetchWithdrawalReasonTrend = async (reason: string): Promise<WithdrawalReasonTrendDTO> => {
+export const fetchWithdrawalReasonTrend = async (reason: string): Promise<WithdrawalReasonStatisticsDTO> => {
   const response = await api.get(`/api/v1/admin/dashboard/withdrawal-reasons/${reason}`);
   return response.data;
 };
