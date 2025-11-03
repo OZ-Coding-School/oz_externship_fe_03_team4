@@ -1,7 +1,7 @@
 import {BarChart,Bar,XAxis,YAxis,CartesianGrid,ResponsiveContainer,Tooltip,type TooltipContentProps,} from 'recharts';
 import { Select } from '../../components/FormUI/Select';
 import { useEffect, useState } from 'react'; //api나오면 삭제
-// import { useMonthlyWithdrawalTrends } from '../../hooks/queries/useMonthlyWithdrawalTrends';
+//api 나오면 주석 삭제 import { useMonthlyWithdrawalTrends } from '../../hooks/chart/fetchWithdrawReasonstick';
 
 // API 나오면 삭제
 const MOCK_DATA = {

@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
 import { mapDtoToWithdrawalStatistics, type WithdrawalStatisticsDTO, type WithdrawalChartData } from '../../types/Chart/WithdrawChart/types';
 import { useEffect, useState } from 'react'; //api연결하면 삭제
-// import { useWithdrawalStatistics } from '../../hooks/queries/useWithdrawalStatistics';
+//api 나오면 주석 삭제 import { useWithdrawalStatistics } from '../../hooks/chart/fetchWithdrawal';
 
 //이거도 api명세서 보고 수정해서 연도숫자가 조금 이상함
 const MOCK_MONTHLY_DATA: WithdrawalStatisticsDTO = {

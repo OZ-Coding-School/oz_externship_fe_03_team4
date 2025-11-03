@@ -1,7 +1,7 @@
 import { Pie, PieChart, Cell, Tooltip, Sector } from 'recharts';
 import { mapDtoToWithdrawalReasonDistribution, type WithdrawalReasonDistributionDTO, type WithdrawalReasonChartData } from '../../types/Chart/WithdrawReasondoughnutChart/types';
 import { useEffect, useState } from 'react'; //api나오면 삭제
-// import { useWithdrawalReasons } from '../../hooks/queries/useWithdrawalReasons';
+//api 나오면 주석 삭제 import { useWithdrawalReasons } from '../../hooks/chart/fetchWithdrawReasondoughnut';
 
 //일단 api명세서 보고 수정
 const MOCK_DATA: WithdrawalReasonDistributionDTO = {
