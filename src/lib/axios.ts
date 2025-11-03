@@ -55,10 +55,10 @@ api.interceptors.response.use(
       originalConfig.headers = currentHeaders as AxiosRequestHeaders
 
       return api(originalConfig) // 요청 재시도 후 결과를 반환 함
-    } catch {
+    } catch (err) {
       // 리프레시도 못불러온다?
       removeAccessToken() // 제거
-      window.location.href = '/login' // 응 ~ 로그인페이지로 잘가
+      window.location.replace('/login') // 응 ~ 로그인페이지로 잘가
       return Promise.reject(err)
     }
   }
