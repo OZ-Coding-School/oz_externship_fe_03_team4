@@ -51,7 +51,7 @@ export type LectureListResponse = {
   previous: string | null
   results: LectureDTO[]
   user_nickname: string
-  recommended_lectures: LectureDTO[]
+  recommended_lectures?: LectureDTO[]
 }
 
 // 매핑 상수
