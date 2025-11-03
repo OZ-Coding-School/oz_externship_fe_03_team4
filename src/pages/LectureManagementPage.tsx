@@ -6,7 +6,7 @@ import { LectureTable } from '../components/Lecture/LectureTable'
 import { LectureModal } from '../components/Lecture/LectureModal'
 import { Pagination } from '../components/pagination/Pagination'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
-import { useLecturesQuery } from '../hooks/lecture/useLecturesQuery'
+import { useLecturesQuery } from '../hooks/Lecture/useLecturesQuery'
 
 const PAGE_SIZE = 10
 
