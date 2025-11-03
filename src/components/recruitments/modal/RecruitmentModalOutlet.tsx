@@ -5,6 +5,7 @@ import { RecruitmentStatusBadge } from '../table/RecruitmentStatusBadge'
 import { FileAttachList } from '../../file-attach/FileAttachList'
 import { ApplyList } from '../../apply-list/ApplyList'
 import { formatDate } from '../../../utils/formatDate'
+import { TagPills } from '../table/TagPills'
 
 interface RecruitmentModalOutletProps {
   detail: RecruitmentDetail
@@ -84,26 +85,14 @@ export const RecruitmentModalOutlet = ({
               value={updatedAt ? formatDate(updatedAt) : '-'}
             />
           </div>
-          <div>
-            <div className="mb-2 text-sm text-neutral-600">
-              사용자 정의 태그
-            </div>
-            <div className="min-h-[44px] p-2">
-              {tags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tagLabel) => (
-                    <span
-                      key={tagLabel}
-                      className="inline-flex items-center rounded-full border border-amber-300 bg-amber-300 px-2 py-2 text-[11px] font-medium text-neutral-700"
-                    >
-                      {tagLabel}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-neutral-500">태그가 없습니다.</p>
-              )}
-            </div>
+          <div className="mb-2 text-sm font-semibold text-neutral-400">
+            사용자 정의 태그
+          </div>
+          <div className="min-h-[44px] p-2">
+            <TagPills
+              tags={tags}
+              pillClassName="border-amber-300 bg-amber-300 px-2 py-2 text-white"
+            />
           </div>
 
           <FileAttachList files={attachmentFiles} />
