@@ -24,7 +24,7 @@ export const CloseModalFooter = ({
   return (
     <footer
       className={cn(
-        'mt-8 grid grid-cols-[auto_1fr_auto] items-center gap-2 border-t border-neutral-200 p-4',
+        'mt-8 grid grid-cols-[auto_1fr_auto] items-center gap-2 p-4',
         className
       )}
     >
