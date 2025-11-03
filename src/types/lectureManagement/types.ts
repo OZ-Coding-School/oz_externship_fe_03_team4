@@ -1,3 +1,5 @@
+import { formatDate } from '../../utils/formatDate'
+
 export type CategoryDTO = {
   id: number
   name: string
@@ -21,9 +23,9 @@ export type LectureDTO = {
   platform: Platform
   average_rating: number
   url_link: string
-  is_bookmarked: boolean
   created_at: string
   updated_at: string
+  duration: number
 }
 
 // UI용
@@ -37,18 +39,12 @@ export type Lecture = {
   platform: 'Udemy' | 'Inflearn'
   categories: string[]
   difficulty: '쉬움' | '보통' | '어려움'
+  duration: number
   originalPrice: number
   discountPrice: number
-  rating: number
-  isBookmarked: boolean
+  urlLink: string
   createdAt: string
   updatedAt: string
-}
-
-export interface LectureDetail extends Lecture {
-  description: string
-  duration: number
-  url_link: string
 }
 
 export type LectureListResponse = {
@@ -57,7 +53,7 @@ export type LectureListResponse = {
   previous: string | null
   results: LectureDTO[]
   user_nickname: string
-  recommended_lectures: LectureDTO[]
+  recommended_lectures?: LectureDTO[]
 }
 
 // 매핑 상수
@@ -81,12 +77,12 @@ export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
   instructor: dto.instructor,
   description: dto.description,
   platform: PLATFORM_MAP[dto.platform],
-  categories: dto.categories.map((category) => category.name),
+  categories: (dto.categories ?? []).map((c) => c.name),
   difficulty: DIFFICULTY_MAP[dto.difficulty],
+  duration: dto.duration,
   originalPrice: dto.original_price,
   discountPrice: dto.discount_price,
-  rating: dto.average_rating,
-  isBookmarked: dto.is_bookmarked,
-  createdAt: dto.created_at,
-  updatedAt: dto.updated_at,
+  urlLink: dto.url_link,
+  createdAt: formatDate(dto.created_at),
+  updatedAt: formatDate(dto.updated_at),
 })

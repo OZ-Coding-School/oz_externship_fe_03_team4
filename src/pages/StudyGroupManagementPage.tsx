@@ -107,6 +107,7 @@ const StudyGroupManagementPage = () => {
     setIsLoadingDetail(true)
     setIsModalOpen(true)
 
+    // 실제 api 연결하면 삭제할 부분
     try {
       if (USE_MOCK_DATA) {
         const { getMockStudyGroupDetail, generateMockDetailFromList } =
@@ -126,7 +127,6 @@ const StudyGroupManagementPage = () => {
           const detail = mapStudyGroupDetailDTO(detailDTO)
           setSelectedStudyGroup(detail)
         } else {
-          console.error('상세 데이터를 찾을 수 없습니다.')
           setIsModalOpen(false)
         }
       } else {
@@ -136,7 +136,6 @@ const StudyGroupManagementPage = () => {
         setSelectedStudyGroup(detail)
       }
     } catch (error) {
-      console.error('상세 정보 로딩 실패:', error)
       setIsModalOpen(false)
       setSelectedStudyGroup(null)
     } finally {

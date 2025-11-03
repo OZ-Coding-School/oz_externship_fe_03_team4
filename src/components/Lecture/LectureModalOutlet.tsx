@@ -1,10 +1,10 @@
-import type { LectureDetail } from '../../types/lectureManagement/types'
+import type { Lecture } from '../../types/lectureManagement/types'
 import { Badge } from '../Badge'
 import { ModalPair } from '../reviews/ModalPair'
 import { PlatformBadge } from '../Lecture/PlatformBadge'
 
 interface LectureModalOutletProps {
-  lecture: LectureDetail
+  lecture: Lecture
 }
 
 export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
@@ -45,12 +45,12 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
               label="바로가기 링크"
               value={
                 <a
-                  href={lecture.url_link}
+                  href={lecture.urlLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm break-all text-orange-600 hover:underline"
                 >
-                  {lecture.url_link}
+                  {lecture.urlLink}
                 </a>
               }
               noBorder

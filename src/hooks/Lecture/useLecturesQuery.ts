@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query'
 import { adminLectureKeys } from './queryKeys'
 import { buildQueryParams } from './buildQueryParams'
-import { fetchLectures, type FetchLecturesReturn } from './fetchLecture'
+import { fetchLectures, type FetchLecturesReturn } from '../../api/fetchLecture'
 import type { LecturesParams } from './types.local'
 
 export const useLecturesQuery = (
