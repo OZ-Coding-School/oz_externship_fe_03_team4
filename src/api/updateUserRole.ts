@@ -15,7 +15,7 @@ export const updateUserRole = async (
 ) => {
   try {
     const response = await axios.patch(
-      `https://api.ozcoding.site/v1/admin/role`, // ✅ 실제 엔드포인트 확인 필요
+      `https://api.ozcoding.site/v1/admin/role`, // 실제 엔드포인트 확인 필요
       {
         user_id: userId,
         role,
@@ -28,11 +28,18 @@ export const updateUserRole = async (
       }
     );
 
-    return response.data; // { detail: "회원 권한이 변경되었습니다.", data: { ... } }
-  } catch (error: any) {
-    console.error("❌ 권한 변경 실패:", error.response?.data || error.message);
-    throw new Error(
-      error.response?.data?.detail || "권한 변경 중 오류가 발생했습니다."
-    );
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const message =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "권한 변경 중 오류가 발생했습니다.";
+      throw new Error(message);
+    } else if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("알 수 없는 오류가 발생했습니다.");
+    }
   }
 };
