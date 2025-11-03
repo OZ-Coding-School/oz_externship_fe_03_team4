@@ -36,9 +36,8 @@ export const CloseModalFooter = ({
         >
           공고 삭제
         </Button>
-      ) : (
-        <span />
-      )}
+      ) : null}
+      <div /> {/* 여백입니닷 */}
       <Button
         size="medium"
         onClick={onClose}
