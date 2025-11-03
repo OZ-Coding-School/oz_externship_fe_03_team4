@@ -4,7 +4,7 @@ import { AdminLoginButton } from '../components/login/AdminLoginButton'
 import { BrandLogo } from '../components/login/BrandLogo'
 import { FormField, TextField } from '../components/FormUI'
 import api from '../lib/axios'
-import { getAccessToken, setAccessToken } from '../lib/token'
+import { getAccessToken, setAccessToken, removeAccessToken } from '../lib/token'
 import { LoginErrorModal } from '../components/login/ErrorModal'
 import { parseJwt } from '../lib/authz'
 
@@ -19,13 +19,16 @@ export default function AdminLoginPage() {
   // 이미 로그인되어있을 경우 진입을 차단합니당.
   useEffect(() => {
     const accessToken = getAccessToken() // 쿠키에 저장된 액세스토큰 불러오기 (없으면 null)
+    if (!accessToken) return
     const claims = parseJwt(accessToken) // JWT 내부 정보를 추출함
     const isExpired = claims?.exp ? claims.exp * 1000 < Date.now() : true // 토큰만료여부를 판단
 
-    if (accessToken && !isExpired) {
-      // 이미 로그인되어 잇는거니??
-      window.location.replace('/userlist') // 응, 그러면 안되 돌아가
+    if (isExpired) {
+      removeAccessToken()
+      return
     }
+    // 이미 로그인되어 잇는거니??
+    window.location.replace('/userlist') // 응, 그러면 안되 돌아가
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
