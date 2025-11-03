@@ -4,6 +4,9 @@ import { Button } from '../buttons/Buttons'
 
 interface CloseModalFooterProps {
   onClose: () => void
+  onConfirm?: () => void
+  comfirmLabel?: string
+  confirmMode?: boolean
   className?: string
   onDelete?: () => void
   showDelete?: boolean
