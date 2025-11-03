@@ -4,6 +4,7 @@ import { ModalPair } from '../../reviews/ModalPair'
 import { RecruitmentStatusBadge } from '../table/RecruitmentStatusBadge'
 import { FileAttachList } from '../../file-attach/FileAttachList'
 import { ApplyList } from '../../apply-list/ApplyList'
+import { formatDate } from '../../../utils/formatDate'
 
 interface RecruitmentModalOutletProps {
   detail: RecruitmentDetail
@@ -35,6 +36,7 @@ export const RecruitmentModalOutlet = ({
     file_name: attachment.fileName,
     file_url: attachment.fileUrl,
   }))
+  const numberFormatterForLocaleKR = new Intl.NumberFormat('ko-KR')
 
   return (
     <div className="scrollbar-hide max-h-[78vh] overflow-y-auto p-1">
@@ -51,30 +53,36 @@ export const RecruitmentModalOutlet = ({
           <div className="grid grid-cols-2 gap-4">
             <ModalPair
               label="예상 모집 인원"
-              value={`${expectedHeadcount}명`}
+              value={`${numberFormatterForLocaleKR.format(expectedHeadcount)}명`}
             />
             <ModalPair
               label="예상 결제 비용"
-              value={`${Number(estimatedFee).toLocaleString()}원`}
+              value={`${numberFormatterForLocaleKR.format(estimatedFee)}원`}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <ModalPair label="마감 기한" value={closeAt} />
+            <ModalPair label="마감 기한" value={formatDate(closeAt)} />
             <ModalPair
               label="공고 상태"
               value={<RecruitmentStatusBadge status={status} />}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <ModalPair label="조회수" value={viewsCount.toLocaleString()} />
+            <ModalPair
+              label="조회수"
+              value={numberFormatterForLocaleKR.format(viewsCount)}
+            />
             <ModalPair
               label="북마크 수"
-              value={bookmarksCount.toLocaleString()}
+              value={numberFormatterForLocaleKR.format(bookmarksCount)}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <ModalPair label="등록일시" value={createdAt} />
-            <ModalPair label="마지막 수정일시" value={updatedAt ?? '-'} />
+            <ModalPair label="등록일시" value={formatDate(createdAt)} />
+            <ModalPair
+              label="마지막 수정일시"
+              value={updatedAt ? formatDate(updatedAt) : '-'}
+            />
           </div>
           <div>
             <div className="mb-2 text-sm font-semibold text-neutral-700">
