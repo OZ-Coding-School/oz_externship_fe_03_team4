@@ -2,6 +2,7 @@ import { Button } from "../buttons/Buttons";
 import Modal from "../modal/Modal";
 import { useState } from "react";
 import type { MappedUser } from "../../types/user";
+import { updateUserRole } from "../../api/updateUserRole";
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -37,10 +38,22 @@ export const UserModalFooter = ({
     onEditToggle(); // 저장 후 읽기 모드 전환
   };
 
-  const handleRoleChangeConfirm = () => {
-    onRoleChange(selectedRole);
-    setIsRoleModalOpen(false);
-    setIsAlertOpen(true);
+  const handleRoleChangeConfirm = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) throw new Error("토큰이 없습니다.");
+
+      await updateUserRole(Number(user.id), selectedRole, token); // API 호출
+      onRoleChange(selectedRole); // 상위 상태 갱신
+      setIsRoleModalOpen(false);
+      setIsAlertOpen(true); // 성공 알림 모달 표시
+    } catch (error: unknown) {
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert("권한 변경 중 오류가 발생했습니다.");
+      }
+    }
   };
 
     const handleDeleteConfirm = () => {
