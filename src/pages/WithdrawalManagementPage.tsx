@@ -19,6 +19,9 @@ export const WithdrawalManagementPage = () => {
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>(undefined)
+
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
 
@@ -201,11 +204,19 @@ export const WithdrawalManagementPage = () => {
       </div>
 
       <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-        <Table<WithdrawalRow>
-          data={filteredWithdrawUsers}
-          columns={columns}
-          onRowClick={handleWithdrawRowClick}
-        />
+        {isLoading ? (
+          <div className="p-6 text-center text-sm text-gray-500">
+            불러오는 중…
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 p-6 text-sm text-red-700"> {error} </div>
+        ) : (
+          <Table<WithdrawalRow>
+            data={filteredWithdrawUsers}
+            columns={columns}
+            onRowClick={handleWithdrawRowClick}
+          />
+        )}
       </div>
 
       {/* 모달 */}
