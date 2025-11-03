@@ -1,6 +1,7 @@
 import { formatDate } from '../../utils/formatDate'
 import { UserIcon } from 'lucide-react'
-import { InfoField } from '../info-field/InfoField'
+// import { InfoField } from '../info-field/InfoField'
+import { ModalPair } from '../reviews/ModalPair'
 
 export type WithdrawalDetail = {
   withdrawal_id: number | string
@@ -53,19 +54,51 @@ export const WithdrawalModalOutlet = ({
 
       {/* 사용자 정보 */}
       <div className="grid grid-cols-2 gap-4 pb-8">
-        <InfoField label="이름" value={user.name} />
+        <ModalPair label="이름" value={user.name} noBorder />
+        <ModalPair label="성별" value={user.gender} noBorder />
+        <ModalPair label="닉네임" value={user.nickname} noBorder />
+        <ModalPair label="이메일" value={user.email} noBorder />
+        <ModalPair label="권한" value={user.role} noBorder />
+        <ModalPair label="상태" value={user.status} noBorder />
+        <ModalPair
+          label="회원가입 일시"
+          value={formatDate(user.created_at)}
+          noBorder
+        />
+        {/* <InfoField label="이름" value={user.name} />
         <InfoField label="성별" value={user.gender} />
         <InfoField label="닉네임" value={user.nickname} />
         <InfoField label="이메일" value={user.email} />
         <InfoField label="권한" value={user.role} />
         <InfoField label="상태" value={user.status} />
-        <InfoField label="회원가입 일시" value={formatDate(user.created_at)} />
+        <InfoField label="회원가입 일시" value={formatDate(user.created_at)} /> */}
       </div>
 
       {/* 탈퇴 상세 */}
       <p className="pb-4 text-lg font-semibold">탈퇴 정보</p>
       <div className="grid grid-cols-2 gap-4">
-        <InfoField label="탈퇴요청 고유 ID" value={detail.withdrawal_id} />
+        <ModalPair
+          label="탈퇴요청 고유 ID"
+          value={detail.withdrawal_id}
+          noBorder
+        />
+        <ModalPair
+          label="탈퇴요청 일시"
+          value={formatDate(detail.requested_at)}
+          noBorder
+        />
+        <ModalPair label="탈퇴 사유" value={detail.reason} noBorder />
+        <ModalPair
+          label="삭제 예정 일시"
+          value={formatDate(detail.scheduled_deletion_at)}
+          noBorder
+        />
+        <ModalPair
+          label="탈퇴 상세 사유"
+          value={detail.reason_detail}
+          noBorder
+        />
+        {/* <InfoField label="탈퇴요청 고유 ID" value={detail.withdrawal_id} />
         <InfoField
           label="탈퇴요청 일시"
           value={formatDate(detail.requested_at)}
@@ -79,7 +112,7 @@ export const WithdrawalModalOutlet = ({
           label="탈퇴 상세 사유"
           value={detail.reason_detail}
           fullWidth
-        />
+        /> */}
       </div>
     </div>
   )
