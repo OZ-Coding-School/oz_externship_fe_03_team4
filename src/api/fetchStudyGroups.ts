@@ -46,7 +46,7 @@ export const fetchStudyGroupDetail = async (
   uuid: number
 ): Promise<StudyGroupDetailDTO> => {
   const response = await api.get<StudyGroupDetailResponse>(
-    `/api/v1/studies/admin/groups/${uuid}`
+    `/v1/studies/admin/groups/${uuid}`
   )
   return response.data.data
 }
