@@ -5,7 +5,7 @@ import { Button } from '../buttons/Buttons'
 interface CloseModalFooterProps {
   onClose: () => void
   onConfirm?: () => void
-  comfirmLabel?: string
+  confirmLabel?: string
   confirmMode?: boolean
   className?: string
   onDelete?: () => void
@@ -14,6 +14,9 @@ interface CloseModalFooterProps {
 
 export const CloseModalFooter = ({
   onClose,
+  onConfirm,
+  confirmLabel = '적용하기',
+  confirmMode = false,
   className,
   onDelete,
   showDelete = false,
