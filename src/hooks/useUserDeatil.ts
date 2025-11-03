@@ -19,6 +19,11 @@ interface ApiUserDetail {
   birthday?: string;
 }
 
+interface ApiUserDetailResponse {
+  detail: string
+  data: ApiUserDetail
+}
+
 // ApiUserDetail → MappedUser 변환
 const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
   id: data.id.toString(),
@@ -51,13 +56,13 @@ export const useUserDetail = (userId?: string | number) => {
     queryFn: async () => {
       if (!userId) throw new Error("userId is required");
 
-      const res = await api.get<ApiUserDetail>(`/v1/admin/users/${userId}`, {
+      const res = await api.get<ApiUserDetailResponse>(`/v1/admin/users/${userId}`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },
       });
 
-      return mapUserDetail(res.data);
+      return mapUserDetail(res.data.data);
     },
     enabled: !!userId, // userId가 있을 때만 실행
     staleTime: 1000 * 60 * 2,
