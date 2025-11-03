@@ -62,10 +62,10 @@ export const RecruitmentModalOutlet = ({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <ModalPair label="마감 기한" value={formatDate(closeAt)} />
-            <ModalPair
-              label="공고 상태"
-              value={<RecruitmentStatusBadge status={status} />}
-            />
+            <div className="space-y-1.5">
+              <p className="text-sm text-neutral-500">공고 상태</p>
+              <RecruitmentStatusBadge status={status} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <ModalPair
