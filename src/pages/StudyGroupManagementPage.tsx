@@ -107,6 +107,7 @@ const StudyGroupManagementPage = () => {
     setIsLoadingDetail(true)
     setIsModalOpen(true)
 
+    // 실제 api 연결하면 삭제할 부분
     try {
       if (USE_MOCK_DATA) {
         const { getMockStudyGroupDetail, generateMockDetailFromList } =
