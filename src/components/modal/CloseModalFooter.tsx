@@ -38,13 +38,24 @@ export const CloseModalFooter = ({
         </Button>
       ) : null}
       <div /> {/* 여백입니닷 */}
-      <Button
-        size="medium"
-        onClick={onClose}
-        className="bg-gray-400 text-white hover:bg-gray-600 focus-visible:ring-gray-300 active:bg-gray-500"
-      >
-        닫기
-      </Button>
+      <div className="flex justify-end gap-2">
+        <Button
+          size="medium"
+          onClick={onClose}
+          className="bg-gray-400 text-white hover:bg-gray-600 focus-visible:ring-gray-300 active:bg-gray-500"
+        >
+          닫기
+        </Button>
+        {confirmMode && (
+          <Button
+            size="medium"
+            onClick={onConfirm}
+            className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 focus-visible:ring-yellow-300 active:bg-yellow-600"
+          >
+            {confirmLabel}
+          </Button>
+        )}
+      </div>
     </footer>
   )
 }
