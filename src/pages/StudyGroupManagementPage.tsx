@@ -126,7 +126,6 @@ const StudyGroupManagementPage = () => {
           const detail = mapStudyGroupDetailDTO(detailDTO)
           setSelectedStudyGroup(detail)
         } else {
-          console.error('상세 데이터를 찾을 수 없습니다.')
           setIsModalOpen(false)
         }
       } else {
@@ -136,7 +135,6 @@ const StudyGroupManagementPage = () => {
         setSelectedStudyGroup(detail)
       }
     } catch (error) {
-      console.error('상세 정보 로딩 실패:', error)
       setIsModalOpen(false)
       setSelectedStudyGroup(null)
     } finally {

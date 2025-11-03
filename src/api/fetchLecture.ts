@@ -20,7 +20,7 @@ export const fetchLectures = async (
   const response = await api.get<LectureListResponse>('/v1/admin/lectures', {
     params: queryParams,
   })
-  console.log('API Response:', response.data)
+
   const data = response.data
 
   return {
