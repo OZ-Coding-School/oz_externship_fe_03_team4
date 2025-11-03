@@ -1,15 +1,10 @@
 import {BarChart,Bar,XAxis,YAxis,CartesianGrid,ResponsiveContainer,Tooltip,type TooltipContentProps,} from 'recharts';
 import { Select } from '../../components/FormUI/Select';
+import { useEffect, useState } from 'react'; //api나오면 삭제
+// import { useMonthlyWithdrawalTrends } from '../../hooks/queries/useMonthlyWithdrawalTrends';
 
-const REASON_DATA = [
-  { name: '서비스 불만족', value: 35, color: '#0088FE' },
-  { name: '개인정보 우려', value: 25, color: '#00C49F' },
-  { name: '사용 빈도 낮음', value: 20, color: '#FFBB28' },
-  { name: '기타', value: 15, color: '#FF8042' },
-  { name: '경쟁 서비스 이용', value: 5, color: '#8884D8' },
-];
-
-const MONTHLY_DATA_BY_REASON: Record<string, Array<{ month: string; count: number }>> = {
+// API 나오면 삭제
+const MOCK_DATA = {
   '서비스 불만족': [
     { month: '1월', count: 1 },
     { month: '2월', count: 0.8 },
@@ -82,6 +77,15 @@ const MONTHLY_DATA_BY_REASON: Record<string, Array<{ month: string; count: numbe
   ],
 };
 
+const REASON_LIST = ['서비스 불만족', '개인정보 우려', '사용 빈도 낮음', '기타', '경쟁 서비스 이용'];
+
+interface WithdrawReasonstickChartProps {
+  selectedReason: string;
+  onReasonChange: (reason: string) => void;
+  isAnimationActive: boolean;
+}
+// API 나오면 여기까지 삭제
+
 const CustomTooltip = ({
   active,
   payload,
@@ -97,26 +101,108 @@ const CustomTooltip = ({
   );
 };
 
-interface WithdrawReasonstickChartProps {
-  selectedReason: string;
-  onReasonChange: (reason: string) => void;
-  isAnimationActive: boolean;
-}
-
 export default function MonthlyTrendChart({
   selectedReason,
   onReasonChange,
   isAnimationActive,
 }: WithdrawReasonstickChartProps) {
+  const [monthlyData, setMonthlyData] = useState<Record<string, Array<{ month: string; count: number }>>>({});
+  const [reasons, setReasons] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // API 연동하면 주석 삭제
+  // const { data: responseData, isLoading, error: queryError } = useMonthlyWithdrawalTrends();
+  
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
+  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+  //       <div className="h-[300px] flex items-center justify-center">
+  //         <p className="text-gray-500">로딩 중...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // if (queryError) {
+  //   return (
+  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
+  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+  //       <div className="h-[300px] flex items-center justify-center">
+  //         <p className="text-red-500">
+  //           {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // if (!responseData) {
+  //   return (
+  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
+  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+  //       <div className="h-[300px] flex items-center justify-center">
+  //         <p className="text-gray-500">데이터가 없습니다.</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // setMonthlyData(responseData.monthly_data);
+  // setReasons(responseData.reasons);
+  // API 연동하면 주석 삭제
+
+  useEffect(() => {
+    const fetchMonthlyData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // API 연동되면 실제 API 응답으로 교체
+        setMonthlyData(MOCK_DATA);
+        setReasons(REASON_LIST);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMonthlyData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+        <div className="h-[300px] flex items-center justify-center">
+          <p className="text-gray-500">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+        <div className="h-[300px] flex items-center justify-center">
+          <p className="text-red-500">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
         <div className="w-40">
           <Select value={selectedReason} onChange={(e) => onReasonChange(e.target.value)}>
-            {REASON_DATA.map((reason) => (
-              <option key={reason.name} value={reason.name}>
-                {reason.name}
+            {reasons.map((reason) => (
+              <option key={reason} value={reason}>
+                {reason}
               </option>
             ))}
           </Select>
@@ -125,7 +211,7 @@ export default function MonthlyTrendChart({
 
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={MONTHLY_DATA_BY_REASON[selectedReason]}>
+          <BarChart data={monthlyData[selectedReason] || []}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />
