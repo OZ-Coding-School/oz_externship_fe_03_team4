@@ -1,9 +1,9 @@
-import api from '../../lib/axios'
+import api from '../lib/axios'
 import {
   mapLectureDTO,
   type Lecture,
   type LectureListResponse,
-} from '../../types/lectureManagement/types'
+} from '../types/lectureManagement/types'
 
 export type FetchLecturesReturn = {
   items: Lecture[]
@@ -24,11 +24,11 @@ export const fetchLectures = async (
   const data = response.data
 
   return {
-    items: data.results.map(mapLectureDTO),
-    totalCount: data.count,
-    pageSize: Number(queryParams.limit),
-    offset: Number(queryParams.offset),
-    userNickname: data.user_nickname,
-    recommendedLectures: data.recommended_lectures.map(mapLectureDTO),
+    items: (data?.results ?? []).map(mapLectureDTO),
+    totalCount: data?.count ?? 0,
+    pageSize: Number(queryParams.limit) || 10,
+    offset: Number(queryParams.offset) || 0,
+    userNickname: data?.user_nickname,
+    recommendedLectures: (data?.recommended_lectures ?? []).map(mapLectureDTO),
   }
 }
