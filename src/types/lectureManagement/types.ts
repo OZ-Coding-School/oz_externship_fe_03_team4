@@ -1,3 +1,5 @@
+import { formatDate } from '../../utils/formatDate'
+
 export type CategoryDTO = {
   id: number
   name: string
@@ -81,6 +83,6 @@ export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
   originalPrice: dto.original_price,
   discountPrice: dto.discount_price,
   urlLink: dto.url_link,
-  createdAt: dto.created_at,
-  updatedAt: dto.updated_at,
+  createdAt: formatDate(dto.created_at),
+  updatedAt: formatDate(dto.updated_at),
 })
