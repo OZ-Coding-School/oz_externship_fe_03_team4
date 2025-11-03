@@ -10,8 +10,9 @@ const Withdrawtrend = ({ isAnimationActive = true }: WithdrawtrendChartProps) =>
   const [selectedReason, setSelectedReason] = useState('서비스 불만족');
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col h-full gap-6">
       <WithdrawReasondoughnut isAnimationActive={isAnimationActive} />
+      <div className="flex-1"></div>
       <WithdrawReasonstick
         selectedReason={selectedReason}
         onReasonChange={setSelectedReason}

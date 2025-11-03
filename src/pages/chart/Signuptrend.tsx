@@ -1,32 +1,54 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, type TooltipContentProps } from 'recharts';
+import { mapDtoToSignupStatistics, type SignupStatisticsDTO, type SignupChartData } from '../../types/Chart/SignupChart/types';
+import { useEffect, useState } from 'react'; //api연결하면 삭제
+//api 나오면 주석 삭제 import { useSignupStatistics } from '../../hooks/chart/fetchSignup';
 
-const monthlyData = [
-  { month: '1월', count: 15 },
-  { month: '2월', count: 24 },
-  { month: '3월', count: 18 },
-  { month: '4월', count: 26 },
-  { month: '5월', count: 21 },
-  { month: '6월', count: 19 },
-  { month: '7월', count: 25 },
-  { month: '8월', count: 29 },
-  { month: '9월', count: 31 },
-  { month: '10월', count: 21 },
-  { month: '11월', count: 26 },
-  { month: '12월', count: 28 },
-];
+//일단 api명세서 보고 수정해서 연도숫자가 조금 이상함
+const MOCK_MONTHLY_DATA: SignupStatisticsDTO = {
+  detail: "회원가입 통계 조회에 성공하였습니다.",
+  data: {
+    interval: "month",
+    from: "2024-11-01",
+    to: "2025-10-31",
+    total_signups: 120,
+    items: [
+      { period: "2024-11", count: 9 },
+      { period: "2024-12", count: 14 },
+      { period: "2025-01", count: 8 },
+      { period: "2025-02", count: 11 },
+      { period: "2025-03", count: 13 },
+      { period: "2025-04", count: 10 },
+      { period: "2025-05", count: 9 },
+      { period: "2025-06", count: 12 },
+      { period: "2025-07", count: 7 },
+      { period: "2025-08", count: 6 },
+      { period: "2025-09", count: 11 },
+      { period: "2025-10", count: 10 }
+    ]
+  }
+}
 
-const yearlyData = [
-  { month: '2021년', count: 180 },
-  { month: '2022년', count: 245 },
-  { month: '2023년', count: 310 },
-  { month: '2024년', count: 285 },
-  { month: '2025년', count: 320 },
-];
+const MOCK_YEARLY_DATA: SignupStatisticsDTO = {
+  detail: "회원가입 통계 조회에 성공하였습니다.",
+  data: {
+    interval: "year",
+    from: "2021-01-01",
+    to: "2025-10-31",
+    total_signups: 40,
+    items: [
+      { period: "2021", count: 6 },
+      { period: "2022", count: 7 },
+      { period: "2023", count: 8 },
+      { period: "2024", count: 9 },
+      { period: "2025", count: 10 },
+    ]
+  }
+}
 
 interface SignupChartProps {
-  isAnimationActive?: boolean;
   period: 'monthly' | 'yearly';
 }
+//api나오면 여기까지 삭제
 
 const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | number, string>) => {
   if (!active || !payload || !payload.length) return null;
@@ -38,18 +60,89 @@ const CustomTooltip = ({ active, payload, label }: TooltipContentProps<string | 
   );
 };
 
-const SignupChart = ({ isAnimationActive = true, period }: SignupChartProps) => {
-  const data = period === 'yearly' ? yearlyData : monthlyData;
+const SignupChart = ({ period }: SignupChartProps) => {
+  const [data, setData] = useState<SignupChartData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // api연동 하면 주석삭제
+  // const interval = period === 'yearly' ? 'year' : 'month';
+  // const { data: responseData, isLoading, error: queryError } = useSignupStatistics(interval);
+  
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">로딩 중...</p>
+  //     </div>
+  //   );
+  // }
+
+  // if (queryError) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-red-500">
+  //         {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+  //       </p>
+  //     </div>
+  //   );
+  // }
+
+  // if (!responseData) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[400px]">
+  //       <p className="text-gray-500">데이터가 없습니다.</p>
+  //     </div>
+  //   );
+  // }
+
+  // const statistics = mapDtoToSignupStatistics(responseData);
+  // api연동 하면 주석삭제
+
+  useEffect(() => {
+    const fetchSignupData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
+        const mockDto = period === 'yearly' ? MOCK_YEARLY_DATA : MOCK_MONTHLY_DATA;
+        const statistics = mapDtoToSignupStatistics(mockDto);
+        setData(statistics.chartData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSignupData();
+  }, [period]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[400px]">
+        <p className="text-gray-500">로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[400px]">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" />
+        <XAxis dataKey="period" />
         <YAxis />
         <Tooltip content={CustomTooltip} />
         <Legend />
-        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} isAnimationActive={isAnimationActive} fill="#FFD700"/> {/*피드백 반영*/}
+        <Bar dataKey="count" name="회원가입 추세" maxBarSize={56} fill="#FFD700" />
       </BarChart>
     </ResponsiveContainer>
   );
