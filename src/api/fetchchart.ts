@@ -5,25 +5,25 @@ import type { WithdrawalReasonDistributionDTO } from '../types/Chart/WithdrawRea
 import type { WithdrawalReasonStatisticsDTO } from '../types/Chart/WithdrawReasonstick/types';
 
 export const fetchSignupStatistics = async (interval: 'month' | 'year'): Promise<SignupStatisticsDTO> => {
-  const response = await api.get('/api/v1/users/statistics/signups', {
+  const response = await api.get('/v1/users/statistics/signups', {
     params: { interval },
   });
   return response.data;
 };
 
 export const fetchWithdrawalStatistics = async (interval: 'month' | 'year'): Promise<WithdrawalStatisticsDTO> => {
-  const response = await api.get('/api/v1/users/statistics/withdrawals', {
+  const response = await api.get('/v1/users/statistics/withdrawals', {
     params: { interval },
   });
   return response.data;
 };
 
 export const fetchWithdrawalReasons = async (): Promise<WithdrawalReasonDistributionDTO> => {
-  const response = await api.get('/api/v1/admin/dashboard/withdrawal-reasons');
+  const response = await api.get('/v1/admin/dashboard/withdrawal-reasons');
   return response.data;
 };
 
 export const fetchWithdrawalReasonTrend = async (reason: string): Promise<WithdrawalReasonStatisticsDTO> => {
-  const response = await api.get(`/api/v1/admin/dashboard/withdrawal-reasons/${reason}`);
+  const response = await api.get(`/v1/admin/dashboard/withdrawal-reasons/${reason}`);
   return response.data;
 };

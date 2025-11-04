@@ -1,4 +1,4 @@
-export type WithdrawalReasonItemDTO = {
+export type WithdrawalReasondoughnutItemDTO = {
   reason_code: string
   reason_label: string
   count: number
@@ -10,7 +10,7 @@ export type WithdrawalReasonDistributionDTO = {
   data: {
     scope: string
     total_withdrawals: number
-    items: WithdrawalReasonItemDTO[]
+    items: WithdrawalReasondoughnutItemDTO[]
   }
 }
 
