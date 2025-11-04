@@ -13,3 +13,14 @@ export type FetchRecruitmentsReturn = {
   pageSize: number
   totalCount: number
 }
+
+export const fetchRecruitments = async (
+  params: RecruitmentRequestParams
+): Promise<FetchRecruitmentsReturn> => {
+  const url = '/v1/recruitments/admin/'
+  const { data } = await api.get<RecruitmentListResponseDTO>(url, { params })
+
+  const items = data.results.map((dto: RecruitmentDTO) =>
+    mapRecruitmentDTO(dto)      // dto -> ui 매핑
+  )
+}
