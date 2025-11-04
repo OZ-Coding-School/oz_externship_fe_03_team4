@@ -17,10 +17,17 @@ export type FetchRecruitmentsReturn = {
 export const fetchRecruitments = async (
   params: RecruitmentRequestParams
 ): Promise<FetchRecruitmentsReturn> => {
-  const url = '/v1/recruitments/admin/'
+  const url = '/v1/recruitments/admin/' // 엔드포인트 좀 더 보고 진행할게요.
   const { data } = await api.get<RecruitmentListResponseDTO>(url, { params })
 
-  const items = data.results.map((dto: RecruitmentDTO) =>
-    mapRecruitmentDTO(dto)      // dto -> ui 매핑
+  const items = data.results.map(
+    (dto: RecruitmentDTO) => mapRecruitmentDTO(dto) // dto -> ui 매핑
   )
+
+  return {
+    items,
+    page: data.page,
+    pageSize: data.page_size,
+    totalCount: data.total_count,
+  }
 }
