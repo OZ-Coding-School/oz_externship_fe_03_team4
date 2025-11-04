@@ -7,6 +7,7 @@ import { useToastStore } from "../../store/toastStore";
 import { AlertTriangle } from "lucide-react";
 import { getAccessToken } from "../../lib/token";
 import { useQueryClient } from "@tanstack/react-query";
+import { ToastContainer } from "../../components/toast/toastContainer";
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -200,6 +201,7 @@ export const UserModalFooter = ({
           </Button>
         </div>
       </Modal>
+      <ToastContainer />
     </>
   );
 };
