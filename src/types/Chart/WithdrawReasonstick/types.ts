@@ -21,7 +21,7 @@ export type WithdrawalReasonChartData = {
 
 // 화면에 표시할 때 쓰는거
 export type WithdrawalReasonStatistics = {
-  interval: 'month'
+  interval: string
   fromDate: string
   toDate: string
   totalWithdrawals: number
@@ -32,7 +32,7 @@ export type WithdrawalReasonStatistics = {
 export const mapDtoToWithdrawalReasonStatistics = (
   dto: WithdrawalReasonStatisticsDTO
 ): WithdrawalReasonStatistics => ({
-  interval: 'month',
+  interval: dto.data.interval,
   fromDate: dto.data.from,
   toDate: dto.data.to,
   totalWithdrawals: dto.data.total_signups,
