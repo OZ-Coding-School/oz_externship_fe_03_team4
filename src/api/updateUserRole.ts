@@ -17,7 +17,6 @@ export const updateUserRole = async (
     const response = await axios.patch(
       `https://api.ozcoding.site/api/v1/admin/users/${userId}/update_role`,
       {
-        user_id: userId,
         role,
       },
       {
