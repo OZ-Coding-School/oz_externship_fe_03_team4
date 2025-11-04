@@ -1,9 +1,6 @@
 import Modal from '../modal/Modal'
 import { ModalHeader } from '../modal/ModalHeader'
-import {
-  WithdrawalModalOutlet,
-  // type WithdrawalDetail,
-} from './WithdrawalModalOutlet'
+import { WithdrawalModalOutlet } from './WithdrawalModalOutlet'
 import { WithdrawalModalFooter } from './WithdrawalModalFooter'
 import type { WithdrawalDetail } from '../../types/withdraw/types'
 

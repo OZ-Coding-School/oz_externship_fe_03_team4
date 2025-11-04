@@ -9,19 +9,16 @@ type WithdrawalModalFooterProps = {
 
 export const WithdrawalModalFooter = ({
   onClose,
+  onRestore,
 }: WithdrawalModalFooterProps) => {
   const [isRestoreOpen, setIsRestoreOpen] = useState(false)
   const [isAlertOpen, setIsAlertOpen] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
 
-  const handleRestoreConfirm = async () => {
-    try {
-      setSubmitting(true)
-      setIsRestoreOpen(false)
-      setIsAlertOpen(true) // 완료 알림
-    } finally {
-      setSubmitting(false)
-    }
+  const handleRestoreConfirm = () => {
+    setIsRestoreOpen(false)
+    setIsAlertOpen(true)
+
+    onRestore?.()
   }
 
   return (
@@ -44,9 +41,10 @@ export const WithdrawalModalFooter = ({
         isOn={isRestoreOpen}
         onBackgroundClick={() => setIsRestoreOpen(false)}
       >
-        <h2 className="text-lg font-bold">회원 복구</h2>
+        <h2 className="text-lg font-bold">회원 복구 확인</h2>
         <p className="mb-6 text-base text-gray-600">
-          해당 회원의 탈퇴 요청을 취소하고 계정을 복구합니다. 진행할까요?
+          해당 유저의 탈퇴요청은 삭제되며 해당 유저는 즉시 이용가능한 상태로
+          복구됩니다.
         </p>
         <div className="flex justify-end gap-3">
           <Button
@@ -56,13 +54,8 @@ export const WithdrawalModalFooter = ({
           >
             취소
           </Button>
-          <Button
-            color="success"
-            size="medium"
-            onClick={handleRestoreConfirm}
-            disabled={submitting}
-          >
-            {submitting ? '복구 중...' : '복구'}
+          <Button color="success" size="medium" onClick={handleRestoreConfirm}>
+            복구
           </Button>
         </div>
       </Modal>

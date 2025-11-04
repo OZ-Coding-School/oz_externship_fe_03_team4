@@ -1,6 +1,5 @@
 import { formatDate } from '../../utils/formatDate'
 import { UserIcon } from 'lucide-react'
-// import { InfoField } from '../info-field/InfoField'
 import { ModalPair } from '../reviews/ModalPair'
 import type { WithdrawalDetail } from '../../types/withdraw/types'
 
@@ -47,13 +46,6 @@ export const WithdrawalModalOutlet = ({
           value={formatDate(user.joined_at)}
           noBorder
         />
-        {/* <InfoField label="이름" value={user.name} />
-        <InfoField label="성별" value={user.gender} />
-        <InfoField label="닉네임" value={user.nickname} />
-        <InfoField label="이메일" value={user.email} />
-        <InfoField label="권한" value={user.role} />
-        <InfoField label="상태" value={user.status} />
-        <InfoField label="회원가입 일시" value={formatDate(user.created_at)} /> */}
       </div>
 
       {/* 탈퇴 상세 */}
@@ -84,21 +76,6 @@ export const WithdrawalModalOutlet = ({
           value={detail.withdrawal.reason_detail}
           noBorder
         />
-        {/* <InfoField label="탈퇴요청 고유 ID" value={detail.withdrawal_id} />
-        <InfoField
-          label="탈퇴요청 일시"
-          value={formatDate(detail.requested_at)}
-        />
-        <InfoField label="탈퇴 사유" value={detail.reason} />
-        <InfoField
-          label="삭제 예정 일시"
-          value={formatDate(detail.scheduled_deletion_at)}
-        />
-        <InfoField
-          label="탈퇴 상세 사유"
-          value={detail.reason_detail}
-          fullWidth
-        /> */}
       </div>
     </div>
   )

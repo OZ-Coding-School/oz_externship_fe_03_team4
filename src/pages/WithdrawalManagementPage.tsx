@@ -228,6 +228,7 @@ export const WithdrawalManagementPage = () => {
           onClose={() => setIsWithdrawModalOpen(false)}
           onRestore={async () => {
             // TODO: 복구 API 호출 후 목록 갱신
+            // 추후 복구 API 제작 후 추가하겠습니다
           }}
         />
       )}
