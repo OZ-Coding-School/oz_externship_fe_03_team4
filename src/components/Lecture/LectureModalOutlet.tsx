@@ -11,7 +11,7 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
   <div className="flex max-h-[85vh] flex-col overflow-hidden">
     <div className="flex-1 overflow-y-auto p-6">
       <div className="mx-auto w-full max-w-4xl">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-[380px_1fr]">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* 왼쪽 */}
           <section className="space-y-4">
             <div className="relative h-[240px] w-full overflow-hidden rounded-lg border-2 border-blue-400">
@@ -86,7 +86,7 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
                 label="원 가격"
                 value={
                   <span className="text-gray-500 line-through">
-                    {lecture.originalPrice.toLocaleString()}원
+                    {(lecture.originalPrice ?? 0).toLocaleString()}원
                   </span>
                 }
                 noBorder
@@ -95,7 +95,7 @@ export const LectureModalOutlet = ({ lecture }: LectureModalOutletProps) => (
                 label="할인된 가격"
                 value={
                   <span className="text-2xl font-bold text-yellow-500">
-                    {lecture.discountPrice.toLocaleString()}원
+                    {(lecture.discountPrice ?? 0).toLocaleString()}원
                   </span>
                 }
                 noBorder

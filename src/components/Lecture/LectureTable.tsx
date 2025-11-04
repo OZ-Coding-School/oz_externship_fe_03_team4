@@ -6,6 +6,8 @@ import { LectureThumbnail } from '../Lecture/LectureThumbnail'
 type LectureTableProps = {
   lectures: Lecture[]
   onLectureClick?: (lecture: Lecture) => void
+  currentPage?: number
+  pageSize?: number
 }
 
 type LectureTableData = {
@@ -22,9 +24,12 @@ type LectureTableData = {
 export const LectureTable = ({
   lectures,
   onLectureClick,
+  currentPage = 1,
+  pageSize = 10,
 }: LectureTableProps) => {
+  const startIndex = (currentPage - 1) * pageSize
   const tableData: LectureTableData[] = lectures.map((lecture, index) => ({
-    id: String(index + 1),
+    id: String(startIndex + index + 1),
     thumbnail: lecture.thumbnail,
     title: lecture.title,
     instructor: lecture.instructor,
