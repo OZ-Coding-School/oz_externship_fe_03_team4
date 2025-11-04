@@ -24,4 +24,8 @@ export const buildRecruitmentsQueryParams = (
   if (options.statusFilter) {
     queryParams.status = options.statusFilter
   }
+
+  if (options.selectedTags && options.selectedTags.length>0) {
+    queryParams.tags = options.selectedTags.join(',')
+  }
 }
