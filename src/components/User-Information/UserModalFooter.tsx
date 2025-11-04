@@ -3,6 +3,9 @@ import Modal from "../modal/Modal";
 import { useState } from "react";
 import type { MappedUser } from "../../types/user";
 import { updateUserRole } from "../../api/updateUserRole";
+import { useToastStore } from "../../store/toastStore";
+import { AlertTriangle } from "lucide-react";
+import { getAccessToken } from "../../lib/token";
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -10,7 +13,7 @@ interface ModalFooterProps {
   onEditToggle: () => void;
   user: MappedUser;
   onRoleChange: (role: "admin" | "staff" | "user") => void;
-  onDelete: (userId: string) => void; // 삭제 콜백 추가
+  onDelete: (userId: string) => void; // 삭제 콜백
 }
 
 export const UserModalFooter = ({
@@ -27,6 +30,8 @@ export const UserModalFooter = ({
     user.role === "관리자" ? "admin" : user.role === "스태프" ? "staff" : "user"
   );
 
+  const { showSuccess } = useToastStore();
+
   const roles = [
     { key: "admin", label: "관리자" },
     { key: "staff", label: "스태프" },
@@ -40,24 +45,28 @@ export const UserModalFooter = ({
 
   const handleRoleChangeConfirm = async () => {
     try {
-      const token = localStorage.getItem("access_token");
+      const token = getAccessToken();
       if (!token) throw new Error("토큰이 없습니다.");
 
+      // API 호출
       await updateUserRole(Number(user.id), selectedRole, token); // API 호출
-      onRoleChange(selectedRole); // 상위 상태 갱신
+      onRoleChange(selectedRole); // 상위 상태 업데이트
       setIsRoleModalOpen(false);
-      setIsAlertOpen(true); // 성공 알림 모달 표시
-    } catch (error: unknown) {
-    if (error instanceof Error) {
-      alert(error.message);
-    } else {
-      alert("권한 변경 중 오류가 발생했습니다.");
-      }
+
+      // 성공 시 Toast 알림
+      showSuccess(
+        "권한 변경 완료",
+        "회원 권한이 성공적으로 변경되었습니다."
+      );
+    } catch {
+      // 실패 시 모달
+      setIsRoleModalOpen(false);
+      setIsAlertOpen(true);
     }
   };
 
-    const handleDeleteConfirm = () => {
-    onDelete(String(user.id)); // number → string 변환
+  const handleDeleteConfirm = () => {
+    onDelete(String(user.id));
     setIsDeleteConfirmOpen(false);
     setIsAlertOpen(true); // 삭제 완료 알람
   };
@@ -86,7 +95,7 @@ export const UserModalFooter = ({
           <Button
             color="danger"
             size="medium"
-            onClick={() => setIsDeleteConfirmOpen(true)} // 닫기 대신 삭제
+            onClick={() => setIsDeleteConfirmOpen(true)}
           >
             삭제하기
           </Button>
@@ -132,7 +141,11 @@ export const UserModalFooter = ({
             >
               취소
             </Button>
-            <Button color="success" size="medium" onClick={handleRoleChangeConfirm}>
+            <Button
+              color="success"
+              size="medium"
+              onClick={handleRoleChangeConfirm}
+            >
               변경하기
             </Button>
           </div>
@@ -147,7 +160,10 @@ export const UserModalFooter = ({
       >
         <div className="p-6 text-center">
           <h2 className="text-lg font-bold mb-4">회원 삭제 확인</h2>
-          <p className="mb-6">삭제 시 해당 유저와 관련된 모든 데이터가 즉시 삭제되며 되될릴 수 없습니다.</p>
+          <p className="mb-6">
+            삭제 시 해당 유저와 관련된 모든 데이터가 즉시 삭제되며 되돌릴 수
+            없습니다.
+          </p>
           <div className="flex justify-center gap-3">
             <Button
               color="secondary"
@@ -163,16 +179,23 @@ export const UserModalFooter = ({
         </div>
       </Modal>
 
-      {/* 저장/권한 변경 완료 알람 */}
+      {/* 저장/권한 변경 실패 모달 */}
       <Modal
         isOn={isAlertOpen}
         onBackgroundClick={() => setIsAlertOpen(false)}
         className="w-[400px] max-h-[600px]"
       >
         <div className="p-6 text-center">
-          <h2 className="text-lg font-bold mb-4">알림</h2>
-          <p className="mb-6">변경이 성공적으로 적용되었습니다.</p>
-          <Button color="success" size="medium" onClick={() => setIsAlertOpen(false)}>
+          <h2 className="text-lg font-bold mb-4 flex items-center justify-center gap-2">
+            <AlertTriangle className="w-6 h-6 text-red-500" />
+            알림
+          </h2>
+          <p className="mb-6">권한 변경 중 오류가 발생했습니다.</p>
+          <Button
+            color="danger"
+            size="medium"
+            onClick={() => setIsAlertOpen(false)}
+          >
             확인
           </Button>
         </div>
