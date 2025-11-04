@@ -7,9 +7,10 @@ import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
+// import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 
 const PAGE_SIZE = 10
-
+// 여기서부터
 const TAGS = [
   // 가짜 목데이터
   ['React', 'Frontend'],
@@ -36,7 +37,7 @@ const mockRecruitments: Recruitment[] = Array.from({ length: 15 }).map(
 )
 
 const ALL_TAGS = Array.from(new Set(mockRecruitments.flatMap((r) => r.tags))) // 전체 태그 목록
-
+// 여기까지 목업데이터 입니닷.
 const RecruitmentManagementPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
@@ -51,9 +52,21 @@ const RecruitmentManagementPage = () => {
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
-
+  // const {
+  //   data: _data,
+  //   isLoading: _isLoading,
+  //   isError: _isError,
+  // } = useAdminRecruitmentsQuery({
+  //   searchText: debouncedSearchText,
+  //   statusFilter: statusFilter === '전체' ? undefined : statusFilter,
+  //   selectedTags,
+  //   ordering: 'latest',
+  //   pageNumber: currentPage,
+  //   pageSize: PAGE_SIZE,
+  // })
   const filteredRecruitments = useMemo(() => {
     let filteredRecruitmentList = mockRecruitments
+    // let filteredRecruitmentList = data?.items ?? []
 
     if (statusFilter !== '전체') {
       filteredRecruitmentList = filteredRecruitmentList.filter(
@@ -80,6 +93,7 @@ const RecruitmentManagementPage = () => {
 
     return filteredRecruitmentList
   }, [statusFilter, debouncedSearchText, selectedTags])
+  // }, [data?.items, debouncedSearchText, statusFilter, selectedTags])
 
   const hasNoData = filteredRecruitments.length === 0
 
