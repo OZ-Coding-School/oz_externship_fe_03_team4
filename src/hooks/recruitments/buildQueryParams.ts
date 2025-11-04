@@ -13,7 +13,7 @@ export const buildRecruitmentsQueryParams = (
 
   const queryParams: RecruitmentRequestParams = {
     page: normalizedPageNumber,
-    page_size: normalizedPageSize
+    page_size: normalizedPageSize,
   }
 
   const trimmedSearchText = (options.searchText ?? '').trim()
@@ -25,7 +25,13 @@ export const buildRecruitmentsQueryParams = (
     queryParams.status = options.statusFilter
   }
 
-  if (options.selectedTags && options.selectedTags.length>0) {
+  if (options.selectedTags && options.selectedTags.length > 0) {
     queryParams.tags = options.selectedTags.join(',')
   }
+
+  if (options.ordering) {
+    queryParams.ordering = options.ordering
+  }
+
+  return queryParams
 }
