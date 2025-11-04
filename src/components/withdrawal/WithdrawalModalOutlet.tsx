@@ -2,25 +2,7 @@ import { formatDate } from '../../utils/formatDate'
 import { UserIcon } from 'lucide-react'
 // import { InfoField } from '../info-field/InfoField'
 import { ModalPair } from '../reviews/ModalPair'
-
-export type WithdrawalDetail = {
-  withdrawal_id: number | string
-  user: {
-    id: number
-    name: string
-    nickname: string
-    email: string
-    gender: string
-    role: string
-    status: string
-    created_at: string
-    profile_img_url?: string
-  }
-  reason: string
-  reason_detail: string
-  requested_at: string
-  scheduled_deletion_at: string
-}
+import type { WithdrawalDetail } from '../../types/withdraw/types'
 
 export const WithdrawalModalOutlet = ({
   detail,
@@ -62,7 +44,7 @@ export const WithdrawalModalOutlet = ({
         <ModalPair label="상태" value={user.status} noBorder />
         <ModalPair
           label="회원가입 일시"
-          value={formatDate(user.created_at)}
+          value={formatDate(user.joined_at)}
           noBorder
         />
         {/* <InfoField label="이름" value={user.name} />
@@ -79,23 +61,27 @@ export const WithdrawalModalOutlet = ({
       <div className="grid grid-cols-2 gap-4">
         <ModalPair
           label="탈퇴요청 고유 ID"
-          value={detail.withdrawal_id}
+          value={detail.withdrawal.id}
           noBorder
         />
         <ModalPair
           label="탈퇴요청 일시"
-          value={formatDate(detail.requested_at)}
+          value={formatDate(detail.withdrawal.created_at)}
           noBorder
         />
-        <ModalPair label="탈퇴 사유" value={detail.reason} noBorder />
+        <ModalPair
+          label="탈퇴 사유"
+          value={detail.withdrawal.reason}
+          noBorder
+        />
         <ModalPair
           label="삭제 예정 일시"
-          value={formatDate(detail.scheduled_deletion_at)}
+          value={formatDate(detail.withdrawal.due_date)}
           noBorder
         />
         <ModalPair
           label="탈퇴 상세 사유"
-          value={detail.reason_detail}
+          value={detail.withdrawal.reason_detail}
           noBorder
         />
         {/* <InfoField label="탈퇴요청 고유 ID" value={detail.withdrawal_id} />

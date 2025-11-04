@@ -5,7 +5,7 @@ import { Table } from '../components/Data-Indicate/Table'
 import { type WithdrawalRow } from '../types/withdraw/types'
 import {
   ROLE_CODE_TO_LABEL,
-  ROLE_LABEL_TO_CODE,
+  // ROLE_LABEL_TO_CODE,
   WITHDRAW_REASONS,
 } from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
@@ -40,31 +40,31 @@ export const WithdrawalManagementPage = () => {
 
   const rows: WithdrawalRow[] = [
     {
-      id: 'W001',
+      id: 101,
       email: 'byeuser@example.com',
       name: '김민수',
       role: '일반회원',
       birthday: '1992-09-21',
       reason: '서비스 불만족',
-      created_at: '2025-10-03 14:10',
+      created_at: '2025-10-12T14:32:00',
     },
     {
-      id: 'W002',
+      id: 102,
       email: 'quit@example.com',
       name: '이영희',
       role: '스태프',
       birthday: '1990-07-02',
       reason: '개인정보 우려',
-      created_at: '2025-10-04 09:30',
+      created_at: '2025-10-13T09:15:00',
     },
     {
-      id: 'W003',
+      id: 103,
       email: 'bye@example.com',
       name: '박철수',
       role: '일반회원',
       birthday: '1995-11-08',
       reason: '사용 빈도 낮음',
-      created_at: '2025-10-05 12:00',
+      created_at: '2025-10-14T12:00:00',
     },
   ]
 
@@ -74,7 +74,7 @@ export const WithdrawalManagementPage = () => {
   const filteredWithdrawUsers = rows.filter((user) => {
     const matchesWithdrawSearch =
       debouncedSearch === '' ||
-      user.id.includes(debouncedSearch) ||
+      user.id.toString().includes(debouncedSearch) ||
       user.email.includes(debouncedSearch) ||
       user.name.includes(debouncedSearch)
 
@@ -83,7 +83,8 @@ export const WithdrawalManagementPage = () => {
 
     const matchedWithdrawRole =
       withdrawRoleFilter === '' ||
-      ROLE_LABEL_TO_CODE[user.role] === withdrawRoleFilter
+      // ROLE_LABEL_TO_CODE[user.role] === withdrawRoleFilter
+      user.role === withdrawRoleFilter
 
     return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
   })
