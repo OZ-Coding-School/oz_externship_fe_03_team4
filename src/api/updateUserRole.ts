@@ -15,7 +15,7 @@ export const updateUserRole = async (
 ) => {
   try {
     const response = await axios.patch(
-      `https://api.ozcoding.site/v1/admin/role`, // 실제 엔드포인트 확인 필요
+      `https://api.ozcoding.site/api/v1/admin/users/${userId}/update_role`,
       {
         user_id: userId,
         role,
