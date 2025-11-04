@@ -10,4 +10,12 @@ export const buildRecruitmentsQueryParams = (
 ): RecruitmentRequestParams => {
     const normalizedPageSize = clampNumber(options.pageSize ?? 20, 1, 100);
     const normalizedPageNumber = Math.max(1, options.pageNumber ?? 1);
+
+    const trimmedSearchText = (options.searchText ?? '').trim();
+    if (trimmedSearchText) {
+        queryParams.search = trimmedSearchText;
+    }
+
+    
+
 }
