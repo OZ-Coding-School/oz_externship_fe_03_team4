@@ -1,18 +1,18 @@
 import { SearchInput } from '../components/search/SearchInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { Table } from '../components/Data-Indicate/Table'
 import { type WithdrawalRow } from '../types/withdraw/types'
-import {
-  ROLE_CODE_TO_LABEL,
-  // ROLE_LABEL_TO_CODE,
-  WITHDRAW_REASONS,
-} from '../constants/withdrawal'
+import { ROLE_CODE_TO_LABEL, WITHDRAW_REASONS } from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
-import { buildMockWithdrawalDetail } from '../components/withdrawal/mockWithdrawalDetail'
+import {
+  MOCK_WITHDRAWAL_LIST_DERIVED,
+  buildMockWithdrawalDetail,
+} from '../components/withdrawal/mockWithdrawalDetail'
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
+import { formatDate } from '../utils/formatDate'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -21,6 +21,7 @@ export const WithdrawalManagementPage = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | undefined>(undefined)
+  const [rows, setRows] = useState<WithdrawalRow[]>([])
 
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
@@ -38,35 +39,7 @@ export const WithdrawalManagementPage = () => {
     // setIsWithdrawEditing(false) // 이 부분은 추후에 API가 나오면 주석 푸는걸로 하겠습니다.
   }
 
-  const rows: WithdrawalRow[] = [
-    {
-      id: 101,
-      email: 'byeuser@example.com',
-      name: '김민수',
-      role: '일반회원',
-      birthday: '1992-09-21',
-      reason: '서비스 불만족',
-      created_at: '2025-10-12T14:32:00',
-    },
-    {
-      id: 102,
-      email: 'quit@example.com',
-      name: '이영희',
-      role: '스태프',
-      birthday: '1990-07-02',
-      reason: '개인정보 우려',
-      created_at: '2025-10-13T09:15:00',
-    },
-    {
-      id: 103,
-      email: 'bye@example.com',
-      name: '박철수',
-      role: '일반회원',
-      birthday: '1995-11-08',
-      reason: '사용 빈도 낮음',
-      created_at: '2025-10-14T12:00:00',
-    },
-  ]
+  // const rows = MOCK_WITHDRAWAL_LIST_DERIVED
 
   const debouncedSearch = useDebouncedValue(search, 300)
 
@@ -82,9 +55,7 @@ export const WithdrawalManagementPage = () => {
       withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
 
     const matchedWithdrawRole =
-      withdrawRoleFilter === '' ||
-      // ROLE_LABEL_TO_CODE[user.role] === withdrawRoleFilter
-      user.role === withdrawRoleFilter
+      withdrawRoleFilter === '' || user.role === withdrawRoleFilter
 
     return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
   })
@@ -106,8 +77,31 @@ export const WithdrawalManagementPage = () => {
     },
     { key: 'birthday', label: '생년월일' },
     { key: 'reason', label: '탈퇴 사유' },
-    { key: 'created_at', label: '탈퇴일시' },
+    {
+      key: 'created_at',
+      label: '탈퇴일시',
+      render: (value: unknown) => {
+        const v = value as WithdrawalRow['created_at']
+        return <span>{formatDate(v)}</span>
+      },
+    },
   ]
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true)
+        setError(undefined)
+
+        setRows(MOCK_WITHDRAWAL_LIST_DERIVED)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '데이터 로드 실패')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadData()
+  }, [])
 
   return (
     <main className="bg-gray-50 p-8">
@@ -190,7 +184,7 @@ export const WithdrawalManagementPage = () => {
                       key={code}
                       className={`w-full px-3 py-2 text-left text-sm ${withdrawRoleFilter === code ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
                       onClick={() => {
-                        setWithdrawRoleFilter(code)
+                        setWithdrawRoleFilter(label)
                         setRoleAccordion('')
                       }}
                     >
