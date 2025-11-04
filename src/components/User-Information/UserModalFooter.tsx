@@ -49,20 +49,15 @@ export const UserModalFooter = ({
     try {
       const token = getAccessToken();
       if (!token) throw new Error("토큰이 없습니다.");
-
-      // API 호출
-      await updateUserRole(Number(user.id), selectedRole, token); // API 호출
+      await updateUserRole(Number(user.id), selectedRole, token);
       await queryClient.invalidateQueries({ queryKey: ["users"], exact: false });
-      onRoleChange(selectedRole); // 상위 상태 업데이트
+      await queryClient.invalidateQueries({ queryKey: ["userDetail", user.id] });
+      onRoleChange(selectedRole);
       setIsRoleModalOpen(false);
 
-      // 성공 시 Toast 알림
-      showSuccess(
-        "권한 변경 완료",
-        "회원 권한이 성공적으로 변경되었습니다."
-      );
+      // 성공 Toast
+      showSuccess("권한 변경 완료", "회원 권한이 성공적으로 변경되었습니다.");
     } catch {
-      // 실패 시 모달
       setIsRoleModalOpen(false);
       setIsAlertOpen(true);
     }
@@ -71,7 +66,7 @@ export const UserModalFooter = ({
   const handleDeleteConfirm = () => {
     onDelete(String(user.id));
     setIsDeleteConfirmOpen(false);
-    setIsAlertOpen(true); // 삭제 완료 알람
+    setIsAlertOpen(true);
   };
 
   return (
@@ -128,7 +123,9 @@ export const UserModalFooter = ({
               >
                 <p
                   className={`font-light text-left ${
-                    selectedRole === role.key ? "text-green-600" : "text-gray-800"
+                    selectedRole === role.key
+                      ? "text-green-600"
+                      : "text-gray-800"
                   }`}
                 >
                   {role.label}

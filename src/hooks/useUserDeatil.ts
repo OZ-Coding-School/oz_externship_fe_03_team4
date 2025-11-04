@@ -11,12 +11,11 @@ interface ApiUserDetail {
   nickname: string;
   phone_number: string;
   is_active: boolean;
-  is_staff: boolean;
-  is_superuser: boolean;
   status: "active" | "inactive" | "withdrawn";
   created_at: string;
   profile_img_url: string;
   birthday?: string;
+  role: "admin" | "staff" | "user";
 }
 
 interface ApiUserDetailResponse {
@@ -40,11 +39,12 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
   joinedAt: new Date(data.created_at).toLocaleDateString(),
   withdrawAt: "",
   birthday: data.birthday ?? "",
-  role: data.is_superuser
-    ? "관리자"
-    : data.is_staff
-    ? "스태프"
-    : "일반회원",
+  role:
+    data.role === "admin"
+      ? "관리자"
+      : data.role === "staff"
+      ? "스태프"
+      : "일반회원",
   avatar: data.profile_img_url || "",
 });
 
@@ -66,5 +66,7 @@ export const useUserDetail = (userId?: string | number) => {
     },
     enabled: !!userId, // userId가 있을 때만 실행
     staleTime: 1000 * 60 * 2,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 };
