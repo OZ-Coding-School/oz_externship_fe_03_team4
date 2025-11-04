@@ -18,10 +18,11 @@ export interface ApiUser {
   email: string;
   nickname: string;
   name: string;
+  gender: string;
   birthday: string;
-  is_superuser: boolean;
-  is_staff: boolean;
-  is_active: boolean;
+  phone_number: string;
+  status: string;
+  role: string;
   created_at: string;
-  withdrawal_requested_at: string | null;
+  profile_img_url?: string | null;
 }

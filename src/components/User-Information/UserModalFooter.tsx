@@ -6,6 +6,7 @@ import { updateUserRole } from "../../api/updateUserRole";
 import { useToastStore } from "../../store/toastStore";
 import { AlertTriangle } from "lucide-react";
 import { getAccessToken } from "../../lib/token";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ export const UserModalFooter = ({
   onRoleChange,
   onDelete,
 }: ModalFooterProps) => {
+  const queryClient = useQueryClient();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -50,6 +52,7 @@ export const UserModalFooter = ({
 
       // API 호출
       await updateUserRole(Number(user.id), selectedRole, token); // API 호출
+      await queryClient.invalidateQueries({ queryKey: ["users"], exact: false });
       onRoleChange(selectedRole); // 상위 상태 업데이트
       setIsRoleModalOpen(false);
 
