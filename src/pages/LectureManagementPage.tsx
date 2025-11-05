@@ -10,7 +10,7 @@ import { useLecturesQuery } from '../hooks/Lecture/useLecturesQuery'
 
 const PAGE_SIZE = 10
 
-export const LectureManagementPage = () => {
+const LectureManagementPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
 
@@ -142,3 +142,4 @@ export const LectureManagementPage = () => {
     </div>
   )
 }
+export default LectureManagementPage

@@ -12,7 +12,9 @@ const StudyReviewPage = lazy(() => import('./pages/StudyReviewPage'))
 const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const StudyApplicationPage = lazy(() => import('./pages/StudyApplicationPage'))
-import { LectureManagementPage } from './pages/LectureManagementPage'
+const LectureManagementPage = lazy(
+  () => import('./pages/LectureManagementPage')
+)
 const RecruitmentManagementPage = lazy(
   () => import('./pages/RecruitmentManagementPage')
 )
