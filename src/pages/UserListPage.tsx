@@ -9,7 +9,7 @@ import Modal from "../components/modal/Modal";
 import { ModalHeader } from "../components/modal/ModalHeader";
 import { UserModalOutlet } from "../components/User-Information/UserModalOutlet";
 import { UserModalFooter } from "../components/User-Information/UserModalFooter";
-import { useUsers } from "../hooks/useUsers";
+import { useUsers } from "../hooks/UserList/useUsers";
 import { Pagination } from "../components/pagination/Pagination";
 
 const UserListPage = () => {

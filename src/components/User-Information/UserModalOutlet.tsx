@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import { useUserDetail } from "../../hooks/useUserDeatil";
+import { useUserDetail } from "../../hooks/UserList/useUserDeatil";
 import type { MappedUser } from "../../types/user";
 import { formatPhone } from "../../utils/formatPhone";
 
