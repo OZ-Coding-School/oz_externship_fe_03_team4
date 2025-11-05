@@ -35,7 +35,13 @@ export const PageHeader = ({
             'flex items-center gap-3',
             textAlign === 'center' && 'md:justify-center'
           )}
-        ></div>
+        >
+          {IconComponent && (
+            <div className="grid h-11 w-11 place-items-center rounded-xl border border-neutral-300">
+              <IconComponent className="text-neurtal-700 h-5 w-5" />
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )
