@@ -13,7 +13,7 @@ type AxiosErrorResponse = {
 
 export const useAdminPing = (
   isRequestEnabled: boolean,
-  endpointPath: string = '/users/' // 엔드포인트는 추후 변경가능, 임시적용
+  endpointPath: string = '/users' // 엔드포인트는 추후 변경가능, 임시적용
 ) => {
   return useQuery<AdminPingResult>({
     queryKey: ['adminPermissionCheck', endpointPath],
