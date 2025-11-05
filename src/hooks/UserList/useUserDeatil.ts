@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import type { MappedUser } from "../types/user";
-import api from "../lib/axios";
-import { getAccessToken } from "../lib/token"; // token 가져오기
+import type { MappedUser } from "../../types/user";
+import api from "../../lib/axios";
+import { getAccessToken } from "../../lib/token"; // token 가져오기
 
 // 백엔드 응답 타입
 interface ApiUserDetail {
