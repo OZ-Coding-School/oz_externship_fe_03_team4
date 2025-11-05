@@ -5,9 +5,10 @@ import { Pagination } from '../components/pagination/Pagination'
 import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
 import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
-import { Inbox } from 'lucide-react'
+import { Inbox, Megaphone } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
 // import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
+import { PageHeader } from '../components/PageHeader'
 
 const PAGE_SIZE = 10
 // 여기서부터
@@ -117,7 +118,11 @@ const RecruitmentManagementPage = () => {
 
   return (
     <div className="space-y-4 p-6">
-      <h1 className="text-lg font-semibold text-neutral-800">공고 관리</h1>
+      <PageHeader
+        iconComponent={Megaphone}
+        koreanTitle="공고 관리"
+        englishSubtitle="RECRUITMENT MANAGEMENT"
+      />
 
       <RecruitmentFilterSection
         searchText={searchText}
