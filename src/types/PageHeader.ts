@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import type { PropsWithChildren, ReactNode } from 'react'
 
-export interface PagerHeaderProps extends PropsWithChildren {
+export interface PageHeaderProps extends PropsWithChildren {
   iconComponents?: LucideIcon
   koreanTitle: string
   englishSubtitle: string
