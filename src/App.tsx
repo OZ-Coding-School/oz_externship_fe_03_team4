@@ -1,7 +1,8 @@
 import { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router'
 import './App.css'
-import Layout from './components/Layout'
+const Layout = lazy(() => import('./components/Layout'))
+const AdminProtectedRoute = lazy(() => import('./components/AdminProtectedRoute'))
 import DanbiTestPage from './pages/tests/DanbiTestPage'
 import HYTestPage from './pages/tests/HYTestPage'
 import WonheeTestPage from './pages/tests/WonheeTestPage'
@@ -14,7 +15,6 @@ import Dashboard from './pages/Dashboard'
 import StudyApplicationPage from './pages/StudyApplicationPage'
 import { LectureManagementPage } from './pages/LectureManagementPage'
 import RecruitmentManagementPage from './pages/RecruitmentManagementPage'
-import { AdminProtectedRoute } from './components/AdminProtectedRoute'
 import StudyGroupManagementPage from './pages/StudyGroupManagementPage'
 
 function App() {
