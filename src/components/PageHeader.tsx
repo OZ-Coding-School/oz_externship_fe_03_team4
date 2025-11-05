@@ -2,11 +2,9 @@ import { cn } from '../utils/cn'
 import type { PageHeaderProps } from '../types/PageHeader'
 
 export const PageHeader = ({
-  iconComponents: IconComponent,
+  iconComponent: IconComponent,
   koreanTitle,
   englishSubtitle,
-  metaContent,
-  actionElements,
   textAlign = 'left',
   headerSize = 'large',
   className,
@@ -41,8 +39,25 @@ export const PageHeader = ({
               <IconComponent className="text-neurtal-700 h-5 w-5" />
             </div>
           )}
+          <div>
+            <h1
+              className={cn(
+                'truncate font-semibold text-neutral-900',
+                headerSize === 'large' ? 'text-xl md:text-2xl' : 'text-lg'
+              )}
+            >
+              {koreanTitle}
+            </h1>
+            {englishSubtitle && (
+              <p className="truncate text-[11px] tracking-[.18em] text-neutral-500 uppercase md:text-xs">
+                {englishSubtitle}
+              </p>
+            )}
+          </div>
         </div>
       </div>
+      <div className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-neutral-200 to-transparent" />
+      {children}
     </header>
   )
 }
