@@ -108,6 +108,8 @@ export const LectureManagementPage = () => {
             <LectureTable
               lectures={lectures}
               onLectureClick={handleLectureClick}
+              currentPage={currentPage}
+              pageSize={PAGE_SIZE}
             />
 
             {totalPages > 1 && (
