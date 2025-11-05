@@ -30,7 +30,7 @@ function App() {
       <Suspense
         fallback={
           <div className="flex h-screen items-center justify-center">
-            <Spinner size={32} />
+            <Spinner size={100} />
           </div>
         }
       >
@@ -43,7 +43,7 @@ function App() {
               <Suspense
                 fallback={
                   <div className="flex h-screen items-center justify-center">
-                    <Spinner size={32} />
+                    <Spinner size={100} />
                   </div>
                 }
               >
