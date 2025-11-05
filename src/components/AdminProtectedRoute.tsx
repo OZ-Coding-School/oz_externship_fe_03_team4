@@ -3,7 +3,7 @@ import { useAdminAuthGuard } from '../hooks/auth/useAdminAuthGuard'
 import { useEffect, type PropsWithChildren } from 'react'
 import { removeAccessToken } from '../lib/token'
 
-export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
+const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
   const currentLocation = useLocation()
   const { status: adminGuardStatus } = useAdminAuthGuard({
     allowedRoles: ['admin'],
@@ -49,3 +49,4 @@ export const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
 
   return children
 }
+export default AdminProtectedRoute
