@@ -1,6 +1,9 @@
 import { ChevronDown } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '../../../utils/cn'
+import Modal from '../../../components/modal/Modal'
+import { ModalHeader } from '../../../components/modal/ModalHeader'
+import { Button } from '../../../components/buttons/Buttons'
 
 interface TagsFilterProps {
   availableTags: string[]
@@ -24,11 +27,29 @@ export const TagsFilter = ({
   controlClassName,
 }: TagsFilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [tempTags, setTempTags] = useState<string[]>(selectedTags)
   const rootRef = useRef<HTMLDivElement>(null)
 
   const toggleTag = (tag: string) => {
     const isSelected = selectedTags.includes(tag)
     onChange(isSelected ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag])
+  }
+
+  const toggleTempTag = (tag: string) => {
+    const isSelected = tempTags.includes(tag)
+    setTempTags(isSelected ? tempTags.filter((t) => t !== tag) : [...tempTags, tag])
+  }
+
+  const openModal = () => {
+    setTempTags(selectedTags)
+    setIsModalOpen(true)
+    setIsOpen(false)
+  }
+
+  const applyTags = () => {
+    onChange(tempTags)
+    setIsModalOpen(false)
   }
 
   useEffect(() => {
@@ -41,66 +62,112 @@ export const TagsFilter = ({
   }, [isOpen])
 
   const visibleTags = availableTags.slice(0, 8)
+  const hasMoreTags = availableTags.length > 8
 
   return (
-    <div ref={rootRef} className={cn('relative inline-block w-64', className)}>
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className={cn(
-          'flex h-11 w-48 items-center justify-between px-3 text-sm',
-          'rounded-lg border border-neutral-200 bg-white',
-          'focus:ring-primary/50 hover:border-neutral-400 focus:ring-2'
-        )}
-      >
-        <span className="truncate">
-          {selectedTags.length > 0
-            ? selectedTags.join(', ')
-            : '태그를 선택하세요.'}
-        </span>
-        <ChevronDown
-          size={16}
+    <>
+      <div ref={rootRef} className={cn('relative inline-block w-64', className)}>
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
           className={cn(
-            'transition-transform duration-150',
-            isOpen ? 'rotate-180' : 'rotate-0'
-          )}
-        />
-      </button>
-      {isOpen && (
-        <div
-          className={cn(
-            'absolute left-0 z-20 mt-2 w-48 rounded-md border border-neutral-200 bg-white shadow-lg',
-            controlClassName
+            'flex h-11 w-48 items-center justify-between px-3 text-sm',
+            'rounded-lg border border-neutral-200 bg-white',
+            'focus:ring-primary/50 hover:border-neutral-400 focus:ring-2'
           )}
         >
-          <ul className="scrollbar-hide grid max-h-48 grid-cols-3 gap-2 overflow-y-auto p-2">
-            {visibleTags.map((tag) => {
-              const isActive = selectedTags.includes(tag)
-              return (
-                <li
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={cn(
-                    'h-8 cursor-pointer rounded-md border text-xs transition-all relative',
-                    'flex items-center justify-center px-2 text-center',
-                    isActive
-                      ? 'scale-[1.03] border-yellow-400 bg-yellow-100 text-yellow-800 font-medium shadow-sm'
-                      : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
-                  )}
-                >
-                  {tag}
-                  {isActive && <CheckMark />}
-                </li>
-              )
-            })}
-            {visibleTags.length === 0 && (
-              <li className="col-span-3 px-3 py-2 text-sm text-neutral-400">
-                등록된 태그가 없습니다.
-              </li>
+          <span className="truncate">
+            {selectedTags.length > 0
+              ? selectedTags.join(', ')
+              : '태그를 선택하세요.'}
+          </span>
+          <ChevronDown
+            size={16}
+            className={cn(
+              'transition-transform duration-150',
+              isOpen ? 'rotate-180' : 'rotate-0'
             )}
-          </ul>
+          />
+        </button>
+        {isOpen && (
+          <div
+            className={cn(
+              'absolute left-0 z-20 mt-2 w-48 rounded-md border border-neutral-200 bg-white shadow-lg',
+              controlClassName
+            )}
+          >
+            <ul className="scrollbar-hide grid max-h-48 grid-cols-3 gap-2 overflow-y-auto p-2">
+              {visibleTags.map((tag) => {
+                const isActive = selectedTags.includes(tag)
+                return (
+                  <li
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className={cn(
+                      'h-8 cursor-pointer rounded-md border text-xs transition-all relative',
+                      'flex items-center justify-center px-2 text-center',
+                      isActive
+                        ? 'scale-[1.03] border-yellow-400 bg-yellow-100 text-yellow-800 font-medium shadow-sm'
+                        : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    )}
+                  >
+                    {tag}
+                    {isActive && <CheckMark />}
+                  </li>
+                )
+              })}
+              {hasMoreTags && (
+                <li
+                  onClick={openModal}
+                  className="col-span-3 mt-1 h-8 cursor-pointer rounded-md border border-gray-300 bg-gray-50 text-xs text-gray-700 hover:bg-gray-100 flex items-center justify-center"
+                >
+                  + 더보기
+                </li>
+              )}
+              {visibleTags.length === 0 && (
+                <li className="col-span-3 px-3 py-2 text-sm text-neutral-400">
+                  등록된 태그가 없습니다.
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <Modal isOn={isModalOpen}>
+        <ModalHeader title="태그 필터 선택" onClose={() => setIsModalOpen(false)} />
+        
+        <div className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto">
+          {availableTags.map((tag) => {
+            const isActive = tempTags.includes(tag)
+            return (
+              <button
+                key={tag}
+                onClick={() => toggleTempTag(tag)}
+                className={cn(
+                  'h-9 rounded-md border text-sm transition-all relative',
+                  'flex items-center justify-center px-2',
+                  isActive
+                    ? 'scale-[1.03] border-yellow-400 bg-yellow-100 text-yellow-800 font-medium shadow-sm'
+                    : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                )}
+              >
+                {tag}
+                {isActive && <CheckMark />}
+              </button>
+            )
+          })}
         </div>
-      )}
-    </div>
+
+        <footer className="mt-6 flex items-center justify-end gap-2">
+          <Button size="medium" color="secondary" onClick={() => setIsModalOpen(false)}>
+            닫기
+          </Button>
+          <Button size="medium" color="warning" onClick={applyTags}>
+            적용하기
+          </Button>
+        </footer>
+      </Modal>
+    </>
   )
 }
