@@ -13,7 +13,7 @@ type AdminAuthOptions = {
 
 export const useAdminAuthGuard = ({
   allowedRoles = ['admin'],
-  endpointPath = '/users/',
+  endpointPath = '/users',
 }: AdminAuthOptions = {}) => {
   const accessToken = getAccessToken()
   const { role: userRole, isExpired: isTokenExpired } =
