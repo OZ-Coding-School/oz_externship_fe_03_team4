@@ -4,6 +4,9 @@ import { Button } from '../buttons/Buttons'
 
 interface CloseModalFooterProps {
   onClose: () => void
+  onConfirm?: () => void
+  confirmLabel?: string
+  confirmMode?: boolean
   className?: string
   onDelete?: () => void
   showDelete?: boolean
@@ -11,6 +14,9 @@ interface CloseModalFooterProps {
 
 export const CloseModalFooter = ({
   onClose,
+  onConfirm,
+  confirmLabel = '적용하기',
+  confirmMode = false,
   className,
   onDelete,
   showDelete = false,
@@ -18,7 +24,7 @@ export const CloseModalFooter = ({
   return (
     <footer
       className={cn(
-        'mt-8 flex items-center justify-between border-neutral-200 p-4',
+        'mt-8 grid grid-cols-[auto_1fr_auto] items-center gap-2 p-4',
         className
       )}
     >
@@ -30,16 +36,26 @@ export const CloseModalFooter = ({
         >
           공고 삭제
         </Button>
-      ) : (
-        <span />
-      )}
-      <Button
-        size="medium"
-        onClick={onClose}
-        className="bg-gray-400 text-white hover:bg-gray-600 focus-visible:ring-gray-300 active:bg-gray-500"
-      >
-        닫기
-      </Button>
+      ) : null}
+      <div /> {/* 여백입니닷 */}
+      <div className="flex justify-end gap-2">
+        <Button
+          size="medium"
+          onClick={onClose}
+          className="bg-gray-400 text-white hover:bg-gray-600 focus-visible:ring-gray-300 active:bg-gray-500"
+        >
+          닫기
+        </Button>
+        {confirmMode && (
+          <Button
+            size="medium"
+            onClick={onConfirm}
+            className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 focus-visible:ring-yellow-300 active:bg-yellow-600"
+          >
+            {confirmLabel}
+          </Button>
+        )}
+      </div>
     </footer>
   )
 }

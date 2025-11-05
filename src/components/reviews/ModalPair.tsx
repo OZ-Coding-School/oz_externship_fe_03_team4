@@ -6,6 +6,7 @@ interface ModalPairProps {
   label: string
   value?: ReactNode
   className?: string
+  valueClassName?: string
   readOnly?: boolean
   multiline?: boolean // 여러 줄일 경우
   minHeightClass?: string
@@ -16,6 +17,7 @@ export const ModalPair = ({
   label,
   value,
   className,
+  valueClassName,
   readOnly = true,
   multiline = false, // 여러 줄일 경우
   minHeightClass = 'min-h-[96px]', // 최소 높이
@@ -46,7 +48,8 @@ export const ModalPair = ({
             'rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2',
             'text-sm whitespace-pre-line text-neutral-800',
             'overflow-y-auto',
-            minHeightClass
+            minHeightClass,
+            valueClassName
           )}
         >
           {isString ? (value as string) : (value ?? '-')}
@@ -55,14 +58,18 @@ export const ModalPair = ({
         <TextField
           value={value as string}
           readOnly={readOnly}
-          className="h-11 bg-neutral-50 text-sm text-neutral-800"
+          className={cn(
+            'h-11 bg-neutral-50 text-sm text-neutral-800',
+            valueClassName
+          )}
         />
       ) : (
         <div
           className={cn(
             'h-11 rounded-md border border-neutral-200 bg-neutral-50 px-3',
             'text-sm text-neutral-800',
-            'flex items-center'
+            'flex items-center',
+            valueClassName
           )}
         >
           {value ?? '-'}
