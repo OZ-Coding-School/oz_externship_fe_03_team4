@@ -84,7 +84,7 @@ const Sidebar = () => {
     post: {
       title: "스터디 구인 공고 관리",
       items: [
-        { to: "/post-management", icon: Megaphone, label: "공고 관리" },
+        { to: "/recruit", icon: Megaphone, label: "공고 관리" },
         { to: "/application", icon: ClipboardList, label: "지원 내역 관리" },
       ],
     },
