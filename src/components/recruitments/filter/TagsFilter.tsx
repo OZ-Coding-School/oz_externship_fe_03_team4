@@ -10,6 +10,12 @@ interface TagsFilterProps {
   controlClassName?: string
 }
 
+const CheckMark = () => (
+  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-500 text-white text-[10px]">
+    ✓
+  </span>
+)
+
 export const TagsFilter = ({
   availableTags,
   selectedTags,
@@ -41,17 +47,33 @@ export const TagsFilter = ({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex h-11 w-48 items-center justify-between px-3 text-sm rounded-lg border border-neutral-200 bg-white focus:ring-primary/50 hover:border-neutral-400 focus:ring-2"
+        className={cn(
+          'flex h-11 w-48 items-center justify-between px-3 text-sm',
+          'rounded-lg border border-neutral-200 bg-white',
+          'focus:ring-primary/50 hover:border-neutral-400 focus:ring-2'
+        )}
       >
         <span className="truncate">
-          {selectedTags.length > 0 ? selectedTags.join(', ') : '태그를 선택하세요.'}
+          {selectedTags.length > 0
+            ? selectedTags.join(', ')
+            : '태그를 선택하세요.'}
         </span>
-        <ChevronDown size={16} className={cn('transition-transform', isOpen && 'rotate-180')} />
+        <ChevronDown
+          size={16}
+          className={cn(
+            'transition-transform duration-150',
+            isOpen ? 'rotate-180' : 'rotate-0'
+          )}
+        />
       </button>
-
       {isOpen && (
-        <div className={cn('absolute left-0 z-20 mt-2 w-48 rounded-md border border-neutral-200 bg-white shadow-lg', controlClassName)}>
-          <ul className="grid max-h-48 grid-cols-3 gap-2 overflow-y-auto p-2">
+        <div
+          className={cn(
+            'absolute left-0 z-20 mt-2 w-48 rounded-md border border-neutral-200 bg-white shadow-lg',
+            controlClassName
+          )}
+        >
+          <ul className="scrollbar-hide grid max-h-48 grid-cols-3 gap-2 overflow-y-auto p-2">
             {visibleTags.map((tag) => {
               const isActive = selectedTags.includes(tag)
               return (
@@ -59,18 +81,22 @@ export const TagsFilter = ({
                   key={tag}
                   onClick={() => toggleTag(tag)}
                   className={cn(
-                    'h-8 cursor-pointer rounded-md border text-xs transition-all flex items-center justify-center px-2',
+                    'h-8 cursor-pointer rounded-md border text-xs transition-all relative',
+                    'flex items-center justify-center px-2 text-center',
                     isActive
-                      ? 'border-gray-900 bg-gray-900 text-white'
+                      ? 'scale-[1.03] border-yellow-400 bg-yellow-100 text-yellow-800 font-medium shadow-sm'
                       : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
                   )}
                 >
                   {tag}
+                  {isActive && <CheckMark />}
                 </li>
               )
             })}
             {visibleTags.length === 0 && (
-              <li className="col-span-3 px-3 py-2 text-sm text-neutral-400">등록된 태그가 없습니다.</li>
+              <li className="col-span-3 px-3 py-2 text-sm text-neutral-400">
+                등록된 태그가 없습니다.
+              </li>
             )}
           </ul>
         </div>
