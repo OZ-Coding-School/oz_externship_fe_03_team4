@@ -18,7 +18,7 @@ export const UserModalOutlet = ({
   const [localUser, setLocalUser] = useState<MappedUser | null>(null);
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
 
-  // ✅ 서버에서 데이터 받아오면 로컬 상태에 저장
+  // 서버에서 데이터 받아오면 로컬 상태에 저장
   useEffect(() => {
     if (user) setLocalUser(user);
   }, [user]);
@@ -29,7 +29,7 @@ export const UserModalOutlet = ({
     return <p className="p-6 text-center text-red-500">회원 정보를 불러오지 못했습니다.</p>;
   if (!localUser) return null;
 
-  // ✅ 변경 핸들러 (로컬 + 부모 동기화)
+  // 변경 핸들러 (로컬 + 부모 동기화)
   const handleChange = (field: keyof MappedUser, value: string) => {
     const updated = { ...localUser, [field]: value };
     setLocalUser(updated);

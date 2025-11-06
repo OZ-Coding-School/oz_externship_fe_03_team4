@@ -74,7 +74,7 @@ export const UserModalFooter = ({
 
       showSuccess("회원 정보 수정 완료", "회원 정보가 성공적으로 수정되었습니다.");
       onEditToggle(); // 읽기 모드 전환
-    } catch (error) {
+    } catch {
       setIsAlertOpen(true);
     }
   };
