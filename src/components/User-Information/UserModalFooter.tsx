@@ -8,6 +8,7 @@ import { AlertTriangle } from "lucide-react";
 import { getAccessToken } from "../../lib/token";
 import { useQueryClient } from "@tanstack/react-query";
 import { ToastContainer } from "../../components/toast/toastContainer";
+import { useUpdateUser } from "../../hooks/UserList/useUpdateUser";
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -15,7 +16,7 @@ interface ModalFooterProps {
   onEditToggle: () => void;
   user: MappedUser;
   onRoleChange: (role: "admin" | "staff" | "user") => void;
-  onDelete: (userId: string) => void; // 삭제 콜백
+  onDelete: (userId: string) => void;
 }
 
 export const UserModalFooter = ({
@@ -35,28 +36,60 @@ export const UserModalFooter = ({
 
   const { showSuccess } = useToastStore();
 
+  // 회원정보 수정 mutation
+  const updateUserMutation = useUpdateUser();
+
   const roles = [
     { key: "admin", label: "관리자" },
     { key: "staff", label: "스태프" },
     { key: "user", label: "일반회원" },
   ];
 
-  const handleSave = () => {
-    setIsAlertOpen(true);
-    onEditToggle(); // 저장 후 읽기 모드 전환
+  // 수정 저장 버튼
+  const handleSave = async () => {
+    try {
+      const token = getAccessToken();
+      if (!token) throw new Error("토큰이 없습니다.");
+
+      // PATCH 요청: 수정된 user 데이터 전달
+      await updateUserMutation.mutateAsync({
+        userId: user.id,
+        data: {
+          name: user.name,
+          nickname: user.nickname,
+          phone_number: user.phone,
+          gender: user.gender || "M",
+          status:
+            user.status === "활성"
+              ? "active"
+              : user.status === "비활성"
+              ? "inactive"
+              : "withdraw_requested",
+          profile_img_url: user.avatar || "",
+        },
+      });
+
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await queryClient.invalidateQueries({ queryKey: ["userDetail", user.id] });
+
+      showSuccess("회원 정보 수정 완료", "회원 정보가 성공적으로 수정되었습니다.");
+      onEditToggle(); // 읽기 모드 전환
+    } catch (error) {
+      setIsAlertOpen(true);
+    }
   };
 
   const handleRoleChangeConfirm = async () => {
     try {
       const token = getAccessToken();
       if (!token) throw new Error("토큰이 없습니다.");
+
       await updateUserRole(Number(user.id), selectedRole, token);
       await queryClient.invalidateQueries({ queryKey: ["users"], exact: false });
       await queryClient.invalidateQueries({ queryKey: ["userDetail", user.id] });
+
       onRoleChange(selectedRole);
       setIsRoleModalOpen(false);
-
-      // 성공 Toast
       showSuccess("권한 변경 완료", "회원 권한이 성공적으로 변경되었습니다.");
     } catch {
       setIsRoleModalOpen(false);
@@ -83,8 +116,13 @@ export const UserModalFooter = ({
 
         <div className="flex gap-2">
           {isEditing ? (
-            <Button color="primary" size="medium" onClick={handleSave}>
-              저장하기
+            <Button
+              color="primary"
+              size="medium"
+              onClick={handleSave}
+              disabled={updateUserMutation.isPending}
+            >
+              {updateUserMutation.isPending ? "저장 중..." : "저장하기"}
             </Button>
           ) : (
             <Button color="primary" size="medium" onClick={onEditToggle}>
@@ -162,8 +200,7 @@ export const UserModalFooter = ({
         <div className="p-6 text-center">
           <h2 className="text-lg font-bold mb-4">회원 삭제 확인</h2>
           <p className="mb-6">
-            삭제 시 해당 유저와 관련된 모든 데이터가 즉시 삭제되며 되돌릴 수
-            없습니다.
+            삭제 시 해당 유저와 관련된 모든 데이터가 즉시 삭제되며 되돌릴 수 없습니다.
           </p>
           <div className="flex justify-center gap-3">
             <Button
@@ -180,7 +217,7 @@ export const UserModalFooter = ({
         </div>
       </Modal>
 
-      {/* 저장/권한 변경 실패 모달 */}
+      {/* 오류 모달 */}
       <Modal
         isOn={isAlertOpen}
         onBackgroundClick={() => setIsAlertOpen(false)}
@@ -191,7 +228,7 @@ export const UserModalFooter = ({
             <AlertTriangle className="w-6 h-6 text-red-500" />
             알림
           </h2>
-          <p className="mb-6">권한 변경 중 오류가 발생했습니다.</p>
+          <p className="mb-6">요청 처리 중 오류가 발생했습니다.</p>
           <Button
             color="danger"
             size="medium"
@@ -201,6 +238,7 @@ export const UserModalFooter = ({
           </Button>
         </div>
       </Modal>
+
       <ToastContainer />
     </>
   );
