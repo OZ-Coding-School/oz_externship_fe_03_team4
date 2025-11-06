@@ -57,6 +57,15 @@ export const reviewColumns = [
       </span>
     ),
   },
+  {
+    key: 'updatedAt' as const,
+    label: '수정일',
+    render: (value: unknown) => (
+      <span className="text-[12px] text-neutral-600">
+        {formatDate(String(value ?? ''))}
+      </span>
+    ),
+  },
 ] satisfies Array<{
   key: keyof ReviewRow
   label: string
