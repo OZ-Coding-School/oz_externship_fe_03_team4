@@ -32,7 +32,7 @@ export const fetchWithdrawals = async ({
       keyword,
     },
   })
-  return response.data
+  return response.data.data
 }
 
 export const fetchWithdrawalDetail = async ({ userId }: { userId: number }) => {
@@ -42,5 +42,5 @@ export const fetchWithdrawalDetail = async ({ userId }: { userId: number }) => {
       Authorization: `Bearer ${accessToken}`,
     },
   })
-  return response.data
+  return response.data.data
 }
