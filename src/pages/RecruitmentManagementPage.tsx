@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router' // 여기는 나중에 탱스택으로 바꿀예정입니닷
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Pagination } from '../components/pagination/Pagination'
@@ -27,61 +27,22 @@ const RecruitmentManagementPage = () => {
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
-  // const {
-  //   data: _data,
-  //   isLoading: _isLoading,
-  //   isError: _isError,
-  // } = useAdminRecruitmentsQuery({
-  //   searchText: debouncedSearchText,
-  //   statusFilter: statusFilter === '전체' ? undefined : statusFilter,
-  //   selectedTags,
-  //   ordering: 'latest',
-  //   pageNumber: currentPage,
-  //   pageSize: PAGE_SIZE,
-  // })
-  const filteredRecruitments = useMemo(() => {
-    let filteredRecruitmentList = mockRecruitments
-    // let filteredRecruitmentList = data?.items ?? []
+  const { data, isLoading, isError } = useAdminRecruitmentsQuery({
+    searchText: debouncedSearchText,
+    statusFilter: statusFilter === '전체' ? undefined : statusFilter,
+    selectedTags,
+    ordering: 'latest',
+    pageNumber: currentPage,
+    pageSize: PAGE_SIZE,
+  })
 
-    if (statusFilter !== '전체') {
-      filteredRecruitmentList = filteredRecruitmentList.filter(
-        (recruitment) => recruitment.status === statusFilter
-      )
-    }
-    if (debouncedSearchText.trim()) {
-      const lowerSearchText = debouncedSearchText.toLowerCase().trim()
-      filteredRecruitmentList = filteredRecruitmentList.filter(
-        (recruitment) =>
-          recruitment.title.toLowerCase().includes(lowerSearchText) ||
-          recruitment.tags.some((tag) =>
-            tag.toLowerCase().includes(lowerSearchText)
-          )
-      )
-    }
+  const filteredRecruitments = data?.items ?? []
 
-    if (selectedTags.length > 0) {
-      const selectedTagSet = new Set(selectedTags)
-      filteredRecruitmentList = filteredRecruitmentList.filter((recruitment) =>
-        recruitment.tags.some((tag) => selectedTagSet.has(tag))
-      )
-    }
+  const hasNoData = !isLoading && !isError && filteredRecruitments.length === 0
 
-    return filteredRecruitmentList
-  }, [statusFilter, debouncedSearchText, selectedTags])
-  // }, [data?.items, debouncedSearchText, statusFilter, selectedTags])
+  const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE))
 
-  const hasNoData = filteredRecruitments.length === 0
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredRecruitments.length / PAGE_SIZE)
-  )
-
-  const paginatedRecruitments = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE
-    const endIndex = startIndex + PAGE_SIZE
-    return filteredRecruitments.slice(startIndex, endIndex)
-  }, [filteredRecruitments, currentPage])
+  const paginatedRecruitments = filteredRecruitments
 
   const resetFilters = () => {
     setSearchText('')
@@ -97,6 +58,13 @@ const RecruitmentManagementPage = () => {
         koreanTitle="공고 관리"
         englishSubtitle="RECRUITMENT MANAGEMENT"
       />
+      {isLoading && <LoadingState message="공고 목록을 불러오는 중..." />}
+      {isError && (
+        <ErrorState
+          title="불러오기 실패"
+          message="잠시 후 다시 시도해 주세요."
+        />
+      )}
 
       <RecruitmentFilterSection
         searchText={searchText}
@@ -114,7 +82,7 @@ const RecruitmentManagementPage = () => {
           setSelectedTags(nextSelectedTags)
           setCurrentPage(1)
         }}
-        availableTags={ALL_TAGS}
+        availableTags={[]}
       />
 
       <div className="mb-3 text-sm text-neutral-600">
