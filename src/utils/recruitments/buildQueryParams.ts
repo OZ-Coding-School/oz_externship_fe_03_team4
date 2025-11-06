@@ -1,5 +1,5 @@
 import { uiStatusToApi } from '../../types/applications'
-import type { ApplicationsParams } from './types.local'
+import type { ApplicationsParams } from '../../hooks/applications/types.local'
 
 export const buildQueryParams = (options: ApplicationsParams) => {
   const pageSize = Math.min(Math.max(options.pageSize ?? 20, 1), 100)

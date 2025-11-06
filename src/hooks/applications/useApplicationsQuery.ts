@@ -3,8 +3,8 @@ import {
   keepPreviousData,
   type UseQueryResult,
 } from '@tanstack/react-query'
-import { adminApplicationsQueryKey } from './queryKeys'
-import { buildQueryParams } from './buildQueryParams'
+import { adminApplicationsQueryKey } from '../../utils/recruitments/queryKeys'
+import { buildQueryParams } from '../../utils/recruitments/buildQueryParams'
 import {
   fetchApplications,
   type FetchApplicationsReturn,
