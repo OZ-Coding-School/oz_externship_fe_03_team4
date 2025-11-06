@@ -5,19 +5,15 @@ import { ApplicationFilterSection } from '../components/application/filter/Appli
 import { ApplicationTableSection } from '../components/application/table/ApplicationTableSection'
 import {
   type Application,
-  type AdminApplicationApi,
-  type AdminApplicationStatus,
   type AdminSortKey,
   type StatusFilter,
   // type ApplicationDetail,
   // apiStatusToUi,
-  uiStatusToApi,
-  mapAdminApiToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { ApplicationPageModal } from '../components/application/modal/ApplicationPageModal'
 import { buildDetailSkeleton } from '../utils/applications.adapters'
-// import { useApplicationsQuery } from '../hooks/applications/useApplicationsQuery'
+import { useApplicationsQuery } from '../hooks/applications/useApplicationsQuery'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -31,50 +27,21 @@ const StudyApplicationPage = () => {
   const debouncedSearchText = useDebouncedValue(searchText, 500)
   const [selectedRow, setSelectedRow] = useState<Application | null>(null)
 
-  // 나중에 이 부분만 주석해제하믄 됨
-  // const { data, isLoading, isError } = useApplicationsQuery({
-  //   searchText: debouncedSearchText,
-  //   statusFilter,
-  //   pageNumber: currentPage,
-  //   pageSize: PAGE_SIZE,
-  //   sortKey,
-  // })
-  // if (isLoading) return <div className="p-6">로딩 중…</div>
-  // if (isError)   return <div className="p-6 text-red-500">불러오기에 실패했습니다.</div>
-
-  const mockApplications: AdminApplicationApi[] = useMemo(() => {
-    const statuses: AdminApplicationStatus[] = [
-      'ACCEPTED',
-      'APPLYING',
-      'REVIEWING',
-      'REJECTED',
-    ]
-    return Array.from({ length: 10 }).map((_, index) => ({
-      // id: `#${1000 + index}`, api연동시에는 이걸 사용
-      id: 1000 + index,
-      recruitment_title: `공고 ${index + 1}`,
-      applicant_nickname: `홍길동${index + 1}`,
-      applicant_email: `user${index + 1}@gmail.com`,
-      status: statuses[index % statuses.length],
-      created_at: new Date(
-        `2025-10-21T14:${String(index % 60).padStart(2, '0')}:00Z`
-      ).toISOString(),
-      updated_at: new Date(
-        `2025-10-22T09:${String(index % 60).padStart(2, '0')}:00Z`
-      ).toISOString(),
-    }))
-  }, [])
+  const { data, isLoading, isError } = useApplicationsQuery({
+    searchText: debouncedSearchText,
+    statusFilter,
+    pageNumber: currentPage,
+    pageSize: PAGE_SIZE,
+    sortKey,
+  })
 
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
-    let filteredList = mockApplications
-    // let filteredList = data?.items ?? []
+    let filteredList = data?.items ?? []
     if (statusFilter !== '전체') {
       // 전체가 아닌 경우
-      const apiCode = uiStatusToApi[statusFilter] // 이 친구가 api상태 코드로 변환한 후 필터링합니당.
       filteredList = filteredList.filter(
-        (application) => application.status === apiCode
-        // filteredList = filteredList.filter((application) => application.status === statusFilter)
+        (application) => application.status === statusFilter
       )
     }
     // 공고명, 닉네임, 이메일에 검색어 포함이면 결과 출력
@@ -82,13 +49,13 @@ const StudyApplicationPage = () => {
       const lowerCaseSearchText = debouncedSearchText.trim().toLowerCase()
       filteredList = filteredList.filter(
         (application) =>
-          application.recruitment_title
+          application.postingTitle
             .toLowerCase()
             .includes(lowerCaseSearchText) ||
-          application.applicant_nickname
+          application.applicant.name
             .toLowerCase()
             .includes(lowerCaseSearchText) ||
-          application.applicant_email
+          application.applicant.email
             .toLowerCase()
             .includes(lowerCaseSearchText)
         // filteredList = filteredList.filter((application) =>
@@ -101,34 +68,29 @@ const StudyApplicationPage = () => {
     // 정렬 부분 : 생성, 수정을 지원하며, 날짜와 문자열을 Date.Parse()로 변환한 뒤 정렬합니당.
     const isDescending = sortKey.startsWith('-')
     const sortTargetKey = (isDescending ? sortKey.slice(1) : sortKey) as
-      | 'created_at'
-      | 'updated_at'
+      | 'appliedAt'
+      | 'updatedAt'
 
     filteredList = [...filteredList].sort((firstItem, secondItem) => {
       const firstValue =
-        sortTargetKey === 'created_at'
-          ? Date.parse(firstItem.created_at)
-          : // ? Date.parse(firstItem.appliedAt)  - 서버에서 내려주는건 created_at이지만 ui에서 이렇게 사용하도록 정의했습니다~
-            Date.parse(firstItem.updated_at)
+        sortTargetKey === 'appliedAt'
+          ? Date.parse(firstItem.appliedAt)
+          : Date.parse(firstItem.updatedAt)
 
       const secondValue =
-        sortTargetKey === 'created_at'
-          ? Date.parse(secondItem.created_at)
-          : // ? Date.parse(secondItem.appliedAt) - 서버에서 내려주는건 created_at이지만 ui에서 이렇게 사용하도록 정의했습니다~
-            Date.parse(secondItem.updated_at)
+        sortTargetKey === 'appliedAt'
+          ? Date.parse(secondItem.appliedAt)
+          : Date.parse(secondItem.updatedAt)
 
       return isDescending ? secondValue - firstValue : firstValue - secondValue
     })
-    return filteredList.map(mapAdminApiToUi)
-    // return filteredList
-  }, [mockApplications, debouncedSearchText, statusFilter, sortKey])
-  // }, [data?.items, debouncedSearchText, statusFilter, sortKey])
+    return filteredList
+  }, [data?.items, debouncedSearchText, statusFilter, sortKey])
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredApplications.length / PAGE_SIZE)
+    Math.ceil((data?.totalCount ?? filteredApplications.length) / PAGE_SIZE)
   )
-  // const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? filteredApplications.length) / PAGE_SIZE))
 
   const paginatedApplications = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE
@@ -138,6 +100,10 @@ const StudyApplicationPage = () => {
 
   return (
     <div className="space-y-4 p-6">
+      {isLoading && <div className="p-6">로딩 중…</div>}
+      {isError && (
+        <div className="p-6 text-red-500">불러오기에 실패했습니다.</div>
+      )}
       <h1 className="text-neutral text-lg font-semibold">지원 내역 관리</h1>
 
       <ApplicationFilterSection
