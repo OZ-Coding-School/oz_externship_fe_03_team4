@@ -6,7 +6,7 @@ export interface MappedUser {
   birthday: string;
   phone: string;
   role: "관리자" | "스태프" | "일반회원";
-  status: "활성" | "비활성" | "탈퇴요청";
+  status: "활성" | "비활성" | "탈퇴요청" | "active" | "inactive" | "withdraw_requested";
   joinedAt: string;
   withdrawAt: string;
   avatar?: string | null;
