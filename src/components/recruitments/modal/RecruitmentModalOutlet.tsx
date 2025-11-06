@@ -126,9 +126,18 @@ export const RecruitmentModalOutlet = ({
                   >
                     <div className="h-20 w-28 flex-shrink-0 overflow-hidden rounded border border-neutral-200 bg-neutral-100">
                       <img
-                        src={lectureItem.thumbnail}
+                        src={
+                          lectureItem.thumbnail ||
+                          'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"%3E%3Crect width="48" height="48" fill="%23e5e7eb"/%3E%3Cpath d="M14 18h20M14 24h20M14 30h12" stroke="%239ca3af" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E'
+                        }
                         alt={lectureItem.title}
                         className="h-full w-full object-cover"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"%3E%3Crect width="48" height="48" fill="%23e5e7eb"/%3E%3Cpath d="M14 18h20M14 24h20M14 30h12" stroke="%239ca3af" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E'
+                        }}
                       />
                     </div>
                     <div className="min-w-0 flex-1">
