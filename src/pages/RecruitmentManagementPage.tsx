@@ -3,13 +3,20 @@ import { useSearchParams } from 'react-router' // 여기는 나중에 탱스택�
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Pagination } from '../components/pagination/Pagination'
 import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
-import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
+import {
+  type Recruitment,
+  type RecruitmentStatusApi,
+  type RecruitmentDetailDTO,
+  type RecruitmentDetail,
+  mapRecruitmentDetailDTO,
+} from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox, Megaphone } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
 import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
 import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
+import api from '../lib/axios'
 
 const PAGE_SIZE = 10
 
