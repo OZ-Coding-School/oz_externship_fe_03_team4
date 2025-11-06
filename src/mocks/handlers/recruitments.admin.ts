@@ -34,6 +34,7 @@ const RECR_DETAIL = (id: number) => ({
   id,
   uuid: '550e8400-e29b-41d4-a716-446655440000',
   title: '스터디 구인 공고 제목',
+  status: id % 5 === 0 ? '마감' : '모집중',
   content: '공고 내용 (마크다운 적용)',
   attachments: [
     {
@@ -45,10 +46,10 @@ const RECR_DETAIL = (id: number) => ({
   estimated_fee: 100000,
   study_lectures: [
     {
-      thumbnail_url: 'https://example.com/thumbnail.jpg',
-      name: '강의 이름',
+      thumbnail_img_url: 'https://example.com/thumbnail.jpg',
+      title: '강의 이름',
       instructor: '강사명',
-      link: 'https://example.com/lecture',
+      url_link: 'https://example.com/lecture',
     },
   ],
   tags: [{ name: 'Python' }, { name: 'Backend' }],
