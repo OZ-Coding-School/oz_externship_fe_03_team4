@@ -17,6 +17,8 @@ import {
 import { ReviewFilterSection } from '../components/reviews/filter/ReviewFilterSection'
 import { ReviewTableSection } from '../components/reviews/table/ReviewTableSection'
 import api from '../lib/axios'
+import { PageHeader } from '../components/PageHeader'
+import { Star } from 'lucide-react'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -73,7 +75,11 @@ const StudyReviewPage = () => {
 
   return (
     <div className="space-y-4 p-6">
-      <h1 className="text-lg font-semibold">리뷰 관리</h1>
+      <PageHeader
+        iconComponent={Star}
+        koreanTitle="리뷰 관리"
+        englishSubtitle="REVIEWS MANAGEMENT"
+      />
 
       <ReviewFilterSection
         searchText={searchText}
