@@ -9,36 +9,10 @@ import { Inbox, Megaphone } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
 import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
+import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
 
 const PAGE_SIZE = 10
-// 여기서부터
-const TAGS = [
-  // 가짜 목데이터
-  ['React', 'Frontend'],
-  ['Python', 'Django'],
-  ['TypeScript', 'Frontend'],
-  ['Java', 'Spring'],
-  ['Next.js', 'Fullstack'],
-]
 
-const STATUSES: RecruitmentStatusApi[] = ['모집중', '마감']
-
-const mockRecruitments: Recruitment[] = Array.from({ length: 15 }).map(
-  (_, index) => ({
-    id: index + 1,
-    title: `스터디 구인 공고 ${index + 1}`,
-    tags: TAGS[index % TAGS.length],
-    closeAt: `2025-11-${String((index % 28) + 1).padStart(2, '0')}T23:59:59Z`,
-    status: STATUSES[index % STATUSES.length],
-    viewsCount: Math.floor(Math.random() * 300 + 50),
-    bookmarksCount: Math.floor(Math.random() * 50 + 10),
-    createdAt: `2025-10-${String((index % 20) + 1).padStart(2, '0')}T12:00:00Z`,
-    updatedAt: `2025-10-${String((index % 20) + 2).padStart(2, '0')}T15:00:00Z`,
-  })
-)
-
-const ALL_TAGS = Array.from(new Set(mockRecruitments.flatMap((r) => r.tags))) // 전체 태그 목록
-// 여기까지 목업데이터 입니닷.
 const RecruitmentManagementPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
