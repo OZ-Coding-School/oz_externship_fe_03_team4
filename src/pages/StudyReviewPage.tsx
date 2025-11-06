@@ -20,7 +20,7 @@ import api from '../lib/axios'
 import { PageHeader } from '../components/PageHeader'
 import { Star } from 'lucide-react'
 
-const DEFAULT_PAGE_SIZE = 20
+const DEFAULT_PAGE_SIZE = 10
 
 const StudyReviewPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -111,7 +111,7 @@ const StudyReviewPage = () => {
           </div>
         )}
 
-        <div className="max-h-[520px] overflow-auto rounded-xl">
+        <div className="rounded-xl">
           <ReviewTableSection
             data={reviewRows}
             onRowClick={async (row) => {
