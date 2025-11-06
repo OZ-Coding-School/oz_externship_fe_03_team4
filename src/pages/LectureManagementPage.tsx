@@ -1,7 +1,7 @@
 import { LectureModal } from '../components/Lecture/LectureModal'
 import { useLectureManagement } from '../hooks/Lecture/useLectureManagement'
 import { PageHeader } from '../components/PageHeader'
-import { ClipboardList } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 import { SearchSection } from '../components/Lecture/SearchSection'
 import { ContentArea } from '../components/Lecture/ContentArea'
 
@@ -39,7 +39,7 @@ const LectureManagementPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <PageHeader
-        iconComponent={ClipboardList}
+        iconComponent={BookOpen}
         koreanTitle="강의 관리"
         englishSubtitle="LECTURE MANAGEMENT"
       />

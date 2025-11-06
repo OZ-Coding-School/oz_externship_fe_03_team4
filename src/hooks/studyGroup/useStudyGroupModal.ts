@@ -48,7 +48,7 @@ export const useStudyGroupModal = () => {
         const detail = mapStudyGroupDetailDTO(detailDTO)
         setSelectedStudyGroup(detail)
       }
-    } catch (error) {
+    } catch {
       setIsModalOpen(false)
       setSelectedStudyGroup(null)
     } finally {

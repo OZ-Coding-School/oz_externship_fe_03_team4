@@ -3,7 +3,7 @@ import { Pagination } from '../components/pagination/Pagination'
 import { StudyGroupModal } from '../components/studyGroup/StudyGroupModal'
 import { useStudyGroupManagement } from '../hooks/studyGroup/useStudyGroupManagement'
 import { PageHeader } from '../components/PageHeader'
-import { Group } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { SearchAndFilterSection } from '../components/studyGroup/SearchAndFilterSection'
 import { EmptyState } from '../components/Lecture/LoadingState'
 
@@ -46,7 +46,7 @@ const StudyGroupManagementPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <PageHeader
-        iconComponent={Group}
+        iconComponent={ClipboardList}
         koreanTitle="스터디 그룹 관리"
         englishSubtitle="STUDY GROUP MANAGEMENT"
       />
