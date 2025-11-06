@@ -57,7 +57,7 @@ const RECR_DETAIL = (id: number) => ({
   created_at: '2025-10-16 13:00',
   updated_at: '2025-10-16 15:00',
   views_count: 123,
-  bookmark_count: 10,
+  bookmarks_count: 10,
   applications: [
     {
       nickname: '홍길동',
