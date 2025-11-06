@@ -4,6 +4,7 @@ import { cn } from '../../../utils/cn'
 import Modal from '../../../components/modal/Modal'
 import { ModalHeader } from '../../../components/modal/ModalHeader'
 import { Button } from '../../../components/buttons/Buttons'
+import { SearchInput } from '../../../components/search/SearchInput'
 
 interface TagsFilterProps {
   availableTags: string[]
@@ -29,6 +30,7 @@ export const TagsFilter = ({
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [tempTags, setTempTags] = useState<string[]>(selectedTags)
+  const [searchValue, setSearchValue] = useState('')
   const rootRef = useRef<HTMLDivElement>(null)
 
   const toggleTag = (tag: string) => {
@@ -52,6 +54,10 @@ export const TagsFilter = ({
     setIsModalOpen(false)
   }
 
+  const filteredTags = availableTags.filter((tag) =>
+    tag.toLowerCase().includes(searchValue.toLowerCase())
+  )
+
   useEffect(() => {
     if (!isOpen) return
     const handleClickOutside = (e: MouseEvent) => {
@@ -61,7 +67,7 @@ export const TagsFilter = ({
     return () => window.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
 
-  const visibleTags = availableTags.slice(0, 8)
+  const visibleTags = filteredTags.slice(0, 8)
   const hasMoreTags = availableTags.length > 8
 
   return (
@@ -137,8 +143,15 @@ export const TagsFilter = ({
       <Modal isOn={isModalOpen}>
         <ModalHeader title="태그 필터 선택" onClose={() => setIsModalOpen(false)} />
         
+        <SearchInput 
+          placeholder="태그 검색" 
+          value={searchValue} 
+          onChangeText={setSearchValue} 
+          className="mb-4" 
+        />
+        
         <div className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto">
-          {availableTags.map((tag) => {
+          {filteredTags.map((tag) => {
             const isActive = tempTags.includes(tag)
             return (
               <button
@@ -157,6 +170,11 @@ export const TagsFilter = ({
               </button>
             )
           })}
+          {filteredTags.length === 0 && (
+            <p className="col-span-3 py-4 text-center text-gray-400 text-sm">
+              검색 결과가 없습니다.
+            </p>
+          )}
         </div>
 
         <footer className="mt-6 flex items-center justify-end gap-2">
