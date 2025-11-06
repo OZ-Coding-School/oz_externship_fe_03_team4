@@ -30,7 +30,6 @@ const StudyReviewPage = () => {
   const [currentPageNumber, setCurrentPageNumber] = useState(initialPageNumber)
   const [currentSortKey, setCurrentSortKey] =
     useState<NonNullable<ReviewsParams['sortKey']>>('-created_at')
-  const [ratingMin, setRatingMin] = useState<number | '전체'>('전체')
 
   const debouncedSearchText = useDebouncedValue(searchText, 300)
 
@@ -91,11 +90,6 @@ const StudyReviewPage = () => {
           setCurrentSortKey(next)
           setCurrentPageNumber(1)
           updateURLQueryParams(searchText, 1)
-        }}
-        ratingMin={ratingMin}
-        onRatingMinChange={(next) => {
-          setRatingMin(next)
-          setCurrentPageNumber(1)
         }}
       />
 

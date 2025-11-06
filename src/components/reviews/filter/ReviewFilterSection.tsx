@@ -1,6 +1,5 @@
 import { ReviewSearchField } from './ReviewSearchField'
 import { ReviewSortSelect } from './ReviewSortSelect'
-import { ReviewRatingSelect } from './ReviewRatingSelect'
 import type { ReviewsParams } from '../../../hooks/reviews/useReviewsQuery'
 
 type SortKey = NonNullable<ReviewsParams['sortKey']>
@@ -23,8 +22,6 @@ export const ReviewFilterSection = ({
   onSearchSubmit,
   sortKey,
   onSortKeyChange,
-  ratingMin = '전체',
-  onRatingMinChange,
 }: ReviewFilterSectionProps) => {
   return (
     <section className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
@@ -37,13 +34,6 @@ export const ReviewFilterSection = ({
             className="w-full sm:w-80"
             inputClassName="h-10"
           />
-          {onRatingMinChange && (
-            <ReviewRatingSelect
-              value={ratingMin}
-              onChange={onRatingMinChange}
-              className="h-10 w-36"
-            />
-          )}
         </div>
 
         <div className="flex w-full justify-end sm:w-auto">
