@@ -6,7 +6,7 @@ type AdminApplicationRow = {
   recruitment_title: string
   applicant_nickname: string
   applicant_email: string
-  status: 'APPLIED' | 'REVIEWING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN'
+  status: 'APPLIED' | 'REVIEWING' | 'APPROVED' | 'REJECTED'
   created_at: string
   updated_at: string
 }
@@ -17,9 +17,7 @@ const APPLICATION_ROWS: AdminApplicationRow[] = Array.from({ length: 42 }).map(
     recruitment_title: i % 2 ? '프론트엔드 개발자' : '백엔드 개발자',
     applicant_nickname: `지원자${i + 1}`,
     applicant_email: `user${i + 1}@example.com`,
-    status: (
-      ['APPLIED', 'REVIEWING', 'APPROVED', 'REJECTED', 'WITHDRAWN'] as const
-    )[i % 5],
+    status: (['APPLIED', 'REVIEWING', 'APPROVED', 'REJECTED'] as const)[i % 4],
     created_at: `2025-10-${String((i % 28) + 1).padStart(2, '0')}T09:00:00Z`,
     updated_at: `2025-10-${String((i % 28) + 1).padStart(2, '0')}T12:00:00Z`,
   })
@@ -50,9 +48,7 @@ export const applicationAdminHandlers = [
     }
     if (
       status &&
-      ['APPLIED', 'REVIEWING', 'APPROVED', 'REJECTED', 'WITHDRAWN'].includes(
-        status
-      )
+      ['APPLIED', 'REVIEWING', 'APPROVED', 'REJECTED'].includes(status)
     ) {
       list = list.filter((r) => r.status === status)
     }
