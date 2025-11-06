@@ -8,7 +8,7 @@ const AdminProtectedRoute = ({ children }: PropsWithChildren) => {
   const { status: adminGuardStatus } = useAdminAuthGuard({
     allowedRoles: ['admin'],
     routeKey: currentLocation.pathname,
-    endpointPath: '/users/',
+    endpointPath: '/users',
   })
 
   useEffect(() => {
