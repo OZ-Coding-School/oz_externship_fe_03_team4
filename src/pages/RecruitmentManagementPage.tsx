@@ -7,7 +7,7 @@ import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox, Megaphone } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
-// import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
+import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
 
 const PAGE_SIZE = 10
