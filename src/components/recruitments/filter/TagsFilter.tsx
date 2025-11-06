@@ -20,6 +20,15 @@ const CheckMark = () => (
   </span>
 )
 
+const SelectedTag = ({ tag, onRemove }: { tag: string; onRemove: () => void }) => (
+  <span
+    onClick={onRemove}
+    className="flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-sm text-yellow-800 cursor-pointer hover:bg-yellow-200"
+  >
+    {tag} ✕
+  </span>
+)
+
 export const TagsFilter = ({
   availableTags,
   selectedTags,
@@ -149,6 +158,20 @@ export const TagsFilter = ({
           onChangeText={setSearchValue} 
           className="mb-4" 
         />
+        
+        {tempTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {tempTags.map((tag) => (
+              <SelectedTag key={tag} tag={tag} onRemove={() => toggleTempTag(tag)} />
+            ))}
+            <button 
+              onClick={() => setTempTags([])} 
+              className="text-xs text-gray-500 underline hover:text-gray-700"
+            >
+              전체 해제
+            </button>
+          </div>
+          )}
         
         <div className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto">
           {filteredTags.map((tag) => {
