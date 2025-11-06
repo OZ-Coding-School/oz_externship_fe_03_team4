@@ -69,7 +69,7 @@ const RECR_DETAIL = (id: number) => ({
 })
 
 export const recruitmentAdminHandlers = [
-  http.get('*/api/admin/recruitments/', ({ request }) => {
+  http.get('*/api/v1/admin/recruitments', ({ request }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -112,7 +112,7 @@ export const recruitmentAdminHandlers = [
     })
   }),
 
-  http.get('*/api/recruitments/admin/', ({ request }) => {
+  http.get('*/api/v1/admin/recruitments', ({ request }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -137,7 +137,7 @@ export const recruitmentAdminHandlers = [
     })
   }),
 
-  http.get('*/api/recruitments/:id/', ({ request, params }) => {
+  http.get('*/api/v1/admin/recruitments/:id/', ({ request, params }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -152,7 +152,7 @@ export const recruitmentAdminHandlers = [
     return HttpResponse.json(RECR_DETAIL(id))
   }),
 
-  http.delete('*/api/recruitments/:id', ({ request, params }) => {
+  http.delete('*/api/v1/admin/recruitments/:id', ({ request, params }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
