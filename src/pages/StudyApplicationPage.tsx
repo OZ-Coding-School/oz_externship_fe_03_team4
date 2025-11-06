@@ -92,11 +92,7 @@ const StudyApplicationPage = () => {
     Math.ceil((data?.totalCount ?? filteredApplications.length) / PAGE_SIZE)
   )
 
-  const paginatedApplications = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE
-    const endIndex = startIndex + PAGE_SIZE
-    return filteredApplications.slice(startIndex, endIndex)
-  }, [filteredApplications, currentPage])
+  const paginatedApplications = filteredApplications
 
   return (
     <div className="space-y-4 p-6">
