@@ -6,8 +6,8 @@ import {
   type StudyGroupDetailResponse,
   type StudyGroupListResponse,
 } from '../types/studyGroup/types'
-import { buildQueryParams } from '../hooks/studyGroup/buildQueryParams'
 import type { StudyGroupsParams } from '../hooks/studyGroup/types.local'
+import { buildQueryParams } from '../utils/studyGroup/buildQueryParams'
 
 export type FetchStudyGroupsParams = Record<string, string | number>
 

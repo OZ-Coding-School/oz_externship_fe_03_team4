@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchStudyGroups } from '../../api/fetchStudyGroups'
-import { buildQueryParams } from './buildQueryParams'
 import type { StudyGroupsParams } from './types.local'
+import { buildQueryParams } from '../../utils/studyGroup/buildQueryParams'
 
 export const studyGroupsQueryKey = (params: StudyGroupsParams) =>
   ['admin:studyGroups', buildQueryParams(params)] as const
