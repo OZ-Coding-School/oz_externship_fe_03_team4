@@ -88,6 +88,22 @@ export const UserModalOutlet = ({
 
       {/* 상세 정보 영역 */}
       <div className="grid grid-cols-2 gap-4">
+        {/* 회원 ID (읽기 전용) */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">회원 ID</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{localUser.id}</p>
+          </div>
+        </div>
+
+        {/* 이메일 (읽기 전용) */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">이메일</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{localUser.email}</p>
+          </div>
+        </div>
+
         {/* 이름 */}
         <div>
           <p className="text-xs text-gray-500 mb-1">이름</p>
@@ -176,7 +192,21 @@ export const UserModalOutlet = ({
           )}
         </div>
 
-        {/* 기타 항목 동일 */}
+        {/* 권한 (읽기 전용) */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">권한</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{localUser.role}</p>
+          </div>
+        </div>
+
+        {/* 회원 가입 일시 (읽기 전용) */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">회원 가입 일시</p>
+          <div className="p-3 rounded-lg bg-gray-50 border-none">
+            <p className="font-medium">{localUser.joinedAt}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
