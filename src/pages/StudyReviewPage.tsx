@@ -127,7 +127,7 @@ const StudyReviewPage = () => {
       </section>
 
       {hasData && (
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Pagination
             currentPage={currentPageNumber}
             totalPages={totalPages}
