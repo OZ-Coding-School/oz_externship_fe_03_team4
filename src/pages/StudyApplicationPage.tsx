@@ -7,7 +7,8 @@ import {
   type Application,
   type AdminSortKey,
   type StatusFilter,
-  // type ApplicationDetail,
+  type ApplicationDetail,
+  mapApplicationDetailApiToUi,
   // apiStatusToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
@@ -21,6 +22,7 @@ import {
   ErrorState,
   LoadingState,
 } from '../components/Lecture/LoadingState'
+import api from '../lib/axios'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -34,6 +36,11 @@ const StudyApplicationPage = () => {
   const debouncedSearchText = useDebouncedValue(searchText, 500)
   const [selectedRow, setSelectedRow] = useState<Application | null>(null)
 
+  const [selectedDetail, setSelectedDetail] =
+    useState<ApplicationDetail | null>(null)
+  const [_detailLoading, setDetailLoading] = useState(false)
+  const [_detailError, setDetailError] = useState<string | null>(null)
+
   const { data, isLoading, isError } = useApplicationsQuery({
     searchText: debouncedSearchText,
     statusFilter,
@@ -41,6 +48,27 @@ const StudyApplicationPage = () => {
     pageSize: PAGE_SIZE,
     sortKey,
   })
+
+  const handleRowClick = async (row: Application) => {
+    setSelectedRow(row)
+    setSelectedDetail(null)
+    setDetailError(null)
+    setDetailLoading(true)
+
+    try {
+      const aid =
+        typeof row.aid === 'number'
+          ? row.aid
+          : Number(String(row.id).replace('#', ''))
+      const { data } = await api.get(`/v1/admin/applications/${aid}`)
+      const ui = mapApplicationDetailApiToUi(data, row)
+      setSelectedDetail(ui)
+    } catch {
+      setDetailError('상세 정보를 불러오지 못했습니다.')
+    } finally {
+      setDetailLoading(false)
+    }
+  }
 
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
   const filteredApplications = useMemo((): Application[] => {
@@ -138,7 +166,7 @@ const StudyApplicationPage = () => {
         <>
           <ApplicationTableSection
             data={paginatedApplications}
-            onRowClick={(row) => setSelectedRow(row)}
+            onRowClick={handleRowClick}
           />
           {/* 1페이지 이상일 경우에만 페이지네이션 렌더링 */}
           {totalPages > 1 && (
@@ -152,13 +180,21 @@ const StudyApplicationPage = () => {
           )}
         </>
       )}
-      {selectedRow && (
-        <ApplicationPageModal
-          open
-          onClose={() => setSelectedRow(null)}
-          detail={buildDetailSkeleton(selectedRow)}
-        />
-      )}
+      {selectedRow &&
+        (isLoading ? (
+          <LoadingState message="상세 불러오는 중…" />
+        ) : isError ? (
+          <ErrorState
+            title="상세 불러오기에 실패했어요"
+            message="잠시 후 다시 시도해주세요."
+          />
+        ) : (
+          <ApplicationPageModal
+            open
+            onClose={() => setSelectedRow(null)}
+            detail={selectedDetail ?? buildDetailSkeleton(selectedRow)}
+          />
+        ))}
     </div>
   )
 }
