@@ -14,6 +14,8 @@ import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { ApplicationPageModal } from '../components/application/modal/ApplicationPageModal'
 import { buildDetailSkeleton } from '../utils/applications.adapters'
 import { useApplicationsQuery } from '../hooks/applications/useApplicationsQuery'
+import { PageHeader } from '../components/PageHeader'
+import { ClipboardList } from 'lucide-react'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -58,10 +60,6 @@ const StudyApplicationPage = () => {
           application.applicant.email
             .toLowerCase()
             .includes(lowerCaseSearchText)
-        // filteredList = filteredList.filter((application) =>
-        //   application.postingTitle.toLowerCase().includes(lowerCaseSearchText) ||
-        //   application.applicant.name.toLowerCase().includes(lowerCaseSearchText) ||
-        //   application.applicant.email.toLowerCase().includes(lowerCaseSearchText)
       )
     }
 
@@ -100,8 +98,11 @@ const StudyApplicationPage = () => {
       {isError && (
         <div className="p-6 text-red-500">불러오기에 실패했습니다.</div>
       )}
-      <h1 className="text-neutral text-lg font-semibold">지원 내역 관리</h1>
-
+      <PageHeader
+        iconComponent={ClipboardList}
+        koreanTitle="지원내역 관리"
+        englishSubtitle="APPLICATION MANAGEMENT"
+      />
       <ApplicationFilterSection
         searchText={searchText}
         setSearchText={(nextSearchText) => {
