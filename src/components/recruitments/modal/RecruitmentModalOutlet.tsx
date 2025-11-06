@@ -71,11 +71,11 @@ export const RecruitmentModalOutlet = ({
           <div className="grid grid-cols-2 gap-4">
             <ModalPair
               label="조회수"
-              value={numberFormatterForLocaleKR.format(viewsCount)}
+              value={numberFormatterForLocaleKR.format(viewsCount ?? 0)}
             />
             <ModalPair
               label="북마크 수"
-              value={numberFormatterForLocaleKR.format(bookmarksCount)}
+              value={`${numberFormatterForLocaleKR.format(bookmarksCount ?? 0)}`}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
