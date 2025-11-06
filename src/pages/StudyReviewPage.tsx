@@ -10,10 +10,13 @@ import { ReviewModal } from '../components/reviews/ReviewModal'
 import {
   type ReviewDetail,
   type Review,
+  type ReviewDTO,
+  mapDtoToReviewDetail,
   mapReviewToDetail,
 } from '../types/reviews/types'
 import { ReviewFilterSection } from '../components/reviews/filter/ReviewFilterSection'
 import { ReviewTableSection } from '../components/reviews/table/ReviewTableSection'
+import api from '../lib/axios'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -105,10 +108,19 @@ const StudyReviewPage = () => {
         <div className="max-h-[520px] overflow-auto rounded-xl">
           <ReviewTableSection
             data={reviewRows}
-            onRowClick={(row) => {
-              const detail = mapReviewToDetail(row)
-              setSelectedReview(detail)
+            onRowClick={async (row) => {
+              setSelectedReview(mapReviewToDetail(row))
               setIsModalOpen(true)
+              try {
+                const { data } = await api.get<{
+                  status: number
+                  message: string
+                  detail: ReviewDTO
+                }>(`/v1/studies/admin/reviews/${row.id}`)
+                setSelectedReview(mapDtoToReviewDetail(data.detail))
+              } catch {
+                // 일단은 잠깐, 제발 살려줘
+              }
             }}
           />
         </div>
