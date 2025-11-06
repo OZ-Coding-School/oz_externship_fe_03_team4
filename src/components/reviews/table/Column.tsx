@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { Review } from '../../../types/reviews/types'
 import { RatingStars } from '../RatingStars'
+import { formatDate } from '../../../utils/formatDate'
 
 export type ReviewRow = Review & Record<string, unknown>
 
@@ -12,7 +13,7 @@ export const reviewColumns = [
   },
   {
     key: 'studyTitle' as const,
-    label: '스터디',
+    label: '스터디 그룹명',
     render: (value: unknown) => (
       <div className="min-w-[14rem] truncate text-neutral-900">
         {String(value ?? '')}
@@ -42,7 +43,7 @@ export const reviewColumns = [
     key: 'rating' as const,
     label: '별점',
     render: (value: unknown) => (
-      <div className="flex justify-end">
+      <div className="flex justify-start">
         <RatingStars value={Number(value ?? 0)} />
       </div>
     ),
@@ -51,8 +52,8 @@ export const reviewColumns = [
     key: 'createdAt' as const,
     label: '작성일',
     render: (value: unknown) => (
-      <span className="font-mono text-[12px] text-neutral-600">
-        {String(value ?? '')}
+      <span className="text-[12px] text-neutral-600">
+        {formatDate(String(value ?? ''))}
       </span>
     ),
   },
