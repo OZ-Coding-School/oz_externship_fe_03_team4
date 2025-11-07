@@ -15,6 +15,7 @@ import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitments
 import { PageHeader } from '../components/PageHeader'
 import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
 import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentDetailQuery'
+import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
 
 const PAGE_SIZE = 10
 
@@ -29,6 +30,9 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+
+  const { mutate: deleteRecruitment, isPending: isDeleting } =
+    useDeleteRecruitment()
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
