@@ -23,10 +23,17 @@ export const useRecruitmentDetailQuery = (recruitment: Recruitment | null) => {
       if (!recruitment) {
         throw new Error('선택된 공고가 없습니다.')
       }
-      const response = await api.get<RecruitmentDetailDTO>(
-        `/v1/admin/recruitments/${recruitment.id}`
-      )
-      return mapRecruitmentDetailDTO(response.data)
+      try {
+        const response = await api.get<RecruitmentDetailDTO>(
+          `/v1/admin/recruitments/${recruitment.id}`
+        )
+        return mapRecruitmentDetailDTO(response.data)
+      } catch {
+        const response = await api.get<RecruitmentDetailDTO>(
+          `/v1/admin/recruitments/${recruitment.id}/`
+        )
+        return mapRecruitmentDetailDTO(response.data)
+      }
     },
   })
 }

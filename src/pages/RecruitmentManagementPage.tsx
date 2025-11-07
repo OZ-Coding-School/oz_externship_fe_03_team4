@@ -29,13 +29,6 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-  const [recruitmentDetail, setRecruitmentDetail] =
-    useState<RecruitmentDetail | null>(null)
-  const [recruitmentDetailLoading, setRecruitmentDetailLoading] =
-    useState(false)
-  const [recruitmentDetailError, setRecruitmentDetailError] = useState<
-    string | null
-  >(null)
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
@@ -48,28 +41,14 @@ const RecruitmentManagementPage = () => {
     pageSize: PAGE_SIZE,
   })
 
-  const handleRowClick = async (row: Recruitment) => {
+  const {
+    data: recruitmentDetail,
+    isLoading: isRecruitmentDetailLoading,
+    isError: isRecruitmentDetailError,
+  } = useRecruitmentDetailQuery(selectedRecruitment)
+
+  const handleRowClick = (row: Recruitment) => {
     setSelectedRecruitment(row)
-    setRecruitmentDetail(null)
-    setRecruitmentDetailError(null)
-    setRecruitmentDetailLoading(true)
-    try {
-      const { data } = await api.get<RecruitmentDetailDTO>(
-        `/v1/admin/recruitments/${row.id}`
-      )
-      setRecruitmentDetail(mapRecruitmentDetailDTO(data))
-    } catch {
-      try {
-        const { data } = await api.get<RecruitmentDetailDTO>(
-          `/v1/admin/recruitments/${row.id}/`
-        )
-        setRecruitmentDetail(mapRecruitmentDetailDTO(data))
-      } catch {
-        setRecruitmentDetailError('공고 상세정보를 불러오지 못했어요.')
-      }
-    } finally {
-      setRecruitmentDetailLoading(false)
-    }
   }
 
   const filteredRecruitments = data?.items ?? []
@@ -177,9 +156,6 @@ const RecruitmentManagementPage = () => {
           open
           onClose={() => {
             setSelectedRecruitment(null)
-            setRecruitmentDetail(null)
-            setRecruitmentDetailError(null)
-            setRecruitmentDetailLoading(false)
           }}
           onDelete={() => setSelectedRecruitment(null)}
           detail={
@@ -187,9 +163,11 @@ const RecruitmentManagementPage = () => {
             ({
               ...selectedRecruitment,
               uuid: '',
-              content: recruitmentDetailLoading
+              content: isRecruitmentDetailLoading
                 ? '불러오는 중...'
-                : (recruitmentDetailError ?? ''),
+                : isRecruitmentDetailError
+                  ? '공고 상세정보를 불러오지 못했어요.'
+                  : '',
               expectedHeadcount: 0,
               estimatedFee: 0,
               attachments: [],
