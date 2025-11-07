@@ -180,21 +180,13 @@ const StudyApplicationPage = () => {
           )}
         </>
       )}
-      {selectedRow &&
-        (isLoading ? (
-          <LoadingState message="상세 불러오는 중…" />
-        ) : isError ? (
-          <ErrorState
-            title="상세 불러오기에 실패했어요"
-            message="잠시 후 다시 시도해주세요."
-          />
-        ) : (
-          <ApplicationPageModal
-            open
-            onClose={handleModalClose}
-            detail={selectedDetail ?? buildDetailSkeleton(selectedRow)}
-          />
-        ))}
+      {selectedRow && selectedDetail && (
+        <ApplicationPageModal
+          open
+          onClose={handleModalClose}
+          detail={selectedDetail ?? buildDetailSkeleton(selectedRow)}
+        />
+      )}
     </div>
   )
 }
