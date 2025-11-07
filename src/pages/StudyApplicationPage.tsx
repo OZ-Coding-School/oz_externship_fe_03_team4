@@ -38,8 +38,6 @@ const StudyApplicationPage = () => {
 
   const [selectedDetail, setSelectedDetail] =
     useState<ApplicationDetail | null>(null)
-  const [_detailLoading, setDetailLoading] = useState(false)
-  const [_detailError, setDetailError] = useState<string | null>(null)
 
   const { data, isLoading, isError } = useApplicationsQuery({
     searchText: debouncedSearchText,
@@ -51,9 +49,7 @@ const StudyApplicationPage = () => {
 
   const handleRowClick = async (row: Application) => {
     setSelectedRow(row)
-    setSelectedDetail(null)
-    setDetailError(null)
-    setDetailLoading(true)
+    setSelectedDetail(buildDetailSkeleton(row))
 
     try {
       const aid =
@@ -64,10 +60,14 @@ const StudyApplicationPage = () => {
       const ui = mapApplicationDetailApiToUi(data, row)
       setSelectedDetail(ui)
     } catch {
-      setDetailError('상세 정보를 불러오지 못했습니다.')
-    } finally {
-      setDetailLoading(false)
+      setSelectedRow(null)
+      setSelectedDetail(null)
     }
+  }
+
+  const handleModalClose = () => {
+    setSelectedRow(null)
+    setSelectedDetail(null)
   }
 
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
@@ -191,7 +191,7 @@ const StudyApplicationPage = () => {
         ) : (
           <ApplicationPageModal
             open
-            onClose={() => setSelectedRow(null)}
+            onClose={handleModalClose}
             detail={selectedDetail ?? buildDetailSkeleton(selectedRow)}
           />
         ))}
