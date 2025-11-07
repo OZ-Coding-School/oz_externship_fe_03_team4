@@ -23,7 +23,7 @@ export const ApplicationPageModal = ({
       <ModalHeader
         title="지원 내역 상세"
         onClose={onClose}
-        subtitle="APPLICATION DETAIL"
+        subtitle="APPLICATION detail"
         iconComponent={ClipboardList}
       />
       <ApplicationModalOutlet detail={detail} />
