@@ -51,26 +51,6 @@ export type StudyGroupDetailDTO = {
   updated_at: string
 }
 
-// export type StudyGroupListResponse = {
-//   count?: number
-//   next?: string | null
-//   previous?: string | null
-//   results: StudyGroupDTO[]
-// }
-// export type StudyGroupListResponse = {
-//   status: number
-//   message: string
-//   data: {
-//     study_groups: StudyGroupDTO[]
-//     total_count: number
-//   }
-// }
-
-// export type StudyGroupDetailResponse = {
-//   status: number
-//   message: string
-//   data: StudyGroupDetailDTO
-// }
 export type StudyGroupListResponse = {
   count: number
   next: string | null
@@ -79,7 +59,6 @@ export type StudyGroupListResponse = {
 }
 
 export type StudyGroupDetailResponse = {
-  status: number
   message: string
   data: StudyGroupDetailDTO
 }
