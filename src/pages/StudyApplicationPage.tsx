@@ -7,8 +7,6 @@ import {
   type Application,
   type AdminSortKey,
   type StatusFilter,
-  type ApplicationDetail,
-  mapApplicationDetailApiToUi,
   // apiStatusToUi,
 } from '../types/applications'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
@@ -22,6 +20,7 @@ import {
   ErrorState,
   LoadingState,
 } from '../components/Lecture/LoadingState'
+import { useApplicationDetailQuery } from '../hooks/applications/useApplicationDetailQuery'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
@@ -33,10 +32,9 @@ const StudyApplicationPage = () => {
   const [sortKey, setSortKey] = useState<AdminSortKey>('-created_at')
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
   const debouncedSearchText = useDebouncedValue(searchText, 500)
-  const [selectedRow, setSelectedRow] = useState<Application | null>(null)
 
-  const [selectedDetail, setSelectedDetail] =
-    useState<ApplicationDetail | null>(null)
+  const [selectedApplication, setSelectedApplication] =
+    useState<Application | null>(null)
 
   const { data, isLoading, isError } = useApplicationsQuery({
     searchText: debouncedSearchText,
@@ -46,27 +44,15 @@ const StudyApplicationPage = () => {
     sortKey,
   })
 
-  const handleRowClick = async (row: Application) => {
-    setSelectedRow(row)
-    setSelectedDetail(buildDetailSkeleton(row))
+  const { data: applicationDetail, isLoading: isDetailLoading } =
+    useApplicationDetailQuery(selectedApplication)
 
-    try {
-      const aid =
-        typeof row.aid === 'number'
-          ? row.aid
-          : Number(String(row.id).replace('#', ''))
-      const { data } = await api.get(`/v1/admin/applications/${aid}`)
-      const ui = mapApplicationDetailApiToUi(data, row)
-      setSelectedDetail(ui)
-    } catch {
-      setSelectedRow(null)
-      setSelectedDetail(null)
-    }
+  const handleRowClick = (application: Application) => {
+    setSelectedApplication(application)
   }
 
   const handleModalClose = () => {
-    setSelectedRow(null)
-    setSelectedDetail(null)
+    setSelectedApplication(null)
   }
 
   // 필터링 & 정렬 : 의존값이 변할 때만 계산되어 성능 낭비 줄이려고 useMemo사용
@@ -126,6 +112,15 @@ const StudyApplicationPage = () => {
 
   const paginatedApplications = filteredApplications
 
+  const shouldShowModal = !!selectedApplication
+
+  const modalDetail =
+    shouldShowModal && selectedApplication
+      ? isDetailLoading || !applicationDetail
+        ? buildDetailSkeleton(selectedApplication)
+        : applicationDetail
+      : null
+
   return (
     <div className="space-y-4 p-6">
       {isLoading && <LoadingState message="데이터 불러오는 중..." />}
@@ -179,11 +174,11 @@ const StudyApplicationPage = () => {
           )}
         </>
       )}
-      {selectedRow && selectedDetail && (
+      {shouldShowModal && modalDetail && (
         <ApplicationPageModal
           open
           onClose={handleModalClose}
-          detail={selectedDetail ?? buildDetailSkeleton(selectedRow)}
+          detail={modalDetail}
         />
       )}
     </div>
