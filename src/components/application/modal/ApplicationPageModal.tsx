@@ -3,6 +3,7 @@ import { CloseModalFooter } from '../../modal/CloseModalFooter'
 import Modal from '../../modal/Modal'
 import { ModalHeader } from '../../modal/ModalHeader'
 import { ApplicationModalOutlet } from './ApplicationModalOutlet'
+import { ClipboardList } from 'lucide-react'
 
 interface ApplicationPageModalProps {
   open: boolean
@@ -19,8 +20,13 @@ export const ApplicationPageModal = ({
 
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
-      <ModalHeader title="지원 내역 상세" onClose={onClose} />
-        <ApplicationModalOutlet detail={detail} />
+      <ModalHeader
+        title="지원 내역 상세"
+        onClose={onClose}
+        subtitle="APPLICATION DETAIL"
+        iconComponent={ClipboardList}
+      />
+      <ApplicationModalOutlet detail={detail} />
       <CloseModalFooter onClose={onClose} />
     </Modal>
   )
