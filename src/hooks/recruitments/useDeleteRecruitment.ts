@@ -16,6 +16,7 @@ export const useDeleteRecruitment = () => {
         await api.delete(`/v1/admin/recruitments/${id}`)
       }
     },
+
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         predicate: (query) =>
@@ -24,14 +25,15 @@ export const useDeleteRecruitment = () => {
             String(keyPart).toLowerCase().includes('recruit')
           ),
       })
+
       showSuccess('공고 삭제 완료', '선택한 공고가 삭제되었습니다.')
     },
 
     onError: () => {
-        showError(
-            '공고 삭제 실패',
-            '공고 삭제에 실패하였습니다, 잠시 후 다시 시도해주세요'
-        )
+      showError(
+        '공고 삭제 실패',
+        '공고 삭제에 실패하였습니다. 잠시 후 다시 시도해 주세요.'
+      )
     },
   })
 }
