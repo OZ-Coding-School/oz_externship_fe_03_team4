@@ -3,6 +3,7 @@ import type { ReviewDetail } from '../../types/reviews/types'
 import { ModalHeader } from '../modal/ModalHeader'
 import { ReviewModalOutlet } from '../reviews/ReviewModalOutlet'
 import { CloseModalFooter } from '../modal/CloseModalFooter'
+import { Star } from 'lucide-react'
 
 interface ReviewModalProps {
   open: boolean
@@ -13,7 +14,12 @@ interface ReviewModalProps {
 export const ReviewModal = ({ open, onClose, review }: ReviewModalProps) => {
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
-      <ModalHeader title="리뷰 상세보기" onClose={onClose} />
+      <ModalHeader
+        title="리뷰 상세보기"
+        subtitle="DETAIL REVIEW"
+        iconComponent={Star}
+        onClose={onClose}
+      />
       <ReviewModalOutlet review={review} />
       <CloseModalFooter onClose={onClose} />
     </Modal>

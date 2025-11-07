@@ -20,7 +20,7 @@ export const ModalHeader = ({
 }: ModalHeaderProps) => (
   <div
     className={cn(
-      'mb-6 flex items-center justify-between',
+      'mb-6 flex items-start justify-between rounded-t-xl bg-gradient-to-r from-white via-neutral-50 to-white p-4 shadow-sm',
       align === 'center' && 'flex-col items-center text-center',
       className
     )}
