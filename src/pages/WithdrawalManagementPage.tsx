@@ -7,22 +7,31 @@ import { ROLE_CODE_TO_LABEL, WITHDRAW_REASONS } from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
-import {
-  MOCK_WITHDRAWAL_LIST_DERIVED,
-  buildMockWithdrawalDetail,
-} from '../components/withdrawal/mockWithdrawalDetail'
+// import {
+//   MOCK_WITHDRAWAL_LIST_DERIVED,
+//   buildMockWithdrawalDetail,
+// } from '../components/withdrawal/mockWithdrawalDetail'
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { formatDate } from '../utils/formatDate'
+import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
+import { Pagination } from '../components/pagination/Pagination'
+
+const ROLE_LABEL_TO_CODE: Record<string, 'user' | 'staff' | 'admin'> = {
+  관리자: 'admin',
+  스태프: 'staff',
+  일반회원: 'user',
+}
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | undefined>(undefined)
-  const [rows, setRows] = useState<WithdrawalRow[]>([])
+  // const [isLoading, setIsLoading] = useState(false)
+  // const [error, setError] = useState<string | undefined>(undefined)
+  // const [rows, setRows] = useState<WithdrawalRow[]>([])
 
+  const [page, setPage] = useState(1)
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
 
@@ -43,22 +52,46 @@ export const WithdrawalManagementPage = () => {
 
   const debouncedSearch = useDebouncedValue(search, 300)
 
-  // 탈퇴 유저 필터링
-  const filteredWithdrawUsers = rows.filter((user) => {
-    const matchesWithdrawSearch =
-      debouncedSearch === '' ||
-      user.id.toString().includes(debouncedSearch) ||
-      user.email.includes(debouncedSearch) ||
-      user.name.includes(debouncedSearch)
+  const pageSize = 10
 
-    const matchesWithdrawReason =
-      withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
-
-    const matchedWithdrawRole =
-      withdrawRoleFilter === '' || user.role === withdrawRoleFilter
-
-    return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
+  const { data, isLoading, error } = useWithdrawalQuery({
+    page,
+    limit: 10,
+    keyword: debouncedSearch,
+    reason: withdrawReasonFilter || undefined,
   })
+
+  const rows = data?.result ?? []
+
+  console.log('useWithdrawalQuery:', { data, isLoading, error })
+
+  // 탈퇴 유저 필터링
+  // const filteredWithdrawUsers = rows.filter((user) => {
+  //   const matchesWithdrawSearch =
+  //     debouncedSearch === '' ||
+  //     user.id.toString().includes(debouncedSearch) ||
+  //     user.email.includes(debouncedSearch) ||
+  //     user.name.includes(debouncedSearch)
+
+  //   const matchesWithdrawReason =
+  //     withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
+
+  //   const matchedWithdrawRole =
+  //     withdrawRoleFilter === '' || user.role === withdrawRoleFilter
+
+  //   return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
+  // })
+  const filteredWithdrawUsers = rows.filter((user: WithdrawalRow) => {
+    // role 필터링 (클라이언트)
+    if (withdrawRoleFilter !== '') {
+      const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+      if (user.role !== targetCode) return false
+    }
+    return true
+  })
+
+  const totalCount = data?.count ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
   // 테이블 컬럼 정의
   const columns = [
@@ -71,7 +104,7 @@ export const WithdrawalManagementPage = () => {
       render: (value: unknown) => {
         const v = value as WithdrawalRow['role']
         const variant: 'info' | 'primary' | 'default' =
-          v === '관리자' ? 'info' : v === '스태프' ? 'primary' : 'default'
+          v === 'admin' ? 'info' : v === 'staff' ? 'primary' : 'default'
         return <Badge variant={variant} label={v} />
       },
     },
@@ -87,21 +120,21 @@ export const WithdrawalManagementPage = () => {
     },
   ]
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true)
-        setError(undefined)
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       setIsLoading(true)
+  //       setError(undefined)
 
-        setRows(MOCK_WITHDRAWAL_LIST_DERIVED)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '데이터 로드 실패')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadData()
-  }, [])
+  //       setRows(MOCK_WITHDRAWAL_LIST_DERIVED)
+  //     } catch (err) {
+  //       setError(err instanceof Error ? err.message : '데이터 로드 실패')
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+  //   loadData()
+  // }, [])
 
   return (
     <main className="bg-gray-50 p-8">
@@ -204,7 +237,10 @@ export const WithdrawalManagementPage = () => {
             불러오는 중…
           </div>
         ) : error ? (
-          <div className="bg-red-50 p-6 text-sm text-red-700"> {error} </div>
+          <div className="bg-red-50 p-6 text-sm text-red-700">
+            {' '}
+            {error instanceof Error ? error.message : '데이터 로드 실패'}{' '}
+          </div>
         ) : (
           <Table<WithdrawalRow>
             data={filteredWithdrawUsers}
@@ -214,14 +250,23 @@ export const WithdrawalManagementPage = () => {
         )}
       </div>
 
+      <div className="mt-6 flex justify-center">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
+
       {/* 모달 */}
       {selectedWithdrawUser && (
         <WithdrawalModal
           open={isWithdrawModalOpen}
           detail={
-            selectedWithdrawUser
-              ? buildMockWithdrawalDetail(selectedWithdrawUser)
-              : null
+            // selectedWithdrawUser
+            //   ? buildMockWithdrawalDetail(selectedWithdrawUser)
+            //   : null
+            null
           }
           loading={false}
           error={undefined}
