@@ -29,22 +29,22 @@ export interface ApplicationDetailApi extends ApplicationApi {
   self_introduction: string // 자기소개
   motivation: string // 지원동기
   objective: string // 목표
-  availableTime: string // 가능시간
-  hasStudyExperience: boolean // 스터디 경험여부
-  studyExperience: string | null //  경험상세내용
+  available_time: string // 가능시간
+  has_study_experience: boolean // 스터디 경험여부
+  study_experience: string | null //  경험상세내용
   recruitment: {
     // 공고정보
     id: number // 공고id
     title: string // 공고제목
-    expectedHeadcount: number // 모집인원
+    expected_headcount: number // 모집인원
     courses: Array<{ name: string; instructor: string }> // 강의목록 [강의이름 / 강사명]
     tags: string[] // 태그 목록
     deadline: string // 모집마감일
   }
-  applicantDetail: {
+  applicant: {
     id: number // 지원자고유 id
     gender: string | null // 성별
-    profileImage: string | null // 프로필이미지 url
+    profile_image: string | null // 프로필이미지 url
   }
 }
 
@@ -154,23 +154,23 @@ export const mapApplicationDetailApiToUi = (
     selfIntroduction: detail.self_introduction,
     motivation: detail.motivation,
     objective: detail.objective,
-    availableTime: detail.availableTime,
-    hasStudyExperience: detail.hasStudyExperience,
-    studyExperience: detail.studyExperience,
+    availableTime: detail.available_time,
+    hasStudyExperience: detail.has_study_experience,
+    studyExperience: detail.study_experience,
     recruitment: {
       // 공고정보
       id: detail.recruitment.id,
       title: detail.recruitment.title,
-      expectedHeadcount: detail.recruitment.expectedHeadcount,
+      expectedHeadcount: detail.recruitment.expected_headcount,
       courses: detail.recruitment.courses,
       tags: detail.recruitment.tags,
       deadline: detail.recruitment.deadline,
     },
     applicantExtra: {
       // 지원자 정보
-      id: detail.applicantDetail.id,
-      gender: detail.applicantDetail.gender,
-      profileImage: detail.applicantDetail.profileImage,
+      id: detail.applicant.id,
+      gender: detail.applicant.gender,
+      profileImage: detail.applicant.profile_image,
     },
   }
 }

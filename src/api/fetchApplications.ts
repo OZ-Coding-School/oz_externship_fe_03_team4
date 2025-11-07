@@ -17,7 +17,7 @@ export const fetchApplications = async (
   requestParams: ApplicationRequestParams
 ): Promise<FetchApplicationsReturn> => {
   const response = await api.get<ApplicationsListResponse>(
-    '/admin/applications',
+    '/v1/admin/applications',
     { params: requestParams }
   )
 
