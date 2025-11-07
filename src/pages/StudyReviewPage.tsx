@@ -10,12 +10,17 @@ import { ReviewModal } from '../components/reviews/ReviewModal'
 import {
   type ReviewDetail,
   type Review,
+  type ReviewDTO,
+  mapDtoToReviewDetail,
   mapReviewToDetail,
 } from '../types/reviews/types'
 import { ReviewFilterSection } from '../components/reviews/filter/ReviewFilterSection'
 import { ReviewTableSection } from '../components/reviews/table/ReviewTableSection'
+import api from '../lib/axios'
+import { PageHeader } from '../components/PageHeader'
+import { Star } from 'lucide-react'
 
-const DEFAULT_PAGE_SIZE = 20
+const DEFAULT_PAGE_SIZE = 10
 
 const StudyReviewPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -70,7 +75,11 @@ const StudyReviewPage = () => {
 
   return (
     <div className="space-y-4 p-6">
-      <h1 className="text-lg font-semibold">리뷰 관리</h1>
+      <PageHeader
+        iconComponent={Star}
+        koreanTitle="리뷰 관리"
+        englishSubtitle="REVIEWS MANAGEMENT"
+      />
 
       <ReviewFilterSection
         searchText={searchText}
@@ -102,20 +111,29 @@ const StudyReviewPage = () => {
           </div>
         )}
 
-        <div className="max-h-[520px] overflow-auto rounded-xl">
+        <div className="rounded-xl">
           <ReviewTableSection
             data={reviewRows}
-            onRowClick={(row) => {
-              const detail = mapReviewToDetail(row)
-              setSelectedReview(detail)
+            onRowClick={async (row) => {
+              setSelectedReview(mapReviewToDetail(row))
               setIsModalOpen(true)
+              try {
+                const { data } = await api.get<{
+                  status: number
+                  message: string
+                  detail: ReviewDTO
+                }>(`/v1/studies/admin/reviews/${row.id}`)
+                setSelectedReview(mapDtoToReviewDetail(data.detail))
+              } catch {
+                // 일단은 잠깐, 제발 살려줘
+              }
             }}
           />
         </div>
       </section>
 
       {hasData && (
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Pagination
             currentPage={currentPageNumber}
             totalPages={totalPages}

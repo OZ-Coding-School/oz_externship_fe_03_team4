@@ -1,6 +1,7 @@
 import { RatingStars } from '../reviews/RatingStars'
 import { ModalPair } from '../reviews/ModalPair'
 import type { ReviewDetail } from '../../types/reviews/types'
+import { formatDate } from '../../utils/formatDate'
 
 export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
@@ -52,8 +53,11 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
       />
 
       <div className="grid grid-cols-2 gap-3 text-sm text-neutral-500">
-        <ModalPair label="생성일" value={review.createdAt} />
-        <ModalPair label="수정일" value={review.updatedAt ?? '-'} />
+        <ModalPair label="생성일" value={formatDate(review.createdAt)} />
+        <ModalPair
+          label="수정일"
+          value={review.updatedAt ? formatDate(review.updatedAt) : '-'}
+        />
       </div>
     </section>
   </div>
