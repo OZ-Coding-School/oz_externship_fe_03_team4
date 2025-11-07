@@ -1,26 +1,26 @@
-import type { StudyGroupsParams } from './types.local'
+import type { StudyGroupsParams } from '../../hooks/studyGroup/types.local'
 
 export const buildQueryParams = (params: StudyGroupsParams) => {
-  const effectivePageSize = Math.min(Math.max(params.pageSize ?? 20, 1), 100)
-  const effectivePageNumber = Math.max(1, params.pageNumber ?? 1)
-  const computedOffset = (effectivePageNumber - 1) * effectivePageSize
+  const { pageSize = 10, pageNumber = 1, sortKey, searchText, status } = params
 
   const queryParams: Record<string, string | number> = {
-    limit: effectivePageSize,
-    offset: computedOffset,
+    limit: pageSize,
+    offset: (pageNumber - 1) * pageSize,
   }
 
-  if (params.sortKey) {
-    queryParams.ordering = params.sortKey
+  // 정렬
+  if (sortKey) {
+    queryParams.ordering = sortKey
   }
 
-  if (params.status) {
-    queryParams.status = params.status
+  // 검색
+  if (searchText?.trim()) {
+    queryParams.search = searchText.trim()
   }
 
-  const trimmedSearchText = (params.searchText ?? '').trim()
-  if (trimmedSearchText) {
-    queryParams.search = trimmedSearchText
+  // 상태 필터
+  if (status) {
+    queryParams.status = status
   }
 
   return queryParams

@@ -14,10 +14,8 @@ export type FetchStudyGroupsParams = Record<string, string | number>
 export type FetchStudyGroupsReturn = {
   items: StudyGroup[]
   totalCount: number
-  // pageSize: number
-  // offset: number
-  // hasNext: boolean
-  // hasPrevious: boolean
+  hasNext: boolean
+  hasPrevious: boolean
 }
 
 export const fetchStudyGroups = async (
@@ -32,18 +30,12 @@ export const fetchStudyGroups = async (
   )
 
   const data = response.data
-  // return {
-  //   items: data.results.map(mapStudyGroupDTO),
-  //   totalCount: data.count ?? 0,
-  //   pageSize: Number(queryParams.limit),
-  //   offset: Number(queryParams.offset),
-  //   hasNext: !!data.next,
-  //   hasPrevious: !!data.previous,
-  // }
+
   return {
-    items: data.data.study_groups.map(mapStudyGroupDTO),
-    // totalCount: data.data.study_groups.length,
-    totalCount: data.data.total_count,
+    items: data.results.map(mapStudyGroupDTO),
+    totalCount: data.count,
+    hasNext: !!data.next,
+    hasPrevious: !!data.previous,
   }
 }
 
