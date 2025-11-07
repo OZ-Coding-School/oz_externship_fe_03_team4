@@ -11,6 +11,7 @@ import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { formatDate } from '../utils/formatDate'
 import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
 import { useWithdrawalDetailQuery } from '../hooks/withdrawal/useWithdrawalDetailQuery'
+import { useWithdrawalRestoreMutation } from '../hooks/withdrawal/useWithdrawalRestoreMutation'
 import { Pagination } from '../components/pagination/Pagination'
 
 const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
@@ -105,6 +106,17 @@ export const WithdrawalManagementPage = () => {
     enabled: isWithdrawModalOpen,
   })
 
+  const restoreMutation = useWithdrawalRestoreMutation()
+
+  const handleRestore = () => {
+    if (!selectedUserId) return
+
+    return restoreMutation.mutateAsync(selectedUserId).then(() => {
+      setSelectedWithdrawUser(null)
+      // setIsWithdrawModalOpen(false) <-- 여기서 닫지 마세요!
+    })
+  }
+
   return (
     <main className="bg-gray-50 p-8">
       <h1 className="mb-6 text-2xl font-semibold">탈퇴 관리</h1>
@@ -178,11 +190,10 @@ export const WithdrawalManagementPage = () => {
                   {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
                     <button
                       key={code}
-                      className={`w-full px-3 py-2 text-left text-sm ${
-                        withdrawRoleFilter === label
-                          ? 'bg-blue-50 font-medium text-blue-700'
-                          : 'hover:bg-gray-50'
-                      }`}
+                      className={`w-full px-3 py-2 text-left text-sm ${withdrawRoleFilter === label
+                        ? 'bg-blue-50 font-medium text-blue-700'
+                        : 'hover:bg-gray-50'
+                        }`}
                       onClick={() => {
                         setWithdrawRoleFilter(label) // ✅ 라벨 저장
                         setRoleAccordion('')
@@ -229,15 +240,11 @@ export const WithdrawalManagementPage = () => {
       {selectedWithdrawUser && (
         <WithdrawalModal
           open={isWithdrawModalOpen}
-          detail={withdrawalDetail ?? null
-          }
+          detail={withdrawalDetail ?? null}
           loading={detailLoading}
           error={detailError instanceof Error ? detailError.message : undefined}
           onClose={() => setIsWithdrawModalOpen(false)}
-          onRestore={async () => {
-            // TODO: 복구 API 호출 후 목록 갱신
-            // 추후 복구 API 제작 후 추가하겠습니다
-          }}
+          onRestore={handleRestore}
         />
       )}
     </main>
