@@ -3,6 +3,7 @@ import type { RecruitmentDetail } from '../../../types/recruitments'
 import { ModalHeader } from '../../modal/ModalHeader'
 import { RecruitmentModalOutlet } from './RecruitmentModalOutlet'
 import { CloseModalFooter } from '../../modal/CloseModalFooter'
+import { Megaphone } from 'lucide-react'
 
 interface RecruitmentModalProps {
   open: boolean
@@ -19,7 +20,12 @@ export const RecruitmentModal = ({
 }: RecruitmentModalProps) => {
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
-      <ModalHeader title="스터디 구인 공고 상세" onClose={onClose} />
+      <ModalHeader
+        title="스터디 구인 공고 상세"
+        onClose={onClose}
+        subtitle="RECRUITMENT DETAIL"
+        iconComponent={Megaphone}
+      />
       <RecruitmentModalOutlet detail={detail} />
       <CloseModalFooter onClose={onClose} showDelete onDelete={onDelete} />
     </Modal>
