@@ -1,4 +1,15 @@
 import { X } from 'lucide-react'
+import { cn } from '../../utils/cn'
+import type { LucideIcon } from 'lucide-react'
+
+interface ModalHeaderProps {
+  title: string
+  subtitle?: string
+  iconComponent?: LucideIcon
+  onClose: () => void
+  align?: 'left' | 'center'
+  className?: string
+}
 
 export const ModalHeader = ({
   title,
