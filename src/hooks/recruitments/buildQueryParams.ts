@@ -11,10 +11,11 @@ export const buildRecruitmentsQueryParams = (
   // 페이지 기본값 설정 및 제어
   const normalizedPageSize = clampNumber(options.pageSize ?? 20, 1, 100)
   const normalizedPageNumber = Math.max(1, options.pageNumber ?? 1)
+  const normalizedOffset = (normalizedPageNumber - 1) * normalizedPageSize
   // 기본 파라미터
   const queryParams: RecruitmentRequestParams = {
-    page: normalizedPageNumber,
-    page_size: normalizedPageSize,
+    limit: normalizedPageSize,
+    offset: normalizedOffset,
   }
   // 검색어
   const trimmedSearchText = (options.searchText ?? '').trim()

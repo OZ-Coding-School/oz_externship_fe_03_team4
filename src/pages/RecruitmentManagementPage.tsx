@@ -1,44 +1,25 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router' // 여기는 나중에 탱스택으로 바꿀예정입니닷
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Pagination } from '../components/pagination/Pagination'
 import { RecruitmentFilterSection } from '../components/recruitments/filter/RecruitmentFilterSection'
-import type { Recruitment, RecruitmentStatusApi } from '../types/recruitments'
+import {
+  type Recruitment,
+  type RecruitmentStatusApi,
+  type RecruitmentDetailDTO,
+  type RecruitmentDetail,
+  mapRecruitmentDetailDTO,
+} from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox, Megaphone } from 'lucide-react'
 import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentModal'
-// import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
+import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
+import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
+import api from '../lib/axios'
 
 const PAGE_SIZE = 10
-// 여기서부터
-const TAGS = [
-  // 가짜 목데이터
-  ['React', 'Frontend'],
-  ['Python', 'Django'],
-  ['TypeScript', 'Frontend'],
-  ['Java', 'Spring'],
-  ['Next.js', 'Fullstack'],
-]
 
-const STATUSES: RecruitmentStatusApi[] = ['모집중', '마감']
-
-const mockRecruitments: Recruitment[] = Array.from({ length: 15 }).map(
-  (_, index) => ({
-    id: index + 1,
-    title: `스터디 구인 공고 ${index + 1}`,
-    tags: TAGS[index % TAGS.length],
-    closeAt: `2025-11-${String((index % 28) + 1).padStart(2, '0')}T23:59:59Z`,
-    status: STATUSES[index % STATUSES.length],
-    viewsCount: Math.floor(Math.random() * 300 + 50),
-    bookmarksCount: Math.floor(Math.random() * 50 + 10),
-    createdAt: `2025-10-${String((index % 20) + 1).padStart(2, '0')}T12:00:00Z`,
-    updatedAt: `2025-10-${String((index % 20) + 2).padStart(2, '0')}T15:00:00Z`,
-  })
-)
-
-const ALL_TAGS = Array.from(new Set(mockRecruitments.flatMap((r) => r.tags))) // 전체 태그 목록
-// 여기까지 목업데이터 입니닷.
 const RecruitmentManagementPage = () => {
   const [searchParams] = useSearchParams()
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
@@ -50,64 +31,56 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
+  const [recruitmentDetail, setRecruitmentDetail] =
+    useState<RecruitmentDetail | null>(null)
+  const [recruitmentDetailLoading, setRecruitmentDetailLoading] =
+    useState(false)
+  const [recruitmentDetailError, setRecruitmentDetailError] = useState<
+    string | null
+  >(null)
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
-  // const {
-  //   data: _data,
-  //   isLoading: _isLoading,
-  //   isError: _isError,
-  // } = useAdminRecruitmentsQuery({
-  //   searchText: debouncedSearchText,
-  //   statusFilter: statusFilter === '전체' ? undefined : statusFilter,
-  //   selectedTags,
-  //   ordering: 'latest',
-  //   pageNumber: currentPage,
-  //   pageSize: PAGE_SIZE,
-  // })
-  const filteredRecruitments = useMemo(() => {
-    let filteredRecruitmentList = mockRecruitments
-    // let filteredRecruitmentList = data?.items ?? []
+  const { data, isLoading, isError } = useAdminRecruitmentsQuery({
+    searchText: debouncedSearchText,
+    statusFilter: statusFilter === '전체' ? undefined : statusFilter,
+    selectedTags,
+    ordering: 'latest',
+    pageNumber: currentPage,
+    pageSize: PAGE_SIZE,
+  })
 
-    if (statusFilter !== '전체') {
-      filteredRecruitmentList = filteredRecruitmentList.filter(
-        (recruitment) => recruitment.status === statusFilter
+  const handleRowClick = async (row: Recruitment) => {
+    setSelectedRecruitment(row)
+    setRecruitmentDetail(null)
+    setRecruitmentDetailError(null)
+    setRecruitmentDetailLoading(true)
+    try {
+      const { data } = await api.get<RecruitmentDetailDTO>(
+        `/v1/admin/recruitments/${row.id}`
       )
+      setRecruitmentDetail(mapRecruitmentDetailDTO(data))
+    } catch {
+      try {
+        const { data } = await api.get<RecruitmentDetailDTO>(
+          `/v1/admin/recruitments/${row.id}/`
+        )
+        setRecruitmentDetail(mapRecruitmentDetailDTO(data))
+      } catch {
+        setRecruitmentDetailError('공고 상세정보를 불러오지 못했어요.')
+      }
+    } finally {
+      setRecruitmentDetailLoading(false)
     }
-    if (debouncedSearchText.trim()) {
-      const lowerSearchText = debouncedSearchText.toLowerCase().trim()
-      filteredRecruitmentList = filteredRecruitmentList.filter(
-        (recruitment) =>
-          recruitment.title.toLowerCase().includes(lowerSearchText) ||
-          recruitment.tags.some((tag) =>
-            tag.toLowerCase().includes(lowerSearchText)
-          )
-      )
-    }
+  }
 
-    if (selectedTags.length > 0) {
-      const selectedTagSet = new Set(selectedTags)
-      filteredRecruitmentList = filteredRecruitmentList.filter((recruitment) =>
-        recruitment.tags.some((tag) => selectedTagSet.has(tag))
-      )
-    }
+  const filteredRecruitments = data?.items ?? []
 
-    return filteredRecruitmentList
-  }, [statusFilter, debouncedSearchText, selectedTags])
-  // }, [data?.items, debouncedSearchText, statusFilter, selectedTags])
+  const hasNoData = !isLoading && !isError && filteredRecruitments.length === 0
 
-  const hasNoData = filteredRecruitments.length === 0
+  const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE))
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredRecruitments.length / PAGE_SIZE)
-  )
-
-  const paginatedRecruitments = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE
-    const endIndex = startIndex + PAGE_SIZE
-    return filteredRecruitments.slice(startIndex, endIndex)
-  }, [filteredRecruitments, currentPage])
+  const paginatedRecruitments = filteredRecruitments
 
   const resetFilters = () => {
     setSearchText('')
@@ -123,6 +96,13 @@ const RecruitmentManagementPage = () => {
         koreanTitle="공고 관리"
         englishSubtitle="RECRUITMENT MANAGEMENT"
       />
+      {isLoading && <LoadingState message="공고 목록을 불러오는 중..." />}
+      {isError && (
+        <ErrorState
+          title="불러오기 실패"
+          message="잠시 후 다시 시도해 주세요."
+        />
+      )}
 
       <RecruitmentFilterSection
         searchText={searchText}
@@ -140,7 +120,7 @@ const RecruitmentManagementPage = () => {
           setSelectedTags(nextSelectedTags)
           setCurrentPage(1)
         }}
-        availableTags={ALL_TAGS}
+        availableTags={[]}
       />
 
       <div className="mb-3 text-sm text-neutral-600">
@@ -179,7 +159,7 @@ const RecruitmentManagementPage = () => {
         <>
           <RecruitmentTableSection
             data={paginatedRecruitments}
-            onRowClick={(row) => setSelectedRecruitment(row)}
+            onRowClick={handleRowClick}
           />
 
           {totalPages > 1 && (
@@ -197,19 +177,30 @@ const RecruitmentManagementPage = () => {
       {selectedRecruitment && (
         <RecruitmentModal
           open
-          onClose={() => setSelectedRecruitment(null)}
-          onDelete={() => setSelectedRecruitment(null)}
-          detail={{
-            ...selectedRecruitment,
-            uuid: '',
-            expectedHeadcount: 0,
-            estimatedFee: 0,
-            attachments: [],
-            lectures: [],
-            applications: [],
-            content: '',
-            isClosed: false,
+          onClose={() => {
+            setSelectedRecruitment(null)
+            setRecruitmentDetail(null)
+            setRecruitmentDetailError(null)
+            setRecruitmentDetailLoading(false)
           }}
+          onDelete={() => setSelectedRecruitment(null)}
+          detail={
+            recruitmentDetail ??
+            ({
+              ...selectedRecruitment,
+              uuid: '',
+              content: recruitmentDetailLoading
+                ? '불러오는 중...'
+                : (recruitmentDetailError ?? ''),
+              expectedHeadcount: 0,
+              estimatedFee: 0,
+              attachments: [],
+              lectures: [],
+              applications: [],
+              studyGroup: null,
+              isClosed: selectedRecruitment.status === '마감',
+            } as RecruitmentDetail)
+          }
         />
       )}
     </div>

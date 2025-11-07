@@ -34,6 +34,7 @@ const RECR_DETAIL = (id: number) => ({
   id,
   uuid: '550e8400-e29b-41d4-a716-446655440000',
   title: '스터디 구인 공고 제목',
+  status: id % 5 === 0 ? '마감' : '모집중',
   content: '공고 내용 (마크다운 적용)',
   attachments: [
     {
@@ -45,10 +46,10 @@ const RECR_DETAIL = (id: number) => ({
   estimated_fee: 100000,
   study_lectures: [
     {
-      thumbnail_url: 'https://example.com/thumbnail.jpg',
-      name: '강의 이름',
+      thumbnail_img_url: 'https://example.com/thumbnail.jpg',
+      title: '강의 이름',
       instructor: '강사명',
-      link: 'https://example.com/lecture',
+      url_link: 'https://example.com/lecture',
     },
   ],
   tags: [{ name: 'Python' }, { name: 'Backend' }],
@@ -57,19 +58,40 @@ const RECR_DETAIL = (id: number) => ({
   created_at: '2025-10-16 13:00',
   updated_at: '2025-10-16 15:00',
   views_count: 123,
-  bookmark_count: 10,
+  bookmarks_count: 10,
   applications: [
     {
-      nickname: '홍길동',
-      email: 'hong@example.com',
-      applied_at: '2025-10-16 14:30',
+      id: 901,
+      recruitment_title: '스터디 구인 공고 제목 1',
+      applicant_nickname: '홍길동',
+      applicant_email: 'hong@example.com',
+      created_at: '2025-10-16T14:30:00+09:00',
+      updated_at: '2025-10-16T15:10:00+09:00',
       status: 'APPLIED',
+    },
+    {
+      id: 902,
+      recruitment_title: '스터디 구인 공고 제목 1',
+      applicant_nickname: '김영희',
+      applicant_email: 'young@example.com',
+      created_at: '2025-10-17T09:05:00+09:00',
+      updated_at: '2025-10-17T11:20:00+09:00',
+      status: 'REVIEWING',
+    },
+    {
+      id: 902,
+      recruitment_title: '스터디 구인 공고 제목 1',
+      applicant_nickname: '코코볼',
+      applicant_email: 'young@example.com',
+      created_at: '2025-10-17T09:05:00+09:00',
+      updated_at: '2025-10-17T11:20:00+09:00',
+      status: 'REVIEWING',
     },
   ],
 })
 
 export const recruitmentAdminHandlers = [
-  http.get('*/api/admin/recruitments/', ({ request }) => {
+  http.get('*/api/v1/admin/recruitments', ({ request }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -112,7 +134,7 @@ export const recruitmentAdminHandlers = [
     })
   }),
 
-  http.get('*/api/recruitments/admin/', ({ request }) => {
+  http.get('*/api/v1/admin/recruitments', ({ request }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -137,7 +159,7 @@ export const recruitmentAdminHandlers = [
     })
   }),
 
-  http.get('*/api/recruitments/:id/', ({ request, params }) => {
+  http.get('*/api/v1/admin/recruitments/:id/', ({ request, params }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
@@ -152,7 +174,7 @@ export const recruitmentAdminHandlers = [
     return HttpResponse.json(RECR_DETAIL(id))
   }),
 
-  http.delete('*/api/recruitments/:id', ({ request, params }) => {
+  http.delete('*/api/v1/admin/recruitments/:id', ({ request, params }) => {
     const authErr = requireAdminAuth(request.headers)
     if (authErr) return authErr
 
