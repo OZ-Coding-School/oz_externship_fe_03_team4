@@ -10,15 +10,13 @@ import { ReviewModal } from '../components/reviews/ReviewModal'
 import {
   type ReviewDetail,
   type Review,
-  type ReviewDTO,
-  mapDtoToReviewDetail,
   mapReviewToDetail,
 } from '../types/reviews/types'
 import { ReviewFilterSection } from '../components/reviews/filter/ReviewFilterSection'
 import { ReviewTableSection } from '../components/reviews/table/ReviewTableSection'
-import api from '../lib/axios'
 import { PageHeader } from '../components/PageHeader'
 import { Star } from 'lucide-react'
+import { useReviewDetailQuery } from '../hooks/reviews/useReviewDetailQuery'
 
 const DEFAULT_PAGE_SIZE = 10
 
@@ -27,9 +25,7 @@ const StudyReviewPage = () => {
   const initialSearchKeyword = searchParams.get('search') ?? ''
   const initialPageNumber = Number(searchParams.get('page') ?? '1')
 
-  const [selectedReview, setSelectedReview] = useState<ReviewDetail | null>(
-    null
-  )
+  const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchText, setSearchText] = useState(initialSearchKeyword)
   const [currentPageNumber, setCurrentPageNumber] = useState(initialPageNumber)
@@ -48,6 +44,12 @@ const StudyReviewPage = () => {
     pageSize: DEFAULT_PAGE_SIZE,
     sortKey: currentSortKey,
   })
+
+  const {
+    data: reviewDetail,
+    isLoading: isReviewDetailLoading,
+    isError: isReviewDetailError,
+  } = useReviewDetailQuery(selectedReviewId)
 
   const totalPages = useMemo(() => {
     if (!reviewListData) return 1
@@ -114,19 +116,9 @@ const StudyReviewPage = () => {
         <div className="rounded-xl">
           <ReviewTableSection
             data={reviewRows}
-            onRowClick={async (row) => {
-              setSelectedReview(mapReviewToDetail(row))
+            onRowClick={(row) => {
+              setSelectedReviewId(row.id)
               setIsModalOpen(true)
-              try {
-                const { data } = await api.get<{
-                  status: number
-                  message: string
-                  detail: ReviewDTO
-                }>(`/v1/studies/admin/reviews/${row.id}`)
-                setSelectedReview(mapDtoToReviewDetail(data.detail))
-              } catch {
-                // 일단은 잠깐, 제발 살려줘
-              }
             }}
           />
         </div>
@@ -144,14 +136,26 @@ const StudyReviewPage = () => {
           />
         </div>
       )}
-      {selectedReview && (
+      {selectedReviewId && (
         <ReviewModal
           open={isModalOpen}
           onClose={() => {
             setIsModalOpen(false)
-            setSelectedReview(null)
+            setSelectedReviewId(null)
           }}
-          review={selectedReview}
+          review={
+            reviewDetail ??
+            ({
+              ...mapReviewToDetail(
+                reviewRows.find((r) => r.id === selectedReviewId)!
+              ),
+              content: isReviewDetailLoading
+                ? '불러오는 중...'
+                : isReviewDetailError
+                  ? '리뷰 정보를 불러오지 못했습니다.'
+                  : '',
+            } as ReviewDetail)
+          }
         />
       )}
     </div>
