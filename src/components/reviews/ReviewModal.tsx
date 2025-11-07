@@ -18,7 +18,7 @@ export const ReviewModal = ({ open, onClose, review }: ReviewModalProps) => {
     <Modal isOn={open} onBackgroundClick={onClose}>
       <ModalHeader
         title="리뷰 상세보기"
-        subtitle="DETAIL REVIEW"
+        subtitle="REVIEW DETAIL"
         iconComponent={Star}
         onClose={onClose}
       />
