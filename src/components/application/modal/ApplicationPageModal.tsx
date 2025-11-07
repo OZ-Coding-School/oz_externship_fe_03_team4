@@ -1,3 +1,4 @@
+import { useBodyScrollLock } from '../../../hooks/useBodyScrollLock'
 import type { ApplicationDetail } from '../../../types/applications'
 import { CloseModalFooter } from '../../modal/CloseModalFooter'
 import Modal from '../../modal/Modal'
@@ -16,6 +17,7 @@ export const ApplicationPageModal = ({
   onClose,
   detail,
 }: ApplicationPageModalProps) => {
+  useBodyScrollLock(open)
   if (!detail) return null
 
   return (
