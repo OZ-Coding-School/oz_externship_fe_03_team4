@@ -23,7 +23,7 @@ export const fetchStudyGroups = async (
 ): Promise<FetchStudyGroupsReturn> => {
   const queryParams = buildQueryParams(params)
   const response = await api.get<StudyGroupListResponse>(
-    '/v1/studies/admin/groups/',
+    '/v1/studies/admin/groups',
     {
       params: queryParams,
     }
