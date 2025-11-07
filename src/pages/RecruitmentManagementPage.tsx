@@ -16,6 +16,7 @@ import { PageHeader } from '../components/PageHeader'
 import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
 import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentDetailQuery'
 import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
+import { ToastContainer } from '../components/toast/toastContainer'
 
 const PAGE_SIZE = 10
 
@@ -159,9 +160,16 @@ const RecruitmentManagementPage = () => {
         <RecruitmentModal
           open
           onClose={() => {
-            setSelectedRecruitment(null)
+            if (!isDeleting) setSelectedRecruitment(null)
           }}
-          onDelete={() => setSelectedRecruitment(null)}
+          onDelete={() => {
+            if (!selectedRecruitment || isDeleting) return
+            deleteRecruitment(selectedRecruitment.id, {
+              onSuccess: () => {
+                setSelectedRecruitment(null)
+              },
+            })
+          }}
           detail={
             recruitmentDetail ??
             ({
@@ -183,6 +191,7 @@ const RecruitmentManagementPage = () => {
           }
         />
       )}
+      <ToastContainer />
     </div>
   )
 }
