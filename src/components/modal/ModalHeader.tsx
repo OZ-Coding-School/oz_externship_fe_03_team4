@@ -20,7 +20,7 @@ export const ModalHeader = ({
 }: ModalHeaderProps) => (
   <div
     className={cn(
-      'mb-6 flex items-start justify-between rounded-t-xl bg-gradient-to-r from-white via-neutral-50 to-white p-4 shadow-sm',
+      'mb-6 flex items-center justify-between',
       align === 'center' && 'flex-col items-center text-center',
       className
     )}
@@ -32,12 +32,12 @@ export const ModalHeader = ({
       )}
     >
       {IconComponent && (
-        <div className="grid h-9 w-9 place-items-center rounded-lg border border-neutral-300 bg-white shadow-sm">
-          <IconComponent className="h-4 w-4 text-neutral-700" />
+        <div className="grid h-14 w-14 place-items-center rounded-lg border border-neutral-300 bg-white shadow-sm">
+          <IconComponent className="h-10 w-10 text-neutral-700" />
         </div>
       )}
       <div>
-        <h2 className="text-neutral text-lg font-semibold">{title}</h2>
+        <h2 className="text-neutral text-xl font-semibold">{title}</h2>
         {subtitle && (
           <p className="text-[11px] tracking-[.15em] text-neutral-500 uppercase">
             {subtitle}
