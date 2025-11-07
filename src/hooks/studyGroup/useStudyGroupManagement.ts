@@ -1,52 +1,41 @@
-import { useEffect } from 'react'
-import { useStudyGroupSearch } from './useStudyGroupSearch'
+import { useState, useMemo } from 'react'
 import { useStudyGroupFilter } from './useStudyGroupFilter'
-import { useStudyGroupSort } from './useStudyGroupSort'
-import { useStudyGroupPagination } from './useStudyGroupPagination'
-import { useStudyGroupData } from './useStudyGroupData'
+import { useStudyGroups } from './useStudyGroupQuery'
+import {
+  STUDY_GROUP_STATUS_REVERSE_MAP,
+  type StudyGroup,
+} from '../../types/studyGroup/types'
 import { useStudyGroupModal } from './useStudyGroupModal'
-import type { StudyGroup } from '../../types/studyGroup/types'
 
 const PAGE_SIZE = 10
 
 export const useStudyGroupManagement = () => {
-  // 검색 로직
-  const { searchKeyword, debouncedSearch, handleSearchChange, clearSearch } =
-    useStudyGroupSearch()
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sortKey, setSortKey] = useState('-created_at')
 
-  // 필터 로직
+  // 필터 hook
   const {
     selectedStatus,
     accordionValue,
     selectedStatusLabel,
     handleStatusChange,
     setAccordionValue,
-    resetFilter,
   } = useStudyGroupFilter()
 
-  // 데이터 조회 및 필터링
-  const { filteredStudyGroups } = useStudyGroupData({
-    searchText: debouncedSearch,
-    selectedStatus,
-  })
-
-  // 정렬 로직
-  const { sortKey, sortedStudyGroups, handleSortChange } =
-    useStudyGroupSort(filteredStudyGroups)
-
-  // 페이지네이션 로직
-  const {
-    currentPage,
-    totalPages,
-    paginatedItems: paginatedStudyGroups,
-    handlePageChange,
-    resetToFirstPage,
-  } = useStudyGroupPagination({
+  // API 호출
+  const { data, isLoading, isFetching } = useStudyGroups({
+    searchText: searchKeyword,
+    status:
+      selectedStatus === 'ALL'
+        ? undefined
+        : STUDY_GROUP_STATUS_REVERSE_MAP[selectedStatus],
+    sortKey: sortKey,
     pageSize: PAGE_SIZE,
-    items: sortedStudyGroups,
+    pageNumber: currentPage,
   })
 
-  // 모달 로직
+  // 모달
   const {
     isModalOpen,
     selectedStudyGroup,
@@ -55,75 +44,176 @@ export const useStudyGroupManagement = () => {
     closeModal,
   } = useStudyGroupModal()
 
-  // 검색/필터 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [debouncedSearch, selectedStatus, resetToFirstPage])
+  // 계산된 값
+  const paginatedStudyGroups = useMemo(() => {
+    return data?.items ?? []
+  }, [data])
 
-  // 정렬 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [sortKey, resetToFirstPage])
+  const totalCount = data?.totalCount ?? 0
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+  const isEmpty = paginatedStudyGroups.length === 0 && !isLoading
 
-  // 계산된 값들
-  const totalCount = sortedStudyGroups.length
-  const isEmpty = paginatedStudyGroups.length === 0
-  const showPagination = totalPages > 1
-
-  // 통합된 핸들러 함수들
+  // 핸들러
   const handleSearch = (keyword: string) => {
-    handleSearchChange(keyword)
+    setSearchKeyword(keyword)
+    setCurrentPage(1)
   }
 
   const handleFilterChange = (status: typeof selectedStatus) => {
     handleStatusChange(status)
+    setCurrentPage(1)
   }
 
   const handleSort = (key: string) => {
-    handleSortChange(key)
+    setSortKey(key)
+    setCurrentPage(1)
   }
 
-  const handleStudyGroupClick = (studyGroup: StudyGroup) => {
-    openModal(studyGroup)
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleStudyGroupClick = async (studyGroup: StudyGroup) => {
+    await openModal(studyGroup)
   }
 
   return {
-    // 검색 관련
+    // 검색
     searchKeyword,
     handleSearch,
-    clearSearch,
 
-    // 필터 관련
+    // 필터
     selectedStatus,
     accordionValue,
     selectedStatusLabel,
     handleFilterChange,
     setAccordionValue,
-    resetFilter,
 
-    // 정렬 관련
+    // 정렬
     sortKey,
     handleSort,
 
-    // 페이지네이션 관련
+    // 페이지네이션
     currentPage,
     totalPages,
-    showPagination,
+    showPagination: totalPages > 1,
     handlePageChange,
 
-    // 데이터 관련
+    // 데이터
     paginatedStudyGroups,
     totalCount,
     isEmpty,
+    isLoading: isLoading || isFetching,
 
-    // 모달 관련
+    // 모달
     isModalOpen,
     selectedStudyGroup,
     isLoadingDetail,
     handleStudyGroupClick,
     closeModal,
-
-    // 상수
-    pageSize: PAGE_SIZE,
   }
 }
+
+// import { StudyGroupTable } from '../components/studyGroup/StudyGroupTable'
+// import { Pagination } from '../components/pagination/Pagination'
+// import { StudyGroupModal } from '../components/studyGroup/StudyGroupModal'
+// import { useStudyGroupManagement } from '../hooks/studyGroup/useStudyGroupManagement'
+// import { PageHeader } from '../components/PageHeader'
+// import { ClipboardList } from 'lucide-react'
+// import { SearchAndFilterSection } from '../components/studyGroup/SearchAndFilterSection'
+// import { EmptyState } from '../components/Lecture/LoadingState'
+// import { useStudyGroups } from '../hooks/studyGroup/useStudyGroupQuery'
+// import { STUDY_GROUP_STATUS_REVERSE_MAP } from '../types/studyGroup/types'
+
+// const StudyGroupManagementPage = () => {
+//   const {
+//     // 검색
+//     searchKeyword,
+//     handleSearch,
+
+//     // 필터
+//     selectedStatus,
+//     accordionValue,
+//     selectedStatusLabel,
+//     handleFilterChange,
+//     setAccordionValue,
+
+//     // 정렬
+//     sortKey,
+//     handleSort,
+
+//     // 페이지네이션
+//     currentPage,
+//     totalPages,
+//     showPagination,
+//     handlePageChange,
+
+//     // 데이터
+//     paginatedStudyGroups,
+//     totalCount,
+//     isEmpty,
+
+//     // 모달
+//     isModalOpen,
+//     selectedStudyGroup,
+//     isLoadingDetail,
+//     handleStudyGroupClick,
+//     closeModal,
+//   } = useStudyGroupManagement()
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-6">
+//       <PageHeader
+//         iconComponent={ClipboardList}
+//         koreanTitle="스터디 그룹 관리"
+//         englishSubtitle="STUDY GROUP MANAGEMENT"
+//       />
+
+//       <SearchAndFilterSection
+//         searchKeyword={searchKeyword}
+//         onSearchChange={handleSearch}
+//         selectedStatus={selectedStatus}
+//         accordionValue={accordionValue}
+//         selectedStatusLabel={selectedStatusLabel}
+//         onStatusChange={handleFilterChange}
+//         onAccordionChange={setAccordionValue}
+//         totalCount={totalCount}
+//       />
+
+//       {isEmpty ? (
+//         <EmptyState
+//           title="검색 결과가 없습니다."
+//           message="다른 검색어를 입력하거나 필터를 변경해보세요."
+//         />
+//       ) : (
+//         <>
+//           <StudyGroupTable
+//             studyGroups={paginatedStudyGroups}
+//             sortKey={sortKey}
+//             onSortChange={handleSort}
+//             onStudyGroupClick={handleStudyGroupClick}
+//           />
+
+//           {showPagination && (
+//             <div className="mt-6 flex justify-center">
+//               <Pagination
+//                 currentPage={currentPage}
+//                 totalPages={totalPages}
+//                 onPageChange={handlePageChange}
+//               />
+//             </div>
+//           )}
+//         </>
+//       )}
+
+//       <StudyGroupModal
+//         open={isModalOpen}
+//         onClose={closeModal}
+//         studyGroup={selectedStudyGroup}
+//         isLoading={isLoadingDetail}
+//       />
+//     </div>
+//   )
+// }
+
+// export default StudyGroupManagementPage

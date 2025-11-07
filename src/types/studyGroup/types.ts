@@ -23,15 +23,14 @@ export type StudyGroupMemberDTO = {
 
 export type StudyGroupDTO = {
   id: number
+  uuid: string
   name: string
-  profile_img_url: string
+  current_headcount: number
   max_headcount: number
+  profile_img_url: string
   start_at: string
   end_at: string
   status: StudyGroupStatus
-  current_headcount: number
-  is_leader: boolean
-  lectures: StudyGroupLectureDTO[]
   created_at: string
   updated_at: string
 }
@@ -52,11 +51,19 @@ export type StudyGroupDetailDTO = {
   updated_at: string
 }
 
+// export type StudyGroupListResponse = {
+//   count?: number
+//   next?: string | null
+//   previous?: string | null
+//   results: StudyGroupDTO[]
+// }
 export type StudyGroupListResponse = {
-  count?: number
-  next?: string | null
-  previous?: string | null
-  results: StudyGroupDTO[]
+  status: number
+  message: string
+  data: {
+    study_groups: StudyGroupDTO[]
+    total_count: number
+  }
 }
 
 export type StudyGroupDetailResponse = {
@@ -71,6 +78,7 @@ export type StudyGroupUiStatus = '대기중' | '진행중' | '완료' | '취소�
 // UI용 타입
 export type StudyGroup = {
   id: number
+  uuid: string
   name: string
   profileImg: string
   maxHeadcount: number
@@ -78,8 +86,6 @@ export type StudyGroup = {
   startAt: string
   endAt: string
   status: StudyGroupUiStatus
-  isLeader: boolean
-  lectures: StudyGroupLectureDTO[]
   createdAt: string
   updatedAt: string
 }
@@ -163,6 +169,7 @@ export const STUDY_GROUP_STATUS_OPTIONS: Array<{
 export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
   return {
     id: dto.id,
+    uuid: dto.uuid,
     name: dto.name,
     profileImg: dto.profile_img_url,
     maxHeadcount: dto.max_headcount,
@@ -170,8 +177,6 @@ export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
     startAt: dto.start_at,
     endAt: dto.end_at,
     status: STUDY_GROUP_STATUS_MAP[dto.status],
-    isLeader: dto.is_leader,
-    lectures: dto.lectures,
     createdAt: formatDate(dto.created_at),
     updatedAt: formatDate(dto.updated_at),
   }
