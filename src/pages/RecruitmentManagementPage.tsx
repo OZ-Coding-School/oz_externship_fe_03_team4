@@ -6,9 +6,7 @@ import { RecruitmentFilterSection } from '../components/recruitments/filter/Recr
 import {
   type Recruitment,
   type RecruitmentStatusApi,
-  type RecruitmentDetailDTO,
   type RecruitmentDetail,
-  mapRecruitmentDetailDTO,
 } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox, Megaphone } from 'lucide-react'
@@ -16,7 +14,7 @@ import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentMo
 import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
 import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
-import api from '../lib/axios'
+import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentDetailQuery'
 
 const PAGE_SIZE = 10
 
