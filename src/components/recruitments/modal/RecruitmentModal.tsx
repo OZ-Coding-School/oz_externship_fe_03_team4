@@ -5,7 +5,6 @@ import { RecruitmentModalOutlet } from './RecruitmentModalOutlet'
 import { CloseModalFooter } from '../../modal/CloseModalFooter'
 import { Megaphone } from 'lucide-react'
 import { useBodyScrollLock } from '../../../hooks/useBodyScrollLock'
-import { Megaphone } from 'lucide-react'
 
 interface RecruitmentModalProps {
   open: boolean
