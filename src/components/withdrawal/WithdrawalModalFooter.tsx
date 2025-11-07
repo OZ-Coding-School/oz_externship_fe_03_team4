@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '../buttons/Buttons'
 import Modal from '../modal/Modal'
+import { useToastStore } from '../../store/toastStore'
 
 type WithdrawalModalFooterProps = {
   onClose: () => void
@@ -12,11 +13,12 @@ export const WithdrawalModalFooter = ({
   onRestore,
 }: WithdrawalModalFooterProps) => {
   const [isRestoreOpen, setIsRestoreOpen] = useState(false)
-  const [isAlertOpen, setIsAlertOpen] = useState(false)
+
+  const { showSuccess } = useToastStore()
 
   const handleRestoreConfirm = () => {
     setIsRestoreOpen(false)
-    setIsAlertOpen(true)
+    showSuccess('탈퇴 회원 복구 완료', '회원 복구가 완료되었습니다.')
 
     onRestore?.()
   }
@@ -56,27 +58,6 @@ export const WithdrawalModalFooter = ({
           </Button>
           <Button color="success" size="medium" onClick={handleRestoreConfirm}>
             복구
-          </Button>
-        </div>
-      </Modal>
-
-      {/* 완료 알림 */}
-      <Modal
-        isOn={isAlertOpen}
-        onBackgroundClick={() => setIsAlertOpen(false)}
-        className="max-h-[600px] w-[400px]"
-      >
-        <h2 className="mb-4 text-lg font-bold">알림</h2>
-        <p className="mb-6 text-base text-gray-600">
-          회원 복구가 완료되었습니다.
-        </p>
-        <div className="flex justify-end">
-          <Button
-            color="success"
-            size="medium"
-            onClick={() => setIsAlertOpen(false)}
-          >
-            확인
           </Button>
         </div>
       </Modal>

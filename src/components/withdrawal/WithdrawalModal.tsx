@@ -3,6 +3,8 @@ import { ModalHeader } from '../modal/ModalHeader'
 import { WithdrawalModalOutlet } from './WithdrawalModalOutlet'
 import { WithdrawalModalFooter } from './WithdrawalModalFooter'
 import type { WithdrawalDetail } from '../../types/withdraw/types'
+import { Toast } from '../toast/toastMessage'
+import { useToastStore } from '../../store/toastStore'
 
 type Props = {
   open: boolean
@@ -21,9 +23,22 @@ export const WithdrawalModal = ({
   onClose,
   onRestore,
 }: Props) => {
+  const toasts = useToastStore((state) => state.toasts)
+  const removeToast = useToastStore((state) => state.removeToast)
+
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
       <div className="flex max-h-[70vh] w-[700px] flex-col p-6">
+        <div className="pointer-events-none absolute top-6 right-6 z-50 flex w-[320px] flex-col gap-2">
+          {toasts.map((toast) => (
+            <div
+              key={`${toast.title}-${toast.message}-${toast.variant}`}
+              className="pointer-events-auto"
+            >
+              <Toast {...toast} onClose={removeToast} />
+            </div>
+          ))}
+        </div>
         <ModalHeader title="회원 탈퇴 상세 정보" onClose={onClose} />
 
         <div className="grow overflow-y-auto">

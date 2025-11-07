@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { formatDate } from '../../utils/formatDate'
 import { UserIcon } from 'lucide-react'
 import { ModalPair } from '../reviews/ModalPair'
@@ -9,17 +10,20 @@ export const WithdrawalModalOutlet = ({
   detail: WithdrawalDetail
 }) => {
   const user = detail.user
+  const [imgError, setImgError] = useState(false)
+
   return (
     <div className="grow overflow-y-auto">
       <p className="pb-4 text-lg font-semibold">회원 정보</p>
       {/* 사용자 */}
       <div className="mb-6 flex items-center gap-4">
         <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gray-200">
-          {user.profile_img_url ? (
+          {user.profile_img_url && !imgError ? (
             <img
               src={user.profile_img_url}
               alt={user.nickname || user.name}
               className="h-full w-full rounded-full object-cover"
+              onError={() => setImgError(true)}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-gray-400">
