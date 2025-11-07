@@ -4,6 +4,7 @@ import { ModalHeader } from '../modal/ModalHeader'
 import { ReviewModalOutlet } from '../reviews/ReviewModalOutlet'
 import { CloseModalFooter } from '../modal/CloseModalFooter'
 import { Star } from 'lucide-react'
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock'
 
 interface ReviewModalProps {
   open: boolean
