@@ -22,7 +22,6 @@ import {
   ErrorState,
   LoadingState,
 } from '../components/Lecture/LoadingState'
-import api from '../lib/axios'
 
 const PAGE_SIZE = 10
 const StudyApplicationPage = () => {
