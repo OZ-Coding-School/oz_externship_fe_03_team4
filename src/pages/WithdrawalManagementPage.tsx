@@ -1,5 +1,5 @@
 import { SearchInput } from '../components/search/SearchInput'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Badge } from '../components/Badge'
 import { Table } from '../components/Data-Indicate/Table'
 import { type WithdrawalRow } from '../types/withdraw/types'
@@ -7,16 +7,13 @@ import { ROLE_CODE_TO_LABEL, WITHDRAW_REASONS } from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { Accordion } from '../components/Accordion/Accordion'
 import { AccordionItem } from '../components/Accordion/AccordionType'
-// import {
-//   MOCK_WITHDRAWAL_LIST_DERIVED,
-//   buildMockWithdrawalDetail,
-// } from '../components/withdrawal/mockWithdrawalDetail'
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { formatDate } from '../utils/formatDate'
 import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
+import { useWithdrawalDetailQuery } from '../hooks/withdrawal/useWithdrawalDetailQuery'
 import { Pagination } from '../components/pagination/Pagination'
 
-const ROLE_LABEL_TO_CODE: Record<string, 'user' | 'staff' | 'admin'> = {
+const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
   관리자: 'admin',
   스태프: 'staff',
   일반회원: 'user',
@@ -26,10 +23,6 @@ export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
-
-  // const [isLoading, setIsLoading] = useState(false)
-  // const [error, setError] = useState<string | undefined>(undefined)
-  // const [rows, setRows] = useState<WithdrawalRow[]>([])
 
   const [page, setPage] = useState(1)
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
@@ -63,34 +56,15 @@ export const WithdrawalManagementPage = () => {
 
   const rows = data?.result ?? []
 
-  console.log('useWithdrawalQuery:', { data, isLoading, error })
-
-  // 탈퇴 유저 필터링
-  // const filteredWithdrawUsers = rows.filter((user) => {
-  //   const matchesWithdrawSearch =
-  //     debouncedSearch === '' ||
-  //     user.id.toString().includes(debouncedSearch) ||
-  //     user.email.includes(debouncedSearch) ||
-  //     user.name.includes(debouncedSearch)
-
-  //   const matchesWithdrawReason =
-  //     withdrawReasonFilter === '' || user.reason === withdrawReasonFilter
-
-  //   const matchedWithdrawRole =
-  //     withdrawRoleFilter === '' || user.role === withdrawRoleFilter
-
-  //   return matchesWithdrawSearch && matchesWithdrawReason && matchedWithdrawRole
-  // })
   const filteredWithdrawUsers = rows.filter((user: WithdrawalRow) => {
-    // role 필터링 (클라이언트)
-    if (withdrawRoleFilter !== '') {
-      const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
-      if (user.role !== targetCode) return false
-    }
-    return true
+    if (!withdrawRoleFilter) return true
+    const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+    return user.role === targetCode
   })
 
-  const totalCount = data?.count ?? 0
+  const filteredCount = filteredWithdrawUsers.length
+  const baseCount = data?.count ?? 0
+  const totalCount = withdrawRoleFilter ? filteredCount : baseCount
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
   // 테이블 컬럼 정의
@@ -120,21 +94,16 @@ export const WithdrawalManagementPage = () => {
     },
   ]
 
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     try {
-  //       setIsLoading(true)
-  //       setError(undefined)
+  const selectedUserId = selectedWithdrawUser?.id
 
-  //       setRows(MOCK_WITHDRAWAL_LIST_DERIVED)
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : '데이터 로드 실패')
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   }
-  //   loadData()
-  // }, [])
+  const {
+    data: withdrawalDetail,
+    isLoading: detailLoading,
+    error: detailError,
+  } = useWithdrawalDetailQuery({
+    userId: selectedUserId,
+    enabled: isWithdrawModalOpen,
+  })
 
   return (
     <main className="bg-gray-50 p-8">
@@ -192,13 +161,7 @@ export const WithdrawalManagementPage = () => {
           <Accordion
             value={roleAccordion}
             onValueChange={setRoleAccordion}
-            selectedLabels={{
-              '0': withdrawRoleFilter
-                ? ROLE_CODE_TO_LABEL[
-                    withdrawRoleFilter as keyof typeof ROLE_CODE_TO_LABEL
-                  ]
-                : '전체 권한',
-            }}
+            selectedLabels={{ '0': withdrawRoleFilter || '전체 권한' }} // ✅ 라벨 그대로 사용
           >
             <AccordionItem title="권한">
               {roleAccordion === '0' && (
@@ -215,9 +178,13 @@ export const WithdrawalManagementPage = () => {
                   {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
                     <button
                       key={code}
-                      className={`w-full px-3 py-2 text-left text-sm ${withdrawRoleFilter === code ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
+                      className={`w-full px-3 py-2 text-left text-sm ${
+                        withdrawRoleFilter === label
+                          ? 'bg-blue-50 font-medium text-blue-700'
+                          : 'hover:bg-gray-50'
+                      }`}
                       onClick={() => {
-                        setWithdrawRoleFilter(label)
+                        setWithdrawRoleFilter(label) // ✅ 라벨 저장
                         setRoleAccordion('')
                       }}
                     >
@@ -262,14 +229,10 @@ export const WithdrawalManagementPage = () => {
       {selectedWithdrawUser && (
         <WithdrawalModal
           open={isWithdrawModalOpen}
-          detail={
-            // selectedWithdrawUser
-            //   ? buildMockWithdrawalDetail(selectedWithdrawUser)
-            //   : null
-            null
+          detail={withdrawalDetail ?? null
           }
-          loading={false}
-          error={undefined}
+          loading={detailLoading}
+          error={detailError instanceof Error ? detailError.message : undefined}
           onClose={() => setIsWithdrawModalOpen(false)}
           onRestore={async () => {
             // TODO: 복구 API 호출 후 목록 갱신
