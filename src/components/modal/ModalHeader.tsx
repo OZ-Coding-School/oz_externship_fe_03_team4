@@ -1,6 +1,5 @@
-import { X } from 'lucide-react'
+import { X, type LucideIcon } from 'lucide-react'
 import { cn } from '../../utils/cn'
-import type { LucideIcon } from 'lucide-react'
 
 interface ModalHeaderProps {
   title: string
@@ -13,13 +12,39 @@ interface ModalHeaderProps {
 
 export const ModalHeader = ({
   title,
+  subtitle,
+  iconComponent: IconComponent,
   onClose,
-}: {
-  title: string
-  onClose: () => void
-}) => (
-  <div className="mb-6 flex items-center justify-between">
-    <h2 className="text-neutral text-lg font-semibold">{title}</h2>
+  align = 'left',
+  className,
+}: ModalHeaderProps) => (
+  <div
+    className={cn(
+      'mb-6 flex items-center justify-between',
+      align === 'center' && 'flex-col items-center text-center',
+      className
+    )}
+  >
+    <div
+      className={cn(
+        'flex items-center gap-3',
+        align === 'center' && 'justify-center'
+      )}
+    >
+      {IconComponent && (
+        <div className="grid h-9 w-9 place-items-center rounded-lg border border-neutral-300 bg-white shadow-sm">
+          <IconComponent className="h-4 w-4 text-neutral-700" />
+        </div>
+      )}
+      <div>
+        <h2 className="text-neutral text-lg font-semibold">{title}</h2>
+        {subtitle && (
+          <p className="text-[11px] tracking-[.15em] text-neutral-500 uppercase">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    </div>
     <button
       onClick={onClose}
       className="rounded-md p-1 text-neutral-500 transition hover:bg-neutral-100"
