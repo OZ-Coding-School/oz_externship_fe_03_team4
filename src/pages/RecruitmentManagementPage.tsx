@@ -31,17 +31,23 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-
+  const [ordering, setOrdering] =
+    useState<AdminRecruitmentsParams['ordering']>('latest')
   const { mutate: deleteRecruitment, isPending: isDeleting } =
     useDeleteRecruitment()
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
+
+  const handleSortChange = (nextSortKey: string) => {
+    setOrdering(nextSortKey)
+    setCurrentPage(1)
+  }
   const { data, isLoading, isError } = useAdminRecruitmentsQuery({
     searchText: debouncedSearchText,
     statusFilter: statusFilter === '전체' ? undefined : statusFilter,
     selectedTags,
-    ordering: 'latest',
+    ordering,
     pageNumber: currentPage,
     pageSize: PAGE_SIZE,
   })
@@ -139,6 +145,8 @@ const RecruitmentManagementPage = () => {
           <RecruitmentTableSection
             data={paginatedRecruitments}
             onRowClick={handleRowClick}
+            sortKey={ordering}
+            onSortChange={handleSortChange}
           />
 
           {totalPages > 1 && (

@@ -16,10 +16,10 @@ interface WithSortableColumnsOptions<Row> {
   onSortChange?: (nextSortKey: string) => void
 }
 
-export function withSortableColumns<Row>(
+export const withSortableColumns = <Row,>(
   columns: Array<BaseColumn<Row>>,
   options: WithSortableColumnsOptions<Row>
-): Array<BaseColumn<Row>> {
+): Array<BaseColumn<Row>> => {
   const { sortableKeys, sortKey, onSortChange } = options
 
   if (!onSortChange) {
