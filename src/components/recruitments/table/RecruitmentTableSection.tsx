@@ -2,9 +2,7 @@ import { Table } from '../../Data-Indicate/Table'
 import type { Recruitment } from '../../../types/recruitments'
 import { baseRecruitmentColumns, type RecruitmentRow } from './Column'
 import { withSortableColumns } from './withSortableColumns'
-import type { AdminRecruitmentsParams } from '../../../hooks/recruitments/types.local'
-
-type RecruitmentOrdering = AdminRecruitmentsParams['ordering']
+import type { RecruitmentOrdering } from '../../../hooks/recruitments/types.local'
 
 interface RecruitmentTableSectionProps {
   data: Recruitment[]

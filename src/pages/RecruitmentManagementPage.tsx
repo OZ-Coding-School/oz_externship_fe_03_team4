@@ -17,7 +17,7 @@ import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
 import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentDetailQuery'
 import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
 import { ToastContainer } from '../components/toast/toastContainer'
-
+import type { RecruitmentOrdering } from '../hooks/recruitments/types.local'
 const PAGE_SIZE = 10
 
 const RecruitmentManagementPage = () => {
@@ -31,17 +31,18 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-  const [ordering, setOrdering] = useState<string>('latest')
+  const [ordering, setOrdering] = useState<RecruitmentOrdering>('latest')
   const { mutate: deleteRecruitment, isPending: isDeleting } =
     useDeleteRecruitment()
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
 
-  const handleSortChange = (nextSortKey: string) => {
-    setOrdering(nextSortKey)
+  const handleSortChange = (nextOrdering: RecruitmentOrdering) => {
+    setOrdering(nextOrdering)
     setCurrentPage(1)
   }
+
   const { data, isLoading, isError } = useAdminRecruitmentsQuery({
     searchText: debouncedSearchText,
     statusFilter: statusFilter === '전체' ? undefined : statusFilter,
