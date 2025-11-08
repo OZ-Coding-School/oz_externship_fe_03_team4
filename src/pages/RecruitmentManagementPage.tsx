@@ -31,8 +31,7 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-  const [ordering, setOrdering] =
-    useState<AdminRecruitmentsParams['ordering']>('latest')
+  const [ordering, setOrdering] = useState<string>('latest')
   const { mutate: deleteRecruitment, isPending: isDeleting } =
     useDeleteRecruitment()
 

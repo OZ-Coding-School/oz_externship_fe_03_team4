@@ -2,12 +2,15 @@ import { Table } from '../../Data-Indicate/Table'
 import type { Recruitment } from '../../../types/recruitments'
 import { baseRecruitmentColumns, type RecruitmentRow } from './Column'
 import { withSortableColumns } from './withSortableColumns'
+import type { AdminRecruitmentsParams } from '../../../hooks/recruitments/types.local'
+
+type RecruitmentOrdering = AdminRecruitmentsParams['ordering']
 
 interface RecruitmentTableSectionProps {
   data: Recruitment[]
   onRowClick?: (row: Recruitment) => void
-  sortKey?: string
-  onSortChange?: (nextSortKey: string) => void
+  sortKey?: RecruitmentOrdering
+  onSortChange?: (nextOrdering: RecruitmentOrdering) => void
 }
 
 const sortableRecruitmentKeys: Array<keyof RecruitmentRow & string> = [
@@ -16,6 +19,29 @@ const sortableRecruitmentKeys: Array<keyof RecruitmentRow & string> = [
   'bookmarksCount',
   'createdAt',
 ]
+const ORDER_TO_SORT: Record<RecruitmentOrdering, string> = {
+  latest: '-createdAt',
+  oldest: 'createdAt',
+  views: '-viewsCount',
+  bookmarks: '-bookmarksCount',
+}
+
+const SORT_TO_ORDER: Record<string, RecruitmentOrdering> = {
+  '-createdAt': 'latest',
+  createdAt: 'oldest',
+  '-viewsCount': 'views',
+  viewsCount: 'views',
+  '-bookmarksCount': 'bookmarks',
+  bookmarksCount: 'bookmarks',
+}
+
+const mapOrderingToSortKey = (
+  ordering?: RecruitmentOrdering
+): string | undefined =>
+  ordering ? (ORDER_TO_SORT[ordering] ?? undefined) : undefined
+
+const mapSortKeyToOrdering = (sortKey: string): RecruitmentOrdering =>
+  SORT_TO_ORDER[sortKey] ?? 'latest'
 
 export const RecruitmentTableSection = ({
   data,
@@ -24,10 +50,16 @@ export const RecruitmentTableSection = ({
   onSortChange,
 }: RecruitmentTableSectionProps) => {
   const rows = data as RecruitmentRow[]
+  const internalSortKey = mapOrderingToSortKey(sortKey)
+  const handleInternalSortChange = (nextSortKey: string) => {
+    if (!onSortChange) return
+    const nextOrdering = mapSortKeyToOrdering(nextSortKey)
+    onSortChange(nextOrdering)
+  }
   const columns = withSortableColumns<RecruitmentRow>(baseRecruitmentColumns, {
     sortableKeys: sortableRecruitmentKeys,
-    sortKey,
-    onSortChange,
+    sortKey: internalSortKey,
+    onSortChange: handleInternalSortChange,
   })
   return (
     <section className="rounded-xl border border-neutral-200 bg-white shadow-sm">
