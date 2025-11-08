@@ -164,11 +164,9 @@ const RecruitmentManagementPage = () => {
           }}
           onDelete={() => {
             if (!selectedRecruitment || isDeleting) return
-            deleteRecruitment(selectedRecruitment.id, {
-              onSuccess: () => {
-                setSelectedRecruitment(null)
-              },
-            })
+            const targetId = selectedRecruitment.id
+            setSelectedRecruitment(null)
+            deleteRecruitment(targetId)
           }}
           detail={
             recruitmentDetail ??

@@ -13,7 +13,7 @@ export const useDeleteRecruitment = () => {
       try {
         await api.delete(`/v1/admin/recruitments/${id}`)
       } catch {
-        await api.delete(`/v1/admin/recruitments/${id}`)
+        await api.delete(`/v1/admin/recruitments/${id}/`)
       }
     },
 
