@@ -57,6 +57,7 @@ const RecruitmentManagementPage = () => {
   }
 
   const filteredRecruitments = data?.items ?? []
+  const totalCount = data?.totalCount ?? 0
 
   const hasNoData = !isLoading && !isError && filteredRecruitments.length === 0
 
@@ -106,11 +107,7 @@ const RecruitmentManagementPage = () => {
       />
 
       <div className="mb-3 text-sm text-neutral-600">
-        총{' '}
-        <span className="font-medium text-neutral-900">
-          {filteredRecruitments.length}
-        </span>
-        건
+        총 <span className="font-medium text-neutral-900">{totalCount}</span>건
       </div>
 
       {hasNoData ? (
