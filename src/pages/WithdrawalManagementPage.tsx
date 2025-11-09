@@ -180,12 +180,14 @@ export const WithdrawalManagementPage = () => {
       key: 'role',
       label: '권한',
       render: (value: unknown) => {
-        const v = value as WithdrawalRow['role']
+        const code = String(value) as keyof typeof ROLE_CODE_TO_LABEL
+        const label = ROLE_CODE_TO_LABEL[code] ?? '일반회원'
         const variant: 'info' | 'primary' | 'default' =
-          v === 'admin' ? 'info' : v === 'staff' ? 'primary' : 'default'
+          code === 'admin' ? 'info' : code === 'staff' ? 'primary' : 'default'
+
         return (
           <div className="w-20 text-center">
-            <Badge variant={variant} label={v} />
+            <Badge variant={variant} label={label} />
           </div>
         )
       },
