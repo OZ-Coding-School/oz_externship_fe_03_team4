@@ -13,6 +13,7 @@ import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
 import { useWithdrawalDetailQuery } from '../hooks/withdrawal/useWithdrawalDetailQuery'
 import { useWithdrawalRestoreMutation } from '../hooks/withdrawal/useWithdrawalRestoreMutation'
 import { Pagination } from '../components/pagination/Pagination'
+import axios from 'axios'
 
 const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
   관리자: 'admin',
@@ -71,6 +72,19 @@ export const WithdrawalManagementPage = () => {
     withdrawRoleFilter && filteredCount === 0
       ? 1
       : Math.max(1, Math.ceil(totalCount / pageSize))
+
+  const getErrorMessage = (err: unknown): string => {
+    if (axios.isAxiosError(err)) {
+      const payload = err.response?.data as
+        | { error?: string; detail?: string; message?: string }
+        | undefined
+      return (
+        payload?.error ?? payload?.detail ?? payload?.message ?? err.message
+      )
+    }
+    if (err instanceof Error) return err.message
+    return '데이터 로드 실패'
+  }
 
   // 테이블 컬럼 정의
   const columns = [
@@ -158,9 +172,14 @@ export const WithdrawalManagementPage = () => {
     enabled: isWithdrawModalOpen && !isRestored,
   })
 
+  const listErrorMessage = error ? getErrorMessage(error) : undefined
+  const detailErrorMessage = detailError
+    ? getErrorMessage(detailError)
+    : undefined
+
   const restoreMutation = useWithdrawalRestoreMutation()
 
-  const handleRestore = () => {
+  const handleRestore = async () => {
     if (!selectedUserId) return Promise.resolve()
 
     return restoreMutation.mutateAsync(selectedUserId).then(() => {
@@ -272,8 +291,7 @@ export const WithdrawalManagementPage = () => {
           </div>
         ) : error ? (
           <div className="bg-red-50 p-6 text-sm text-red-700">
-            {' '}
-            {error instanceof Error ? error.message : '데이터 로드 실패'}{' '}
+            {listErrorMessage ?? '데이터 로드 실패'}
           </div>
         ) : (
           <Table<WithdrawalRow>
@@ -298,7 +316,8 @@ export const WithdrawalManagementPage = () => {
           open={isWithdrawModalOpen}
           detail={withdrawalDetail ?? null}
           loading={detailLoading}
-          error={detailError instanceof Error ? detailError.message : undefined}
+          // error={detailError instanceof Error ? detailError.message : undefined}
+          error={detailErrorMessage}
           onClose={() => {
             setIsWithdrawModalOpen(false)
             setIsRestored(false)
