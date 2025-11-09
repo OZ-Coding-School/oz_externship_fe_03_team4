@@ -26,6 +26,7 @@ export const WithdrawalManagementPage = () => {
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
 
   const [page, setPage] = useState(1)
+  const [isRestored, setIsRestored] = useState(false)
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
 
@@ -66,13 +67,40 @@ export const WithdrawalManagementPage = () => {
   const filteredCount = filteredWithdrawUsers.length
   const baseCount = data?.count ?? 0
   const totalCount = withdrawRoleFilter ? filteredCount : baseCount
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
+  const totalPages =
+    withdrawRoleFilter && filteredCount === 0
+      ? 1
+      : Math.max(1, Math.ceil(totalCount / pageSize))
 
   // 테이블 컬럼 정의
   const columns = [
-    { key: 'id', label: '요청 ID' },
-    { key: 'email', label: '이메일' },
-    { key: 'name', label: '이름' },
+    {
+      key: 'id',
+      label: '요청 ID',
+      render: (value: unknown) => (
+        <span className="block w-16 text-center text-sm font-medium">
+          {String(value)}
+        </span>
+      ),
+    },
+    {
+      key: 'email',
+      label: '이메일',
+      render: (value: unknown) => (
+        <span className="block w-44 truncate text-center text-sm font-medium">
+          {String(value)}
+        </span>
+      ),
+    },
+    {
+      key: 'name',
+      label: '이름',
+      render: (value: unknown) => (
+        <span className="block w-24 truncate text-center text-sm font-medium">
+          {String(value)}
+        </span>
+      ),
+    },
     {
       key: 'role',
       label: '권한',
@@ -80,17 +108,41 @@ export const WithdrawalManagementPage = () => {
         const v = value as WithdrawalRow['role']
         const variant: 'info' | 'primary' | 'default' =
           v === 'admin' ? 'info' : v === 'staff' ? 'primary' : 'default'
-        return <Badge variant={variant} label={v} />
+        return (
+          <div className="w-20 text-center">
+            <Badge variant={variant} label={v} />
+          </div>
+        )
       },
     },
-    { key: 'birthday', label: '생년월일' },
-    { key: 'reason', label: '탈퇴 사유' },
+    {
+      key: 'birthday',
+      label: '생년월일',
+      render: (value: unknown) => (
+        <span className="block w-28 text-center text-sm font-medium">
+          {String(value)}
+        </span>
+      ),
+    },
+    {
+      key: 'reason',
+      label: '탈퇴 사유',
+      render: (value: unknown) => (
+        <span className="block w-60 truncate text-center text-sm font-medium">
+          {String(value)}
+        </span>
+      ),
+    },
     {
       key: 'created_at',
       label: '탈퇴일시',
       render: (value: unknown) => {
         const v = value as WithdrawalRow['created_at']
-        return <span>{formatDate(v)}</span>
+        return (
+          <span className="block w-36 text-right text-sm font-medium">
+            {formatDate(String(v))}
+          </span>
+        )
       },
     },
   ]
@@ -103,17 +155,16 @@ export const WithdrawalManagementPage = () => {
     error: detailError,
   } = useWithdrawalDetailQuery({
     userId: selectedUserId,
-    enabled: isWithdrawModalOpen,
+    enabled: isWithdrawModalOpen && !isRestored,
   })
 
   const restoreMutation = useWithdrawalRestoreMutation()
 
   const handleRestore = () => {
-    if (!selectedUserId) return
+    if (!selectedUserId) return Promise.resolve()
 
     return restoreMutation.mutateAsync(selectedUserId).then(() => {
-      setSelectedWithdrawUser(null)
-      // setIsWithdrawModalOpen(false) <-- 여기서 닫지 마세요!
+      setIsRestored(true)
     })
   }
 
@@ -122,7 +173,7 @@ export const WithdrawalManagementPage = () => {
       <h1 className="mb-6 text-2xl font-semibold">탈퇴 관리</h1>
 
       {/* 검색 / 필터 */}
-      <div className="mb-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-center">
+      <div className="mb-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-start">
         <div className="max-w-full min-w-[200px] flex-1">
           <SearchInput
             placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
@@ -141,28 +192,30 @@ export const WithdrawalManagementPage = () => {
           >
             <AccordionItem title="탈퇴 사유">
               {reasonAccordion === '0' && (
-                <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
-                  <button
-                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                    onClick={() => {
-                      setWithdrawReasonFilter('')
-                      setReasonAccordion('')
-                    }}
-                  >
-                    전체 탈퇴 사유
-                  </button>
-                  {WITHDRAW_REASONS.map((reason) => (
+                <div className="mt-2 -mb-2">
+                  <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
                     <button
-                      key={reason}
-                      className={`w-full px-3 py-2 text-left text-sm ${withdrawReasonFilter === reason ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
                       onClick={() => {
-                        setWithdrawReasonFilter(reason)
+                        setWithdrawReasonFilter('')
                         setReasonAccordion('')
                       }}
                     >
-                      {reason}
+                      전체 탈퇴 사유
                     </button>
-                  ))}
+                    {WITHDRAW_REASONS.map((reason) => (
+                      <button
+                        key={reason}
+                        className={`w-full px-3 py-2 text-left text-sm ${withdrawReasonFilter === reason ? 'bg-blue-50 font-medium text-blue-700' : 'hover:bg-gray-50'}`}
+                        onClick={() => {
+                          setWithdrawReasonFilter(reason)
+                          setReasonAccordion('')
+                        }}
+                      >
+                        {reason}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </AccordionItem>
@@ -177,31 +230,34 @@ export const WithdrawalManagementPage = () => {
           >
             <AccordionItem title="권한">
               {roleAccordion === '0' && (
-                <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
-                  <button
-                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                    onClick={() => {
-                      setWithdrawRoleFilter('')
-                      setRoleAccordion('')
-                    }}
-                  >
-                    전체 권한
-                  </button>
-                  {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
+                <div className="mt-2 -mb-2">
+                  <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
                     <button
-                      key={code}
-                      className={`w-full px-3 py-2 text-left text-sm ${withdrawRoleFilter === label
-                        ? 'bg-blue-50 font-medium text-blue-700'
-                        : 'hover:bg-gray-50'
-                        }`}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
                       onClick={() => {
-                        setWithdrawRoleFilter(label) // ✅ 라벨 저장
+                        setWithdrawRoleFilter('')
                         setRoleAccordion('')
                       }}
                     >
-                      {label}
+                      전체 권한
                     </button>
-                  ))}
+                    {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
+                      <button
+                        key={code}
+                        className={`w-full px-3 py-2 text-left text-sm ${
+                          withdrawRoleFilter === label
+                            ? 'bg-blue-50 font-medium text-blue-700'
+                            : 'hover:bg-gray-50'
+                        }`}
+                        onClick={() => {
+                          setWithdrawRoleFilter(label) // ✅ 라벨 저장
+                          setRoleAccordion('')
+                        }}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </AccordionItem>
@@ -243,7 +299,11 @@ export const WithdrawalManagementPage = () => {
           detail={withdrawalDetail ?? null}
           loading={detailLoading}
           error={detailError instanceof Error ? detailError.message : undefined}
-          onClose={() => setIsWithdrawModalOpen(false)}
+          onClose={() => {
+            setIsWithdrawModalOpen(false)
+            setIsRestored(false)
+            setSelectedWithdrawUser(null)
+          }}
           onRestore={handleRestore}
         />
       )}
