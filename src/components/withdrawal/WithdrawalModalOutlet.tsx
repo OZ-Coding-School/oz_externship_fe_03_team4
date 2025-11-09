@@ -12,6 +12,20 @@ export const WithdrawalModalOutlet = ({
   const user = detail.user
   const [imgError, setImgError] = useState(false)
 
+  const genderLabel = user.gender === 'M' ? '남성' : '여성'
+  const roleLabel =
+    user.role === 'admin'
+      ? '관리자'
+      : user.role === 'staff'
+        ? '스태프'
+        : '일반회원'
+  const statusLabel =
+    user.status === 'active'
+      ? '활성'
+      : user.status === 'inactive'
+        ? '비활성'
+        : '탈퇴요청'
+
   return (
     <div className="grow overflow-y-auto">
       <p className="pb-4 text-lg font-semibold">회원 정보</p>
@@ -39,16 +53,40 @@ export const WithdrawalModalOutlet = ({
 
       {/* 사용자 정보 */}
       <div className="grid grid-cols-2 gap-4 pb-8">
-        <ModalPair label="이름" value={user.name} noBorder />
-        <ModalPair label="성별" value={user.gender} noBorder />
-        <ModalPair label="닉네임" value={user.nickname} noBorder />
-        <ModalPair label="이메일" value={user.email} noBorder />
-        <ModalPair label="권한" value={user.role} noBorder />
-        <ModalPair label="상태" value={user.status} noBorder />
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="이름"
+          value={user.name}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="성별"
+          value={genderLabel}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="닉네임"
+          value={user.nickname}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="이메일"
+          value={user.email}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="권한"
+          value={roleLabel}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
+          label="상태"
+          value={statusLabel}
+        />
+        <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="회원가입 일시"
           value={formatDate(user.joined_at)}
-          noBorder
         />
       </div>
 
@@ -56,29 +94,29 @@ export const WithdrawalModalOutlet = ({
       <p className="pb-4 text-lg font-semibold">탈퇴 정보</p>
       <div className="grid grid-cols-2 gap-4">
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="탈퇴요청 고유 ID"
           value={detail.withdrawal.id}
-          noBorder
         />
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="탈퇴요청 일시"
           value={formatDate(detail.withdrawal.created_at)}
-          noBorder
         />
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="탈퇴 사유"
           value={detail.withdrawal.reason}
-          noBorder
         />
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="삭제 예정 일시"
           value={formatDate(detail.withdrawal.due_date)}
-          noBorder
         />
         <ModalPair
+          valueClassName="p-3 rounded-lg bg-gray-50 border-none"
           label="탈퇴 상세 사유"
-          value={detail.withdrawal.reason_detail}
-          noBorder
+          value={detail.withdrawal.reason_detail || '-'}
         />
       </div>
     </div>
