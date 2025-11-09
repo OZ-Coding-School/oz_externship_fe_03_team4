@@ -14,12 +14,15 @@ import { useWithdrawalDetailQuery } from '../hooks/withdrawal/useWithdrawalDetai
 import { useWithdrawalRestoreMutation } from '../hooks/withdrawal/useWithdrawalRestoreMutation'
 import { Pagination } from '../components/pagination/Pagination'
 import axios from 'axios'
+import { ArrowUpDown } from 'lucide-react'
 
 const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
   관리자: 'admin',
   스태프: 'staff',
   일반회원: 'user',
 }
+
+type SortKey = 'id' | '-id' | 'name' | '-name' | 'created_at' | '-created_at'
 
 export const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -30,6 +33,16 @@ export const WithdrawalManagementPage = () => {
   const [isRestored, setIsRestored] = useState(false)
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
+
+  const [sortKey, setSortKey] = useState<SortKey>('id')
+
+  const toggleSort = (target: 'id' | 'name' | 'created_at') => {
+    setSortKey((current) => {
+      if (current === target) return `-${target}` as SortKey // 오름 → 내림
+      if (current === `-${target}`) return target as SortKey // 내림 → 오름
+      return target as SortKey // 다른 컬럼 클릭 시 오름
+    })
+  }
 
   // 탈퇴 관리 모달 상태
   const [selectedWithdrawUser, setSelectedWithdrawUser] =
@@ -65,7 +78,27 @@ export const WithdrawalManagementPage = () => {
     return user.role === targetCode
   })
 
-  const filteredCount = filteredWithdrawUsers.length
+  const sortedWithdrawUsers = [...filteredWithdrawUsers].sort((a, b) => {
+    const desc = sortKey.startsWith('-')
+    const target = (desc ? sortKey.slice(1) : sortKey) as
+      | 'id'
+      | 'name'
+      | 'created_at'
+    const dir = desc ? -1 : 1
+
+    if (target === 'id') {
+      return (Number(a.id) - Number(b.id)) * dir
+    }
+    if (target === 'name') {
+      return a.name.localeCompare(b.name, 'ko') * dir
+    }
+    return (
+      (new Date(a.created_at).getTime() - new Date(b.created_at).getTime()) *
+      dir
+    )
+  })
+
+  const filteredCount = sortedWithdrawUsers.length
   const baseCount = data?.count ?? 0
   const totalCount = withdrawRoleFilter ? filteredCount : baseCount
   const totalPages =
@@ -90,7 +123,21 @@ export const WithdrawalManagementPage = () => {
   const columns = [
     {
       key: 'id',
-      label: '요청 ID',
+      // label: '요청 ID',
+      label: (
+        <button
+          type="button"
+          onClick={() => toggleSort('id')}
+          className={`flex items-center gap-1 ${
+            sortKey === 'id' || sortKey === '-id'
+              ? 'text-gray-900'
+              : 'text-gray-600'
+          }`}
+        >
+          <span>요청 ID</span>
+          <ArrowUpDown size={14} />
+        </button>
+      ),
       render: (value: unknown) => (
         <span className="block w-16 text-center text-sm font-medium">
           {String(value)}
@@ -108,7 +155,21 @@ export const WithdrawalManagementPage = () => {
     },
     {
       key: 'name',
-      label: '이름',
+      // label: '이름',
+      label: (
+        <button
+          type="button"
+          onClick={() => toggleSort('name')}
+          className={`flex items-center gap-1 ${
+            sortKey === 'name' || sortKey === '-name'
+              ? 'text-gray-900'
+              : 'text-gray-600'
+          }`}
+        >
+          <span>이름</span>
+          <ArrowUpDown size={14} />
+        </button>
+      ),
       render: (value: unknown) => (
         <span className="block w-24 truncate text-center text-sm font-medium">
           {String(value)}
@@ -149,7 +210,21 @@ export const WithdrawalManagementPage = () => {
     },
     {
       key: 'created_at',
-      label: '탈퇴일시',
+      // label: '탈퇴일시',
+      label: (
+        <button
+          type="button"
+          onClick={() => toggleSort('created_at')}
+          className={`flex items-center gap-1 ${
+            sortKey === 'created_at' || sortKey === '-created_at'
+              ? 'text-gray-900'
+              : 'text-gray-600'
+          }`}
+        >
+          <span>탈퇴일시</span>
+          <ArrowUpDown size={14} />
+        </button>
+      ),
       render: (value: unknown) => {
         const v = value as WithdrawalRow['created_at']
         return (
@@ -295,7 +370,8 @@ export const WithdrawalManagementPage = () => {
           </div>
         ) : (
           <Table<WithdrawalRow>
-            data={filteredWithdrawUsers}
+            // data={filteredWithdrawUsers}
+            data={sortedWithdrawUsers}
             columns={columns}
             onRowClick={handleWithdrawRowClick}
           />
