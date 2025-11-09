@@ -14,7 +14,8 @@ import { useWithdrawalDetailQuery } from '../hooks/withdrawal/useWithdrawalDetai
 import { useWithdrawalRestoreMutation } from '../hooks/withdrawal/useWithdrawalRestoreMutation'
 import { Pagination } from '../components/pagination/Pagination'
 import axios from 'axios'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, UserX } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 
 const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
   관리자: 'admin',
@@ -265,11 +266,15 @@ export const WithdrawalManagementPage = () => {
   }
 
   return (
-    <main className="bg-gray-50 p-8">
-      <h1 className="mb-6 text-2xl font-semibold">탈퇴 관리</h1>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <PageHeader
+        iconComponent={UserX}
+        koreanTitle="탈퇴 관리"
+        englishSubtitle="Withdrawal Management"
+      />
 
       {/* 검색 / 필터 */}
-      <div className="mb-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-start">
+      <div className="my-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-start">
         <div className="max-w-full min-w-[200px] flex-1">
           <SearchInput
             placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
@@ -404,6 +409,6 @@ export const WithdrawalManagementPage = () => {
           onRestore={handleRestore}
         />
       )}
-    </main>
+    </div>
   )
 }
