@@ -12,7 +12,7 @@ export const fetchSignupStatistics = async (interval: 'month' | 'year'): Promise
 };
 
 export const fetchWithdrawalStatistics = async (interval: 'month' | 'year'): Promise<WithdrawalStatisticsDTO> => {
-  const response = await api.get('/v1/users/statistics/withdrawals', {
+  const response = await api.get('/v1/admin/dashboard/withdrawal-trends', {
     params: { interval },
   });
   return response.data;
