@@ -8,6 +8,7 @@ export interface FetchWithdrawalsParams {
   end_date?: string
   reason?: string
   keyword?: string
+  role?: 'user' | 'staff' | 'admin'
 }
 
 export const fetchWithdrawals = async ({
@@ -17,6 +18,7 @@ export const fetchWithdrawals = async ({
   end_date = '',
   reason = '',
   keyword = '',
+  role,
 }: FetchWithdrawalsParams) => {
   const accessToken = getAccessToken()
   const response = await api.get('/v1/admin/users/withdrawals', {
@@ -30,6 +32,7 @@ export const fetchWithdrawals = async ({
       end_date,
       reason,
       keyword,
+      role,
     },
   })
   return response.data.data

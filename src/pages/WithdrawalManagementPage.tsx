@@ -64,22 +64,27 @@ export const WithdrawalManagementPage = () => {
 
   const pageSize = 10
 
+  const roleCode = withdrawRoleFilter
+    ? ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+    : undefined
+
   const { data, isLoading, error } = useWithdrawalQuery({
     page,
     limit: 10,
     keyword: debouncedSearch,
     reason: withdrawReasonFilter || undefined,
+    role: roleCode,
   })
 
   const rows = data?.result ?? []
 
-  const filteredWithdrawUsers = rows.filter((user: WithdrawalRow) => {
-    if (!withdrawRoleFilter) return true
-    const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
-    return user.role === targetCode
-  })
+  // const filteredWithdrawUsers = rows.filter((user: WithdrawalRow) => {
+  //   if (!withdrawRoleFilter) return true
+  //   const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+  //   return user.role === targetCode
+  // })
 
-  const sortedWithdrawUsers = [...filteredWithdrawUsers].sort((a, b) => {
+  const sortedWithdrawUsers = [...rows].sort((a, b) => {
     const desc = sortKey.startsWith('-')
     const target = (desc ? sortKey.slice(1) : sortKey) as
       | 'id'
@@ -99,22 +104,32 @@ export const WithdrawalManagementPage = () => {
     )
   })
 
-  const filteredCount = sortedWithdrawUsers.length
-  const baseCount = data?.count ?? 0
-  const totalCount = withdrawRoleFilter ? filteredCount : baseCount
-  const totalPages =
-    withdrawRoleFilter && filteredCount === 0
-      ? 1
-      : Math.max(1, Math.ceil(totalCount / pageSize))
+  // const filteredCount = sortedWithdrawUsers.length
+  // const baseCount = data?.count ?? 0
+  // const totalCount = withdrawRoleFilter ? filteredCount : baseCount
+  // const totalPages =
+  //   withdrawRoleFilter && filteredCount === 0
+  //     ? 1
+  //     : Math.max(1, Math.ceil(totalCount / pageSize))
+  const totalPages = Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
 
   const getErrorMessage = (err: unknown): string => {
     if (axios.isAxiosError(err)) {
-      const payload = err.response?.data as
-        | { error?: string; detail?: string; message?: string }
-        | undefined
-      return (
-        payload?.error ?? payload?.detail ?? payload?.message ?? err.message
-      )
+      const payload = err.response?.data
+
+      if (typeof payload === 'object' && payload !== null) {
+        const errorData = payload as {
+          error?: string
+          detail?: string
+          message?: string
+        }
+        if (errorData.error) return errorData.error
+        if (errorData.detail) return errorData.detail
+        if (errorData.message) return errorData.message
+      }
+
+      // Axios 에러 메시지는 사용하지 않고 기본 메시지 반환
+      return '데이터를 불러오는데 실패했습니다.'
     }
     if (err instanceof Error) return err.message
     return '데이터 로드 실패'
