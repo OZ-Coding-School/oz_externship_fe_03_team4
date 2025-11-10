@@ -140,23 +140,22 @@ export const WithdrawalManagementPage = () => {
         </button>
       ),
       render: (value: unknown) => (
-        <span className="block w-16 text-center text-sm font-medium">
+        <span className="block w-16 text-left text-sm font-medium">
           {String(value)}
         </span>
       ),
     },
     {
       key: 'email',
-      label: '이메일',
+      label: <span className="block w-44 truncate text-left">이메일</span>,
       render: (value: unknown) => (
-        <span className="block w-44 truncate text-center text-sm font-medium">
+        <span className="block w-44 truncate text-left text-sm font-medium">
           {String(value)}
         </span>
       ),
     },
     {
       key: 'name',
-      // label: '이름',
       label: (
         <button
           type="button"
@@ -172,14 +171,14 @@ export const WithdrawalManagementPage = () => {
         </button>
       ),
       render: (value: unknown) => (
-        <span className="block w-24 truncate text-center text-sm font-medium">
+        <span className="block w-24 truncate text-left text-sm font-medium">
           {String(value)}
         </span>
       ),
     },
     {
       key: 'role',
-      label: '권한',
+      label: <span className="block w-10 truncate text-left">권한</span>,
       render: (value: unknown) => {
         const code = String(value) as keyof typeof ROLE_CODE_TO_LABEL
         const label = ROLE_CODE_TO_LABEL[code] ?? '일반회원'
@@ -187,7 +186,7 @@ export const WithdrawalManagementPage = () => {
           code === 'admin' ? 'info' : code === 'staff' ? 'primary' : 'default'
 
         return (
-          <div className="w-20 text-center">
+          <div className="w-20 text-left">
             <Badge variant={variant} label={label} />
           </div>
         )
@@ -195,25 +194,24 @@ export const WithdrawalManagementPage = () => {
     },
     {
       key: 'birthday',
-      label: '생년월일',
+      label: <span className="block w-28 truncate text-left">생년월일</span>,
       render: (value: unknown) => (
-        <span className="block w-28 text-center text-sm font-medium">
+        <span className="block w-28 text-left text-sm font-medium">
           {String(value)}
         </span>
       ),
     },
     {
       key: 'reason',
-      label: '탈퇴 사유',
+      label: <span className="block w-60 truncate text-left">탈퇴 사유</span>,
       render: (value: unknown) => (
-        <span className="block w-60 truncate text-center text-sm font-medium">
+        <span className="block w-60 truncate text-left text-sm font-medium">
           {String(value)}
         </span>
       ),
     },
     {
       key: 'created_at',
-      // label: '탈퇴일시',
       label: (
         <button
           type="button"
@@ -231,7 +229,7 @@ export const WithdrawalManagementPage = () => {
       render: (value: unknown) => {
         const v = value as WithdrawalRow['created_at']
         return (
-          <span className="block w-36 text-right text-sm font-medium">
+          <span className="block w-36 text-left text-sm font-medium">
             {formatDate(String(v))}
           </span>
         )
