@@ -28,7 +28,7 @@ export const WithdrawalModalOutlet = ({
 
   return (
     <div className="grow overflow-y-auto">
-      <p className="pb-4 text-lg font-semibold">회원 정보</p>
+      {/* <p className="pb-4 text-lg font-semibold">회원 정보</p> */}
       {/* 사용자 */}
       <div className="mb-6 flex items-center gap-4">
         <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gray-200">
