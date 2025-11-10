@@ -71,6 +71,39 @@ export const WithdrawalSearchAndFilterSection = ({
           </AccordionItem>
         </Accordion>
       </div>
+
+      {/* 탈퇴 권한 필터 */}
+      <div className="relative w-40">
+        <Accordion
+          value={roleAccordion}
+          onValueChange={setRoleAccordion}
+          selectedLabels={{ '0': withdrawRoleFilter || '전체 탈퇴 권한' }}
+        >
+          <AccordionItem title="탈퇴 권한">
+            {roleAccordion === '0' && (
+              <div className="mt-2 -mb-2">
+                <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
+                  <button
+                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
+                    onClick={() => onRoleFilterChange('')}
+                  >
+                    전체 탈퇴 권한
+                  </button>
+                  {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
+                    <button
+                      key={code}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
+                      onClick={() => onRoleFilterChange(code)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </AccordionItem>
+        </Accordion>
+      </div>
     </div>
   )
 }
