@@ -32,7 +32,7 @@ export type StudyGroupDTO = {
   profile_img_url: string
   start_at: string
   end_at: string
-  status: StudyGroupStatus
+  status: StudyGroupUiStatus
   created_at: string
   updated_at: string
 }
@@ -139,7 +139,7 @@ export const STUDY_GROUP_STATUS_REVERSE_MAP: Record<
 // 상태 Badge variant 매핑
 export const STUDY_GROUP_STATUS_BADGE: Record<
   StudyGroupUiStatus,
-  'success' | 'info' | 'warning' | 'danger'
+  'success' | 'info' | 'warning'
 > = {
   완료: 'success',
   대기중: 'info',
@@ -167,7 +167,7 @@ export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
     currentHeadcount: dto.current_headcount,
     startAt: formatDate(dto.start_at),
     endAt: formatDate(dto.end_at),
-    status: STUDY_GROUP_STATUS_MAP[dto.status],
+    status: dto.status,
     createdAt: formatDate(dto.created_at),
     updatedAt: formatDate(dto.updated_at),
   }

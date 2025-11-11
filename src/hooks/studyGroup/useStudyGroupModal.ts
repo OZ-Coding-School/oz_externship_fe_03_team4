@@ -15,26 +15,14 @@ export const useStudyGroupModal = () => {
   })
 
   const openModal = (studyGroup: StudyGroup) => {
-    console.log('🔵 openModal 호출됨:', studyGroup.uuid)
     setSelectedUuid(studyGroup.uuid)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
-    console.log('🔴 closeModal 호출됨')
     setIsModalOpen(false)
-    // UUID는 즉시 초기화하지 않고 약간의 지연 후 초기화 (모달 닫히는 애니메이션 고려)
-    setTimeout(() => {
-      setSelectedUuid(null)
-    }, 300)
+    setSelectedUuid(null)
   }
-
-  console.log('📊 현재 모달 상태:', {
-    isModalOpen,
-    selectedUuid,
-    hasData: !!selectedStudyGroup,
-    isLoadingDetail,
-  })
 
   return {
     isModalOpen,
