@@ -6,11 +6,13 @@ import { useToastStore } from '../../store/toastStore'
 type WithdrawalModalFooterProps = {
   onClose: () => void
   onRestore?: () => void | Promise<void>
+  isRestored?: boolean
 }
 
 export const WithdrawalModalFooter = ({
   onClose,
   onRestore,
+  isRestored = false,
 }: WithdrawalModalFooterProps) => {
   const [isRestoreOpen, setIsRestoreOpen] = useState(false)
   const [isRestoring, setIsRestoring] = useState(false)
@@ -22,8 +24,8 @@ export const WithdrawalModalFooter = ({
     setIsRestoreOpen(false)
 
     try {
-      await onRestore()               // ② 복구 진행 (Promise 반환 필요)
-      showSuccess('탈퇴 회원 복구 완료', '회원 복구가 완료되었습니다.')  // ③ 토스트 표시
+      await onRestore() // ② 복구 진행 (Promise 반환 필요)
+      showSuccess('탈퇴 회원 복구 완료', '회원 복구가 완료되었습니다.') // ③ 토스트 표시
       // onClose()는 필요 시 별도로 호출 (토스트 잠시 노출하고 닫고 싶다면 setTimeout 등 활용)
     } catch {
       showError('복구 실패', '복구 중 오류가 발생했습니다.')
@@ -38,14 +40,16 @@ export const WithdrawalModalFooter = ({
         <Button size="medium" color="secondary" onClick={onClose}>
           닫기
         </Button>
-        <Button
-          size="medium"
-          color="success"
-          onClick={() => setIsRestoreOpen(true)}
-          disabled={isRestoring}
-        >
-          회원 복구하기
-        </Button>
+        {!isRestored && (
+          <Button
+            size="medium"
+            color="success"
+            onClick={() => setIsRestoreOpen(true)}
+            disabled={isRestoring}
+          >
+            회원 복구하기
+          </Button>
+        )}
       </div>
 
       {/* 회원 복구 확인 모달 */}
@@ -66,7 +70,12 @@ export const WithdrawalModalFooter = ({
           >
             취소
           </Button>
-          <Button color="success" size="medium" onClick={handleRestoreConfirm} disabled={isRestoring}>
+          <Button
+            color="success"
+            size="medium"
+            onClick={handleRestoreConfirm}
+            disabled={isRestoring}
+          >
             복구
           </Button>
         </div>

@@ -6,8 +6,10 @@ import type { WithdrawalDetail } from '../../types/withdraw/types'
 
 export const WithdrawalModalOutlet = ({
   detail,
+  isRestored = false,
 }: {
   detail: WithdrawalDetail
+  isRestored: boolean
 }) => {
   const user = detail.user
   const [imgError, setImgError] = useState(false)
@@ -19,8 +21,10 @@ export const WithdrawalModalOutlet = ({
       : user.role === 'staff'
         ? '스태프'
         : '일반회원'
-  const statusLabel =
-    user.status === 'active'
+
+  const statusLabel = isRestored
+    ? '활성'
+    : user.status === 'active'
       ? '활성'
       : user.status === 'inactive'
         ? '비활성'

@@ -163,6 +163,7 @@ const WithdrawalManagementPage = () => {
           detail={withdrawalDetail ?? null}
           loading={detailLoading}
           error={detailErrorMessage}
+          isRestored={isRestored}
           onClose={() => {
             setIsWithdrawModalOpen(false)
             setIsRestored(false)
