@@ -15,7 +15,7 @@ export type AdminApplicationStatus = ApplicationStatusServer
 // 서버에서 제공해주는 지원 내역 데이터들
 export interface ApplicationApi {
   id: number // ui표시용, 고유id
-  uuid: string
+  uuid?: string
   user: {
     id: number
     nickname: string
@@ -79,7 +79,7 @@ export interface Applicant {
 export interface Application {
   aid: number
   id: string
-  uuid: string
+  uuid?: string
   postingTitle: string // 공고명
   applicant: Applicant
   status: ApplicationStatus
