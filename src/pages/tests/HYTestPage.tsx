@@ -1,4 +1,4 @@
-import { WithdrawalManagementPage } from '../WithdrawalManagementPage'
+import WithdrawalManagementPage from '../WithdrawalManagementPage'
 
 const HYTestPage = () => {
   return <WithdrawalManagementPage />
