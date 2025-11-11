@@ -10,6 +10,7 @@ export type StudyGroupLectureDTO = {
 }
 
 export type StudyGroupLectureDetailDTO = {
+  uuid: string
   thumbnail_img_url: string
   title: string
   instructor: string
@@ -17,6 +18,7 @@ export type StudyGroupLectureDetailDTO = {
 }
 
 export type StudyGroupMemberDTO = {
+  uuid: string
   nickname: string
   is_leader: boolean
 }
@@ -100,12 +102,14 @@ export type StudyGroupDetail = {
 
 // UI용 멤버
 export type StudyGroupMember = {
+  uuid: string
   nickname: string
   isLeader: boolean
 }
 
 // UI용 상세 모달창
 export type StudyGroupLectureDetail = {
+  uuid: string
   thumbnailImgUrl: string
   title: string
   instructor: string
@@ -184,6 +188,7 @@ export const mapStudyGroupDetailDTO = (
     currentHeadcount: dto.current_headcount,
     maxHeadcount: dto.max_headcount,
     members: dto.members.map((member) => ({
+      uuid: member.uuid,
       nickname: member.nickname,
       isLeader: member.is_leader,
     })),
@@ -192,6 +197,7 @@ export const mapStudyGroupDetailDTO = (
     endAt: formatDate(dto.end_at),
     status: STUDY_GROUP_STATUS_MAP[dto.status],
     lectures: dto.lectures.map((lecture) => ({
+      uuid: lecture.uuid,
       thumbnailImgUrl: lecture.thumbnail_img_url,
       title: lecture.title,
       instructor: lecture.instructor,
