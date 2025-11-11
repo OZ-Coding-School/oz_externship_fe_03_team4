@@ -8,31 +8,24 @@ import {
 
 const DETAIL_STALE_TIME_MILLISECONDS = 30 * 1000
 // 지원내역의 상세 정보만 관리하기에, 여기 안에 쿼리 키를 정의했어요~
-const createApplicationDetailQueryKey = (applicationId: number) =>
-  ['admin', 'applications', 'detail', applicationId] as const
+const createApplicationDetailQueryKey = (applicationUuid: string) =>
+  ['admin', 'applications', 'detail', applicationUuid] as const
 
 export const useApplicationDetailQuery = (application: Application | null) => {
   return useQuery<ApplicationDetail, Error>({
-    enabled: !!application,
+    enabled: !!application?.uuid,
     queryKey: application
-      ? createApplicationDetailQueryKey(
-          typeof application.aid === 'number'
-            ? application.aid
-            : Number(String(application.id).replace('#', ''))
-        )
+      ? createApplicationDetailQueryKey(application.uuid)
       : ['admin', 'applications', 'detail', 'idle'],
     staleTime: DETAIL_STALE_TIME_MILLISECONDS,
     queryFn: async () => {
-      if (!application) {
+      if (!application || !application.uuid) {
         throw new Error('선택된 항목이 없습니다.')
       }
 
-      const applicationId =
-        typeof application.aid === 'number'
-          ? application.aid
-          : Number(String(application.id).replace('#', ''))
-
-      const response = await api.get(`/v1/admin/applications/${applicationId}`)
+      const response = await api.get(
+        `/v1/admin/applications/${application.uuid}`
+      )
       const mappedDetail = mapApplicationDetailApiToUi(
         response.data,
         application

@@ -8,18 +8,27 @@ export type ApplicationStatusServer =
   | 'REVIEWING' // 검토중
   | 'REJECTED' // 거절
   | 'PENDING' // 대기
+  | 'CANCELED' // 거절
 
 export type AdminApplicationStatus = ApplicationStatusServer
 
 // 서버에서 제공해주는 지원 내역 데이터들
 export interface ApplicationApi {
   id: number // ui표시용, 고유id
-  recruitment_title: string // 공고명
-  applicant_nickname: string // 지원자이름
-  applicant_email: string // 이메일
-  status: AdminApplicationStatus // 지원 상태
-  created_at: string // 지원일
-  updated_at: string // 수정일
+  uuid: string
+  user: {
+    id: number
+    nickname: string
+    email: string
+  }
+  recruitment: {
+    id: number
+    title: string
+  }
+  status: 'PENDING' | 'APPROVED' | 'CANCELED' | 'REJECTED'
+  status_display: string
+  created_at: string
+  updated_at: string
 }
 
 export type AdminApplicationApi = ApplicationApi
@@ -70,6 +79,7 @@ export interface Applicant {
 export interface Application {
   aid: number
   id: string
+  uuid: string
   postingTitle: string // 공고명
   applicant: Applicant
   status: ApplicationStatus
@@ -113,6 +123,7 @@ export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
     APPLYING: '대기',
     APPLIED: '대기',
     REJECTED: '거절',
+    CANCELED: '거절',
   }
 
 export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
@@ -128,10 +139,11 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
 export const mapApplicationApiToUi = (a: ApplicationApi): Application => ({
   aid: a.id,
   id: `#${a.id}`,
-  postingTitle: a.recruitment_title,
+  uuid: a.uuid,
+  postingTitle: a.recruitment?.title ?? '',
   applicant: {
-    name: a.applicant_nickname,
-    email: a.applicant_email,
+    name: a.user?.nickname ?? '',
+    email: a.user?.email ?? '',
   },
   status: apiStatusToUi[a.status],
   appliedAt: new Date(a.created_at).toLocaleString('ko-KR', {
