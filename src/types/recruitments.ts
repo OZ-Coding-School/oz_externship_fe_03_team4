@@ -12,7 +12,7 @@ import {
 
 import type { LectureDTO } from './lectureManagement/types'
 
-export type RecruitmentStatusApi = '모집중' | '마감' // API에서 내려오는 값
+export type RecruitmentStatusApi = string // API에서 내려오는 값
 export type RecruitmentOrderingApi = 'latest' | 'oldest' | 'views' | 'bookmarks' // 정렬 키값
 
 // 서버 응답

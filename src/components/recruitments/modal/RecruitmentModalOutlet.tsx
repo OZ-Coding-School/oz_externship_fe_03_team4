@@ -46,9 +46,7 @@ export const RecruitmentModalOutlet = ({
           <ModalPair label="공고 ID" value={`#${id}`} />
           <ModalPair
             label="UUID"
-            value={
-              <span className="block font-mono text-xs break-all">{uuid}</span>
-            }
+            value={<span className="block text-xs break-all">{uuid}</span>}
           />
           <ModalPair label="공고 제목" value={title} />
           <div className="grid grid-cols-2 gap-4">
