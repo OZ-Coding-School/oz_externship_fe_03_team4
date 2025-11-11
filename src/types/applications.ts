@@ -49,6 +49,7 @@ export interface ApplicationDetailApi extends ApplicationApi {
     courses: Array<{ name: string; instructor: string }> // 강의목록 [강의이름 / 강사명]
     tags: string[] // 태그 목록
     deadline: string // 모집마감일
+    close_at?: string
   }
   applicant: {
     id: number // 지원자고유 id
@@ -156,13 +157,26 @@ export const mapApplicationApiToUi = (a: ApplicationApi): Application => ({
 
 export const mapAdminApiToUi = mapApplicationApiToUi
 
+type ApplicantLike = {
+  id: number
+  gender?: string | null
+  profile_image?: string | null
+  profile_img_url?: string | null
+}
+
 export const mapApplicationDetailApiToUi = (
   detail: ApplicationDetailApi,
   base?: Application
 ): ApplicationDetail => {
-  const baseUi = base ?? mapApplicationApiToUi(detail)
+  const baseUi: Application = base ?? mapApplicationApiToUi(detail)
+
+  const applicantSource: ApplicantLike = detail.applicant ??
+    (detail as unknown as { user?: ApplicantLike }).user ?? {
+      id: baseUi.aid,
+    }
   return {
     ...baseUi, // 목록의 공통 필드들을 복사합니당
+    applicationCode: detail.uuid,
     selfIntroduction: detail.self_introduction,
     motivation: detail.motivation,
     objective: detail.objective,
@@ -176,13 +190,17 @@ export const mapApplicationDetailApiToUi = (
       expectedHeadcount: detail.recruitment.expected_headcount,
       courses: detail.recruitment.courses,
       tags: detail.recruitment.tags,
-      deadline: detail.recruitment.deadline,
+      deadline:
+        detail.recruitment.deadline ?? detail.recruitment.close_at ?? '',
     },
     applicantExtra: {
       // 지원자 정보
-      id: detail.applicant.id,
-      gender: detail.applicant.gender,
-      profileImage: detail.applicant.profile_image,
+      id: applicantSource.id ?? baseUi.aid,
+      gender: applicantSource.gender ?? null,
+      profileImage:
+        applicantSource.profile_image ??
+        applicantSource.profile_img_url ??
+        null,
     },
   }
 }

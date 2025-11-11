@@ -15,7 +15,7 @@ export const useApplicationDetailQuery = (application: Application | null) => {
   return useQuery<ApplicationDetail, Error>({
     enabled: !!application?.uuid,
     queryKey: application
-      ? createApplicationDetailQueryKey(application.uuid)
+      ? createApplicationDetailQueryKey(application.uuid as string)
       : ['admin', 'applications', 'detail', 'idle'],
     staleTime: DETAIL_STALE_TIME_MILLISECONDS,
     queryFn: async () => {
