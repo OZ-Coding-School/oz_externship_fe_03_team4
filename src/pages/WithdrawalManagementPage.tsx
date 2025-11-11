@@ -21,7 +21,7 @@ const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
 
 type SortKey = 'id' | '-id' | 'name' | '-name' | 'created_at' | '-created_at'
 
-export const WithdrawalManagementPage = () => {
+const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
@@ -54,20 +54,24 @@ export const WithdrawalManagementPage = () => {
 
   const pageSize = 10
 
-  const roleCode = withdrawRoleFilter
-    ? ROLE_LABEL_TO_CODE[withdrawRoleFilter]
-    : undefined
-
   const { data, isLoading, error } = useWithdrawalQuery({
     page,
     limit: 10,
     keyword: debouncedSearch,
     reason: withdrawReasonFilter || undefined,
-    role: roleCode,
   })
 
   const rows = data?.result ?? []
-  const totalPages = Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
+  const filteredRows = withdrawRoleFilter
+    ? rows.filter((user: WithdrawalRow) => {
+        const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+        return user.role === targetCode
+      })
+    : rows
+  const totalPages =
+    withdrawRoleFilter && filteredRows.length === 0
+      ? 1 // 현재 페이지에 필터링된 데이터가 없으면 1페이지만 표시
+      : Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
 
   const getErrorMessage = (err: unknown): string => {
     if (axios.isAxiosError(err)) {
@@ -136,7 +140,7 @@ export const WithdrawalManagementPage = () => {
       />
 
       <WithdrawalTable
-        data={rows}
+        data={filteredRows}
         isLoading={isLoading}
         error={listErrorMessage}
         sortKey={sortKey}
@@ -170,3 +174,5 @@ export const WithdrawalManagementPage = () => {
     </div>
   )
 }
+
+export default WithdrawalManagementPage

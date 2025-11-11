@@ -52,7 +52,10 @@ export const WithdrawalSearchAndFilterSection = ({
                 <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
                   <button
                     className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                    onClick={() => onReasonFilterChange('')}
+                    onClick={() => {
+                      onReasonFilterChange('')
+                      setReasonAccordion('')
+                    }}
                   >
                     전체 탈퇴 사유
                   </button>
@@ -60,7 +63,10 @@ export const WithdrawalSearchAndFilterSection = ({
                     <button
                       key={reason}
                       className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                      onClick={() => onReasonFilterChange(reason)}
+                      onClick={() => {
+                        onReasonFilterChange(reason)
+                        setReasonAccordion('')
+                      }}
                     >
                       {reason}
                     </button>
@@ -77,7 +83,7 @@ export const WithdrawalSearchAndFilterSection = ({
         <Accordion
           value={roleAccordion}
           onValueChange={setRoleAccordion}
-          selectedLabels={{ '0': withdrawRoleFilter || '전체 탈퇴 권한' }}
+          selectedLabels={{ '0': withdrawRoleFilter || '전체 권한' }}
         >
           <AccordionItem title="탈퇴 권한">
             {roleAccordion === '0' && (
@@ -85,15 +91,21 @@ export const WithdrawalSearchAndFilterSection = ({
                 <div className="absolute top-full right-0 left-0 z-20 mt-2 max-h-80 overflow-auto rounded-lg border bg-white p-3 shadow-lg">
                   <button
                     className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                    onClick={() => onRoleFilterChange('')}
+                    onClick={() => {
+                      onRoleFilterChange('')
+                      setRoleAccordion('')
+                    }}
                   >
-                    전체 탈퇴 권한
+                    전체 권한
                   </button>
                   {Object.entries(ROLE_CODE_TO_LABEL).map(([code, label]) => (
                     <button
                       key={code}
                       className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                      onClick={() => onRoleFilterChange(code)}
+                      onClick={() => {
+                        onRoleFilterChange(label)
+                        setRoleAccordion('')
+                      }}
                     >
                       {label}
                     </button>
