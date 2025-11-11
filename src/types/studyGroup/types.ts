@@ -1,7 +1,7 @@
 import { formatDate } from '../../utils/formatDate'
 
 // API용 상태 타입
-export type StudyGroupStatus = 'PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'
+export type StudyGroupStatus = 'PENDING' | 'ONGOING' | 'ENDED'
 
 export type StudyGroupLectureDTO = {
   id: number
@@ -47,7 +47,7 @@ export type StudyGroupDetailDTO = {
   profile_img_url: string
   start_at: string
   end_at: string
-  status: StudyGroupStatus
+  status: StudyGroupUiStatus
   lectures: StudyGroupLectureDetailDTO[]
   created_at: string
   updated_at: string
@@ -66,7 +66,7 @@ export type StudyGroupDetailResponse = {
 }
 
 // UI용 상태 타입
-export type StudyGroupUiStatus = '대기중' | '진행중' | '완료' | '취소됨'
+export type StudyGroupUiStatus = '대기중' | '진행중' | '완료'
 
 // UI용 타입
 export type StudyGroup = {
@@ -122,9 +122,8 @@ export const STUDY_GROUP_STATUS_MAP: Record<
   StudyGroupUiStatus
 > = {
   PENDING: '대기중',
-  ACTIVE: '진행중',
-  COMPLETED: '완료',
-  CANCELLED: '취소됨',
+  ONGOING: '진행중',
+  ENDED: '완료',
 } as const // 지정한 리터럴 타입으로 고정
 
 // UI -> API (검색필터용)
@@ -133,9 +132,8 @@ export const STUDY_GROUP_STATUS_REVERSE_MAP: Record<
   StudyGroupStatus
 > = {
   대기중: 'PENDING',
-  진행중: 'ACTIVE',
-  완료: 'COMPLETED',
-  취소됨: 'CANCELLED',
+  진행중: 'ONGOING',
+  완료: 'ENDED',
 } as const
 
 // 상태 Badge variant 매핑
@@ -146,7 +144,6 @@ export const STUDY_GROUP_STATUS_BADGE: Record<
   완료: 'success',
   대기중: 'info',
   진행중: 'warning',
-  취소됨: 'danger',
 } as const
 
 export const STUDY_GROUP_STATUS_OPTIONS: Array<{
@@ -157,7 +154,6 @@ export const STUDY_GROUP_STATUS_OPTIONS: Array<{
   { value: '대기중', label: '대기중' },
   { value: '진행중', label: '진행중' },
   { value: '완료', label: '완료' },
-  { value: '취소됨', label: '취소됨' },
 ] as const
 
 // API-> UI
@@ -195,7 +191,7 @@ export const mapStudyGroupDetailDTO = (
     profileImg: dto.profile_img_url,
     startAt: formatDate(dto.start_at),
     endAt: formatDate(dto.end_at),
-    status: STUDY_GROUP_STATUS_MAP[dto.status],
+    status: dto.status,
     lectures: dto.lectures.map((lecture) => ({
       uuid: lecture.uuid,
       thumbnailImgUrl: lecture.thumbnail_img_url,

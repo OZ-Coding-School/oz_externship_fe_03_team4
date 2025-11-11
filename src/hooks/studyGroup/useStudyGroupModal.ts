@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import {
-  mapStudyGroupDetailDTO,
-  type StudyGroup,
-} from '../../types/studyGroup/types'
+import { type StudyGroup } from '../../types/studyGroup/types'
 import { useQuery } from '@tanstack/react-query'
 import { fetchStudyGroupDetail } from '../../api/fetchStudyGroups'
 
@@ -14,23 +11,34 @@ export const useStudyGroupModal = () => {
   const { data: selectedStudyGroup, isLoading: isLoadingDetail } = useQuery({
     queryKey: ['studyGroupDetail', selectedUuid],
     queryFn: () => fetchStudyGroupDetail(selectedUuid!),
-    enabled: !!selectedUuid,
-    select: (data) => mapStudyGroupDetailDTO(data),
+    enabled: !!selectedUuid && isModalOpen,
   })
 
-  const openModal = async (studyGroup: StudyGroup) => {
+  const openModal = (studyGroup: StudyGroup) => {
+    console.log('🔵 openModal 호출됨:', studyGroup.uuid)
     setSelectedUuid(studyGroup.uuid)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
+    console.log('🔴 closeModal 호출됨')
     setIsModalOpen(false)
-    setSelectedUuid(null)
+    // UUID는 즉시 초기화하지 않고 약간의 지연 후 초기화 (모달 닫히는 애니메이션 고려)
+    setTimeout(() => {
+      setSelectedUuid(null)
+    }, 300)
   }
+
+  console.log('📊 현재 모달 상태:', {
+    isModalOpen,
+    selectedUuid,
+    hasData: !!selectedStudyGroup,
+    isLoadingDetail,
+  })
 
   return {
     isModalOpen,
-    selectedStudyGroup,
+    selectedStudyGroup: selectedStudyGroup ?? null,
     isLoadingDetail,
     openModal,
     closeModal,

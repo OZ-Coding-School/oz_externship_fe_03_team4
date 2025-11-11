@@ -1,9 +1,10 @@
 import api from '../lib/axios'
 import {
+  mapStudyGroupDetailDTO,
   mapStudyGroupDTO,
   type StudyGroup,
+  type StudyGroupDetail,
   type StudyGroupDetailDTO,
-  type StudyGroupDetailResponse,
   type StudyGroupListResponse,
 } from '../types/studyGroup/types'
 import type { StudyGroupsParams } from '../hooks/studyGroup/types.local'
@@ -39,11 +40,23 @@ export const fetchStudyGroups = async (
   }
 }
 
+// export const fetchStudyGroupDetail = async (
+//   uuid: string
+// ): Promise<StudyGroupDetail> => {
+//   const response = await api.get<StudyGroupDetailResponse>(
+//     `/v1/studies/admin/groups/${uuid}`
+//   )
+//   return mapStudyGroupDetailDTO(response.data.data)
+// }
+
 export const fetchStudyGroupDetail = async (
   uuid: string
-): Promise<StudyGroupDetailDTO> => {
-  const response = await api.get<StudyGroupDetailResponse>(
+): Promise<StudyGroupDetail> => {
+  // response.data가 바로 DetailDTO (래퍼 없음)
+  const response = await api.get<StudyGroupDetailDTO>(
     `/v1/studies/admin/groups/${uuid}`
   )
-  return response.data.data
+
+  // 타입 파일의 매퍼 함수 재사용
+  return mapStudyGroupDetailDTO(response.data)
 }
