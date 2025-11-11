@@ -6,9 +6,7 @@ import { RecruitmentFilterSection } from '../components/recruitments/filter/Recr
 import {
   type Recruitment,
   type RecruitmentStatusApi,
-  type RecruitmentDetailDTO,
   type RecruitmentDetail,
-  mapRecruitmentDetailDTO,
 } from '../types/recruitments'
 import { RecruitmentTableSection } from '../components/recruitments/table/RecruitmentTableSection'
 import { Inbox, Megaphone } from 'lucide-react'
@@ -16,8 +14,10 @@ import { RecruitmentModal } from '../components/recruitments/modal/RecruitmentMo
 import { useAdminRecruitmentsQuery } from '../hooks/recruitments/useRecruitmentsQuery'
 import { PageHeader } from '../components/PageHeader'
 import { ErrorState, LoadingState } from '../components/Lecture/LoadingState'
-import api from '../lib/axios'
-
+import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentDetailQuery'
+import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
+import { ToastContainer } from '../components/toast/toastContainer'
+import type { RecruitmentOrdering } from '../hooks/recruitments/types.local'
 const PAGE_SIZE = 10
 
 const RecruitmentManagementPage = () => {
@@ -31,50 +31,39 @@ const RecruitmentManagementPage = () => {
   >('전체')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(initialPageNumber)
-  const [recruitmentDetail, setRecruitmentDetail] =
-    useState<RecruitmentDetail | null>(null)
-  const [recruitmentDetailLoading, setRecruitmentDetailLoading] =
-    useState(false)
-  const [recruitmentDetailError, setRecruitmentDetailError] = useState<
-    string | null
-  >(null)
+  const [ordering, setOrdering] = useState<RecruitmentOrdering>('latest')
+  const { mutate: deleteRecruitment, isPending: isDeleting } =
+    useDeleteRecruitment()
 
   const [selectedRecruitment, setSelectedRecruitment] =
     useState<Recruitment | null>(null)
+
+  const handleSortChange = (nextOrdering: RecruitmentOrdering) => {
+    setOrdering(nextOrdering)
+    setCurrentPage(1)
+  }
+
   const { data, isLoading, isError } = useAdminRecruitmentsQuery({
     searchText: debouncedSearchText,
     statusFilter: statusFilter === '전체' ? undefined : statusFilter,
     selectedTags,
-    ordering: 'latest',
+    ordering,
     pageNumber: currentPage,
     pageSize: PAGE_SIZE,
   })
 
-  const handleRowClick = async (row: Recruitment) => {
+  const {
+    data: recruitmentDetail,
+    isLoading: isRecruitmentDetailLoading,
+    isError: isRecruitmentDetailError,
+  } = useRecruitmentDetailQuery(selectedRecruitment)
+
+  const handleRowClick = (row: Recruitment) => {
     setSelectedRecruitment(row)
-    setRecruitmentDetail(null)
-    setRecruitmentDetailError(null)
-    setRecruitmentDetailLoading(true)
-    try {
-      const { data } = await api.get<RecruitmentDetailDTO>(
-        `/v1/admin/recruitments/${row.id}`
-      )
-      setRecruitmentDetail(mapRecruitmentDetailDTO(data))
-    } catch {
-      try {
-        const { data } = await api.get<RecruitmentDetailDTO>(
-          `/v1/admin/recruitments/${row.id}/`
-        )
-        setRecruitmentDetail(mapRecruitmentDetailDTO(data))
-      } catch {
-        setRecruitmentDetailError('공고 상세정보를 불러오지 못했어요.')
-      }
-    } finally {
-      setRecruitmentDetailLoading(false)
-    }
   }
 
   const filteredRecruitments = data?.items ?? []
+  const totalCount = data?.totalCount ?? 0
 
   const hasNoData = !isLoading && !isError && filteredRecruitments.length === 0
 
@@ -124,11 +113,7 @@ const RecruitmentManagementPage = () => {
       />
 
       <div className="mb-3 text-sm text-neutral-600">
-        총{' '}
-        <span className="font-medium text-neutral-900">
-          {filteredRecruitments.length}
-        </span>
-        건
+        총 <span className="font-medium text-neutral-900">{totalCount}</span>건
       </div>
 
       {hasNoData ? (
@@ -160,6 +145,8 @@ const RecruitmentManagementPage = () => {
           <RecruitmentTableSection
             data={paginatedRecruitments}
             onRowClick={handleRowClick}
+            sortKey={ordering}
+            onSortChange={handleSortChange}
           />
 
           {totalPages > 1 && (
@@ -178,20 +165,24 @@ const RecruitmentManagementPage = () => {
         <RecruitmentModal
           open
           onClose={() => {
-            setSelectedRecruitment(null)
-            setRecruitmentDetail(null)
-            setRecruitmentDetailError(null)
-            setRecruitmentDetailLoading(false)
+            if (!isDeleting) setSelectedRecruitment(null)
           }}
-          onDelete={() => setSelectedRecruitment(null)}
+          onDelete={() => {
+            if (!selectedRecruitment || isDeleting) return
+            const targetId = selectedRecruitment.id
+            setSelectedRecruitment(null)
+            deleteRecruitment(targetId)
+          }}
           detail={
             recruitmentDetail ??
             ({
               ...selectedRecruitment,
               uuid: '',
-              content: recruitmentDetailLoading
+              content: isRecruitmentDetailLoading
                 ? '불러오는 중...'
-                : (recruitmentDetailError ?? ''),
+                : isRecruitmentDetailError
+                  ? '공고 상세정보를 불러오지 못했어요.'
+                  : '',
               expectedHeadcount: 0,
               estimatedFee: 0,
               attachments: [],
@@ -203,6 +194,7 @@ const RecruitmentManagementPage = () => {
           }
         />
       )}
+      <ToastContainer />
     </div>
   )
 }

@@ -3,12 +3,13 @@ import type { Recruitment } from '../../../types/recruitments'
 import { RecruitmentStatusBadge } from './RecruitmentStatusBadge'
 import { TagPills } from './TagPills'
 import { formatDate } from '../../../utils/formatDate'
+import type { BaseColumn } from './withSortableColumns'
 
 export type RecruitmentRow = Recruitment & Record<string, unknown>
 
 const numberFormatter = new Intl.NumberFormat('ko-KR')
 
-export const recruitmentColumns = [
+export const baseRecruitmentColumns: Array<BaseColumn<RecruitmentRow>> = [
   { key: 'id' as const, label: 'ID' },
   {
     key: 'title' as const,

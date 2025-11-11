@@ -6,3 +6,4 @@ export type AdminRecruitmentsParams = {
   pageNumber?: number // 페이지 번호
   pageSize?: number // 페이지당 출력될 항목의 수
 }
+export type RecruitmentOrdering = AdminRecruitmentsParams['ordering']
