@@ -1,6 +1,15 @@
 import type { AdminRecruitmentsParams } from './types.local'
 
-export type RecruitmentRequestParams = Record<string, string | number>
+type RecruitmentOrderingApi = NonNullable<AdminRecruitmentsParams['ordering']>
+
+const ORDERING_MAP: Record<RecruitmentOrderingApi, string> = {
+  latest: '-created_at',
+  oldest: 'created_at',
+  views: '-views_count',
+  bookmarks: '-bookmarks_count',
+}
+
+export type RecruitmentRequestParams = Record<string, string | number | boolean>
 
 const clampNumber = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max)
@@ -32,8 +41,10 @@ export const buildRecruitmentsQueryParams = (
   }
   // 정렬
   if (options.ordering) {
-    queryParams.ordering = options.ordering
+    const mapped = ORDERING_MAP[options.ordering]
+    if (mapped) {
+      queryParams.ordering = mapped
+    }
   }
-
   return queryParams
 }

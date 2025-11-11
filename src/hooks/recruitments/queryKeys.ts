@@ -1,3 +1,4 @@
+import type { RecruitmentRequestParams } from './buildQueryParams'
 export const adminRecruitmentsQueryKey = (
-  queryParams: Record<string, string | number>
+  queryParams: RecruitmentRequestParams
 ) => ['admin:recruitments', queryParams] as const
