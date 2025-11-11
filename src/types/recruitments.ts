@@ -18,28 +18,32 @@ export type RecruitmentOrderingApi = 'latest' | 'oldest' | 'views' | 'bookmarks'
 // 서버 응답
 export interface RecruitmentDTO {
   id: number
+  uuid: string
   title: string
   tags: string[]
+  is_closed: boolean
   close_at: string
-  status: RecruitmentStatusApi
+  status: string
   views_count: number
   bookmarks_count: number
   created_at: string
   updated_at: string | null
 }
 export interface RecruitmentListResponseDTO {
+  count: number
+  next: string | null
+  previous: string | null
   results: RecruitmentDTO[]
-  page: number
-  page_size: number
-  total_count: number
 }
 // ui에서 사용할 값들
 export interface Recruitment {
   id: number
+  uuid: string
   title: string
   tags: string[]
+  isClosed: boolean
   closeAt: string
-  status: RecruitmentStatusApi
+  status: string
   viewsCount: number
   bookmarksCount: number
   createdAt: string
@@ -48,8 +52,10 @@ export interface Recruitment {
 
 export const mapRecruitmentDTO = (dto: RecruitmentDTO): Recruitment => ({
   id: dto.id,
+  uuid: dto.uuid,
   title: dto.title,
   tags: dto.tags,
+  isClosed: dto.is_closed,
   closeAt: dto.close_at,
   status: dto.status,
   viewsCount: dto.views_count,
