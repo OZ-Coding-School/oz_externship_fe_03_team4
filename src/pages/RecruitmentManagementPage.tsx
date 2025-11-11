@@ -192,7 +192,7 @@ const RecruitmentManagementPage = () => {
           }}
           onDelete={() => {
             if (!selectedRecruitment || isDeleting) return
-            deleteRecruitment(selectedRecruitment.id)
+            deleteRecruitment(selectedRecruitment.uuid)
             setSelectedRecruitment(null)
           }}
           detail={effectiveDetail}

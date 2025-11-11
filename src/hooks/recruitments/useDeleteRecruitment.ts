@@ -9,12 +9,8 @@ export const useDeleteRecruitment = () => {
   const showError = useToastStore((state) => state.showError)
 
   return useMutation({
-    mutationFn: async (id: number | string) => {
-      try {
-        await api.delete(`/v1/admin/recruitments/${id}`)
-      } catch {
-        await api.delete(`/v1/admin/recruitments/${id}/`)
-      }
+    mutationFn: async (uuid: string) => {
+      await api.delete(`/v1/admin/recruitments/${uuid}`)
     },
 
     onSuccess: async () => {
