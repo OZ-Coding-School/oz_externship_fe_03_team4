@@ -25,7 +25,7 @@ export interface RecruitmentDTO {
   close_at: string
   status: string
   views_count: number
-  bookmarks_count: number
+  bookmark_count: number
   created_at: string
   updated_at: string | null
 }
@@ -59,7 +59,7 @@ export const mapRecruitmentDTO = (dto: RecruitmentDTO): Recruitment => ({
   closeAt: dto.close_at,
   status: dto.status,
   viewsCount: dto.views_count,
-  bookmarksCount: dto.bookmarks_count,
+  bookmarksCount: dto.bookmark_count,
   createdAt: dto.created_at,
   updatedAt: dto.updated_at,
 })
@@ -81,7 +81,7 @@ export interface RecruitmentDetailDTO extends Omit<RecruitmentDTO, 'tags'> {
   attachments: RecruitmentAttachmentDTO[]
   expected_headcount: number
   estimated_fee: number
-  study_lectures: RecruitmentLectureDTO[]
+  study_lectures?: RecruitmentLectureDTO[]
   tags: RecruitmentTagDTO[]
   is_closed: boolean
   applications: ApplicationApi[]
@@ -116,7 +116,7 @@ export const mapRecruitmentDetailDTO = (
     fileName: attachment.file_name,
     fileUrl: attachment.file_url,
   }))
-  const lectures = detailDto.study_lectures.map((lecture) => ({
+  const lectures = (detailDto.study_lectures ?? []).map((lecture) => ({
     thumbnail: lecture.thumbnail_img_url ?? '',
     title: lecture.title,
     instructor: lecture.instructor,

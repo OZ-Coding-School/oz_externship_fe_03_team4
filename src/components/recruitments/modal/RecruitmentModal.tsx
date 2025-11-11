@@ -10,7 +10,7 @@ interface RecruitmentModalProps {
   open: boolean
   onClose: () => void
   onDelete: () => void
-  detail: RecruitmentDetail
+  detail: RecruitmentDetail | null
 }
 
 export const RecruitmentModal = ({
@@ -20,6 +20,7 @@ export const RecruitmentModal = ({
   detail,
 }: RecruitmentModalProps) => {
   useBodyScrollLock(open)
+  if (!open || !detail) return null
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
       <ModalHeader

@@ -62,6 +62,29 @@ const RecruitmentManagementPage = () => {
     setSelectedRecruitment(row)
   }
 
+  const fallbackDetail: RecruitmentDetail | null = selectedRecruitment
+    ? ({
+        ...selectedRecruitment,
+        // 목록 응답에 이미 uuid 있으니까 그대로 사용
+        uuid: selectedRecruitment.uuid,
+        content: isRecruitmentDetailLoading
+          ? '상세정보를 불러오는 중...'
+          : isRecruitmentDetailError
+            ? '공고 상세정보를 불러오지 못했어요.'
+            : '',
+        expectedHeadcount: 0,
+        estimatedFee: 0,
+        attachments: [],
+        lectures: [],
+        applications: [],
+        studyGroup: null,
+        isClosed: selectedRecruitment.isClosed,
+      } as RecruitmentDetail)
+    : null
+
+  const effectiveDetail: RecruitmentDetail | null =
+    recruitmentDetail ?? fallbackDetail
+
   const filteredRecruitments = data?.items ?? []
   const totalCount = data?.totalCount ?? 0
 
@@ -161,7 +184,7 @@ const RecruitmentManagementPage = () => {
         </>
       )}
 
-      {selectedRecruitment && (
+      {selectedRecruitment && effectiveDetail && (
         <RecruitmentModal
           open
           onClose={() => {
@@ -169,29 +192,10 @@ const RecruitmentManagementPage = () => {
           }}
           onDelete={() => {
             if (!selectedRecruitment || isDeleting) return
-            const targetId = selectedRecruitment.id
+            deleteRecruitment(selectedRecruitment.id)
             setSelectedRecruitment(null)
-            deleteRecruitment(targetId)
           }}
-          detail={
-            recruitmentDetail ??
-            ({
-              ...selectedRecruitment,
-              uuid: '',
-              content: isRecruitmentDetailLoading
-                ? '불러오는 중...'
-                : isRecruitmentDetailError
-                  ? '공고 상세정보를 불러오지 못했어요.'
-                  : '',
-              expectedHeadcount: 0,
-              estimatedFee: 0,
-              attachments: [],
-              lectures: [],
-              applications: [],
-              studyGroup: null,
-              isClosed: selectedRecruitment.status === '마감',
-            } as RecruitmentDetail)
-          }
+          detail={effectiveDetail}
         />
       )}
       <ToastContainer />
