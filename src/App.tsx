@@ -4,6 +4,7 @@ import './App.css'
 const Layout = lazy(() => import('./components/Layout'))
 const DanbiTestPage = lazy(() => import('./pages/tests/DanbiTestPage'))
 const HYTestPage = lazy(() => import('./pages/tests/HYTestPage'))
+const WithdrawalManagementPage = lazy(() => import('./pages/WithdrawalManagementPage'))
 const WonheeTestPage = lazy(() => import('./pages/tests/WonheeTestPage'))
 const KyungbokTestPage = lazy(() => import('./pages/tests/KyungbokTestPage'))
 const HyunjinTestPage = lazy(() => import('./pages/tests/HyunjinTestPage'))
@@ -63,6 +64,7 @@ function App() {
             <Route path="userlist" element={<UserListPage />} />
             <Route path="reviews" element={<StudyReviewPage />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="withdraw-management" element={<WithdrawalManagementPage />} />
             <Route path="application" element={<StudyApplicationPage />} />
             <Route
               path="lecture-management"

@@ -14,7 +14,7 @@ import {
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { formatDate } from '../utils/formatDate'
 
-export const WithdrawalManagementPage = () => {
+const WithdrawalManagementPage = () => {
   const [search, setSearch] = useState('')
   const [withdrawReasonFilter, setWithdrawReasonFilter] = useState('')
   const [withdrawRoleFilter, setWithdrawRoleFilter] = useState('')
@@ -235,3 +235,5 @@ export const WithdrawalManagementPage = () => {
     </main>
   )
 }
+
+export default WithdrawalManagementPage;

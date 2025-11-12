@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { mapUserResponse } from "../utils/user";
-import api from "../lib/axios";
-import { getAccessToken } from "../lib/token";
+import { mapUserResponse } from "../../utils/user";
+import api from "../../lib/axios";
+import { getAccessToken } from "../../lib/token";
 
 interface UseUsersProps {
   page?: number;
