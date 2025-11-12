@@ -3,47 +3,48 @@ import { getAccessToken } from '../lib/token'
 
 export interface FetchWithdrawalsParams {
   page?: number
-  limit?: number
-  start_date?: string
-  end_date?: string
-  reason?: string
+  page_size?: number
   keyword?: string
   role?: 'user' | 'staff' | 'admin'
+  ordering?: string
 }
 
 export const fetchWithdrawals = async ({
   page = 1,
-  limit = 10,
-  start_date = '',
-  end_date = '',
-  reason = '',
+  page_size = 20,
   keyword = '',
   role,
+  ordering,
 }: FetchWithdrawalsParams) => {
   const accessToken = getAccessToken()
-  const response = await api.get('/v1/admin/users/withdrawals', {
+
+  const response = await api.get('/v1/admin/withdrawals', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
     params: {
       page,
-      limit,
-      start_date,
-      end_date,
-      reason,
+      page_size,
       keyword,
       role,
+      ordering,
     },
   })
+
   return response.data.data
 }
 
-export const fetchWithdrawalDetail = async ({ userId }: { userId: number }) => {
+export const fetchWithdrawalDetail = async ({
+  withdrawal_id,
+}: {
+  withdrawal_id: number
+}) => {
   const accessToken = getAccessToken()
-  const response = await api.get(`/v1/admin/users/withdrawals/${userId}`, {
+  const response = await api.get(`/v1/admin/withdrawals/${withdrawal_id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+
   return response.data.data
 }

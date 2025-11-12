@@ -13,11 +13,28 @@ export const ROLE_LABEL_TO_CODE: Record<
   일반회원: 'user',
 }
 
+// ✅ 탈퇴 사유 코드 → 한글 매핑 추가
+export const WITHDRAW_REASON_CODE_TO_LABEL: Record<string, string> = {
+  NO_LONGER_NEEDED: '서비스 이용할 시간이 없음',
+  LACK_OF_INTEREST: '관심이 사라짐',
+  TOO_DIFFICULT: '서비스를 이용하기가 너무 어려움',
+  FOUND_BETTER_SERVICE: '더 좋은 대안을 찾음',
+  PRIVACY_CONCERNS: '개인정보/보안 우려',
+  POOR_SERVICE_QUALITY: '서비스 품질 불만',
+  TECHNICAL_ISSUES: '기술적 문제(버그 등)',
+  LACK_OF_CONTENT: '원하는 콘텐츠나 기능의 부족',
+  OTHER: '기타',
+}
+
 export const WITHDRAW_REASONS = [
-  '서비스 불만족',
-  '개인정보 우려',
-  '사용 빈도 낮음',
-  '경쟁 서비스 이용',
+  '서비스 이용할 시간이 없음',
+  '관심이 사라짐',
+  '서비스를 이용하기가 너무 어려움',
+  '더 좋은 대안을 찾음',
+  '개인정보/보안 우려',
+  '서비스 품질 불만',
+  '기술적 문제(버그 등)',
+  '원하는 콘텐츠나 기능의 부족',
   '기타',
 ] as const
 

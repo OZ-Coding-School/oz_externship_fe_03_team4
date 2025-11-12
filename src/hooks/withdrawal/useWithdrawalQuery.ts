@@ -6,33 +6,20 @@ import { useQuery } from '@tanstack/react-query'
 
 export const useWithdrawalQuery = ({
   page,
-  limit,
-  start_date,
-  end_date,
-  reason,
+  page_size,
   keyword,
   role,
+  ordering,
 }: FetchWithdrawalsParams) => {
   return useQuery({
-    queryKey: [
-      'withdrawals',
-      page,
-      limit,
-      start_date,
-      end_date,
-      reason,
-      keyword,
-      role,
-    ],
+    queryKey: ['withdrawals', page, page_size, keyword, role, ordering],
     queryFn: () =>
       fetchWithdrawals({
         page,
-        limit,
-        start_date,
-        end_date,
-        reason,
+        page_size,
         keyword,
         role,
+        ordering,
       }),
   })
 }

@@ -54,24 +54,20 @@ const WithdrawalManagementPage = () => {
 
   const pageSize = 10
 
+  const roleCode = withdrawRoleFilter
+    ? ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+    : undefined
+
   const { data, isLoading, error } = useWithdrawalQuery({
     page,
-    limit: 10,
+    page_size: pageSize,
     keyword: debouncedSearch,
-    reason: withdrawReasonFilter || undefined,
+    role: roleCode,
+    ordering: sortKey,
   })
 
-  const rows = data?.result ?? []
-  const filteredRows = withdrawRoleFilter
-    ? rows.filter((user: WithdrawalRow) => {
-        const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
-        return user.role === targetCode
-      })
-    : rows
-  const totalPages =
-    withdrawRoleFilter && filteredRows.length === 0
-      ? 1 // 현재 페이지에 필터링된 데이터가 없으면 1페이지만 표시
-      : Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
+  const rows = data?.results ?? []
+  const totalPages = Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
 
   const getErrorMessage = (err: unknown): string => {
     if (axios.isAxiosError(err)) {
@@ -140,7 +136,7 @@ const WithdrawalManagementPage = () => {
       />
 
       <WithdrawalTable
-        data={filteredRows}
+        data={rows}
         isLoading={isLoading}
         error={listErrorMessage}
         sortKey={sortKey}
@@ -176,4 +172,4 @@ const WithdrawalManagementPage = () => {
   )
 }
 
-export default WithdrawalManagementPage;
+export default WithdrawalManagementPage

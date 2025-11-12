@@ -10,7 +10,14 @@ export type WithdrawalRow = {
   role: UserRole
   birthday: string
   reason: WithdrawReason
-  created_at: string
+  withdrawn_at: string
+}
+
+export interface FetchWithdrawalsResponse {
+  count: number
+  next: string | null
+  previous: string | null
+  results: WithdrawalRow[] // ✅ result → results
 }
 
 export type WithdrawalDetail = {
