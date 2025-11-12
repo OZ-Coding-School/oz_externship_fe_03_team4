@@ -3,12 +3,16 @@ import { ModalHeader } from '../modal/ModalHeader'
 import { WithdrawalModalOutlet } from './WithdrawalModalOutlet'
 import { WithdrawalModalFooter } from './WithdrawalModalFooter'
 import type { WithdrawalDetail } from '../../types/withdraw/types'
+import { ToastContainer } from '../toast/toastContainer'
+import { UserX } from 'lucide-react'
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock'
 
 type Props = {
   open: boolean
   detail?: WithdrawalDetail | null
   loading?: boolean
   error?: string
+  isRestored?: boolean
   onClose: () => void
   onRestore?: () => void | Promise<void>
 }
@@ -18,13 +22,22 @@ export const WithdrawalModal = ({
   detail,
   loading,
   error,
+  isRestored = false,
   onClose,
   onRestore,
 }: Props) => {
+  useBodyScrollLock(open)
+
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
       <div className="flex max-h-[70vh] w-[700px] flex-col p-6">
-        <ModalHeader title="회원 탈퇴 상세 정보" onClose={onClose} />
+        <ToastContainer />
+        <ModalHeader
+          title="회원 탈퇴 상세 정보"
+          onClose={onClose}
+          subtitle="WITHDRAWAL DETAIL"
+          iconComponent={UserX}
+        />
 
         <div className="grow overflow-y-auto">
           {loading ? (
@@ -42,7 +55,11 @@ export const WithdrawalModal = ({
           )}
         </div>
 
-        <WithdrawalModalFooter onClose={onClose} onRestore={onRestore} />
+        <WithdrawalModalFooter
+          onClose={onClose}
+          onRestore={onRestore}
+          isRestored={isRestored}
+        />
       </div>
     </Modal>
   )

@@ -11,10 +11,28 @@ export const useWithdrawalQuery = ({
   end_date,
   reason,
   keyword,
+  role,
 }: FetchWithdrawalsParams) => {
   return useQuery({
-    queryKey: [page, limit, start_date, end_date, reason, keyword],
+    queryKey: [
+      'withdrawals',
+      page,
+      limit,
+      start_date,
+      end_date,
+      reason,
+      keyword,
+      role,
+    ],
     queryFn: () =>
-      fetchWithdrawals({ page, limit, start_date, end_date, reason, keyword }),
+      fetchWithdrawals({
+        page,
+        limit,
+        start_date,
+        end_date,
+        reason,
+        keyword,
+        role,
+      }),
   })
 }
