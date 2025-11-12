@@ -2,17 +2,17 @@ import { fetchWithdrawalDetail } from '../../api/fetchWithdrawals'
 import { useQuery } from '@tanstack/react-query'
 
 type Params = {
-  userId?: number
+  withdrawal_id?: number
   enabled?: boolean
 }
 
 export const useWithdrawalDetailQuery = ({
-  userId,
+  withdrawal_id,
   enabled = true,
 }: Params) => {
   return useQuery({
-    queryKey: ['withdrawalDetail', userId],
-    queryFn: () => fetchWithdrawalDetail({ userId: userId! }),
-    enabled: enabled && !!userId,
+    queryKey: ['withdrawalDetail', withdrawal_id],
+    queryFn: () => fetchWithdrawalDetail({ withdrawal_id: withdrawal_id! }),
+    enabled: enabled && !!withdrawal_id,
   })
 }

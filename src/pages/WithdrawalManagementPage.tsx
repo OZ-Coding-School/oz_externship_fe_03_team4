@@ -98,7 +98,7 @@ const WithdrawalManagementPage = () => {
     isLoading: detailLoading,
     error: detailError,
   } = useWithdrawalDetailQuery({
-    userId: selectedUserId,
+    withdrawal_id: selectedUserId,
     enabled: isWithdrawModalOpen && !isRestored,
   })
 
