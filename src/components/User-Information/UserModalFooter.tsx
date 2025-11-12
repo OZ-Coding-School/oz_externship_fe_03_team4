@@ -58,14 +58,15 @@ export const UserModalFooter = ({
           name: user.name,
           nickname: user.nickname,
           phone_number: user.phone,
-          gender: user.gender || "M",
+          gender: user.gender || 'M',
           status:
-            user.status === "활성"
-              ? "active"
-              : user.status === "비활성"
-              ? "inactive"
-              : "withdraw_requested",
-          profile_img_url: user.avatar || "",
+            user.status === '활성'
+              ? 'active'
+              : user.status === '비활성'
+                ? 'inactive'
+                : 'withdraw_requested',
+          profile_img_url: user.avatar || '',
+          birthday: user.birthday || undefined,
         },
       });
 
@@ -73,7 +74,7 @@ export const UserModalFooter = ({
       await queryClient.invalidateQueries({ queryKey: ["userDetail", user.id] });
 
       showSuccess("회원 정보 수정 완료", "회원 정보가 성공적으로 수정되었습니다.");
-      onEditToggle(); // 읽기 모드 전환
+      onEditToggle();
     } catch {
       setIsAlertOpen(true);
     }

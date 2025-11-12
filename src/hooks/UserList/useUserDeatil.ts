@@ -1,21 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import type { MappedUser } from "../../types/user";
 import api from "../../lib/axios";
-import { getAccessToken } from "../../lib/token"; // token 가져오기
+import { getAccessToken } from "../../lib/token";
 
 // 백엔드 응답 타입
 interface ApiUserDetail {
-  id: number;
-  email: string;
-  name: string;
-  nickname: string;
-  phone_number: string;
-  is_active: boolean;
-  status: "active" | "inactive" | "withdrawn";
-  created_at: string;
-  profile_img_url: string;
-  birthday?: string;
-  role: "admin" | "staff" | "user";
+  id: number
+  email: string
+  name: string
+  nickname: string
+  phone_number: string
+  is_active: boolean
+  status: 'active' | 'inactive' | 'withdraw_requested'
+  created_at: string
+  profile_img_url: string
+  birthday?: string
+  role: 'admin' | 'staff' | 'user'
+  gender?: 'M' | 'F' | null
 }
 
 interface ApiUserDetailResponse {
@@ -31,25 +32,26 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
   nickname: data.nickname,
   phone: data.phone_number,
   status:
-    data.status === "active"
-      ? "활성"
-      : data.status === "withdrawn"
-      ? "탈퇴요청"
-      : "비활성",
+    data.status === 'active'
+      ? '활성'
+      : data.status === 'inactive'
+        ? '비활성'
+        : '탈퇴요청',
   joinedAt: new Date(data.created_at).toLocaleDateString(),
-  withdrawAt: "",
-  birthday: data.birthday ?? "",
+  withdrawAt: '',
+  birthday: data.birthday ? data.birthday.slice(0, 10) : '',
   role:
-    data.role === "admin"
-      ? "관리자"
-      : data.role === "staff"
-      ? "스태프"
-      : "일반회원",
-  avatar: data.profile_img_url || "",
+    data.role === 'admin'
+      ? '관리자'
+      : data.role === 'staff'
+        ? '스태프'
+        : '일반회원',
+  avatar: data.profile_img_url || '',
+  gender: data.gender ?? 'M',
 });
 
 export const useUserDetail = (userId?: string | number) => {
-  const token = getAccessToken(); // lib/token 사용
+  const token = getAccessToken();
 
   return useQuery({
     queryKey: ["userDetail", userId],
