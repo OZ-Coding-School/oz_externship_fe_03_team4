@@ -201,6 +201,27 @@ const UserModalOutletComponent = ({
           )}
         </div>
 
+        {/* 성별 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">성별</p>
+          {isEditing ? (
+            <select
+              className="p-3 rounded-lg w-full border border-gray-300"
+              value={localUser.gender ?? "M"}
+              onChange={(e) => handleChange("gender", e.target.value)}
+            >
+              <option value="M">남성</option>
+              <option value="F">여성</option>
+            </select>
+          ) : (
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
+              <p className="font-medium">
+                {localUser.gender === "F" ? "여성" : "남성"}
+              </p>
+            </div>
+          )}
+        </div>
+
         {/* 권한 (읽기 전용) */}
         <div>
           <p className="text-xs text-gray-500 mb-1">권한</p>
