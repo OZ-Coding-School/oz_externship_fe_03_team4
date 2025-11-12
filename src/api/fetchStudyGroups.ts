@@ -24,7 +24,7 @@ export const fetchStudyGroups = async (
 ): Promise<FetchStudyGroupsReturn> => {
   const queryParams = buildQueryParams(params)
   const response = await api.get<StudyGroupListResponse>(
-    '/v1/studies/admin/groups',
+    '/v1/admin/studies/groups',
     {
       params: queryParams,
     }
@@ -40,23 +40,12 @@ export const fetchStudyGroups = async (
   }
 }
 
-// export const fetchStudyGroupDetail = async (
-//   uuid: string
-// ): Promise<StudyGroupDetail> => {
-//   const response = await api.get<StudyGroupDetailResponse>(
-//     `/v1/studies/admin/groups/${uuid}`
-//   )
-//   return mapStudyGroupDetailDTO(response.data.data)
-// }
-
 export const fetchStudyGroupDetail = async (
   uuid: string
 ): Promise<StudyGroupDetail> => {
-  // response.data가 바로 DetailDTO (래퍼 없음)
   const response = await api.get<StudyGroupDetailDTO>(
-    `/v1/studies/admin/groups/${uuid}`
+    `/v1/admin/studies/groups/${uuid}`
   )
 
-  // 타입 파일의 매퍼 함수 재사용
   return mapStudyGroupDetailDTO(response.data)
 }
