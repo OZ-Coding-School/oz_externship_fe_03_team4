@@ -18,6 +18,8 @@ import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentD
 import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
 import { ToastContainer } from '../components/toast/toastContainer'
 import type { RecruitmentOrdering } from '../hooks/recruitments/types.local'
+import { useRecruitmentTagsQuery } from '../hooks/recruitments/useRecruitmentTagsQuery'
+
 const PAGE_SIZE = 10
 
 const RecruitmentManagementPage = () => {
@@ -94,6 +96,9 @@ const RecruitmentManagementPage = () => {
 
   const paginatedRecruitments = filteredRecruitments
 
+  const { data: tagData } = useRecruitmentTagsQuery({ page_size: 100 })
+  const availableTags = tagData?.tags ?? []
+
   const resetFilters = () => {
     setSearchText('')
     setStatusFilter('전체')
@@ -132,7 +137,7 @@ const RecruitmentManagementPage = () => {
           setSelectedTags(nextSelectedTags)
           setCurrentPage(1)
         }}
-        availableTags={[]}
+        availableTags={availableTags}
       />
 
       <div className="mb-3 text-sm text-neutral-600">
