@@ -47,7 +47,7 @@ export const WithdrawalModal = ({
           ) : error ? (
             <div className="bg-red-50 p-6 text-sm text-red-700"> {error} </div>
           ) : detail ? (
-            <WithdrawalModalOutlet detail={detail} />
+            <WithdrawalModalOutlet detail={detail} isRestored={isRestored} />
           ) : (
             <div className="p-6 text-center text-sm text-gray-500">
               데이터가 없습니다.
