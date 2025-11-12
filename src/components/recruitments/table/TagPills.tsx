@@ -10,7 +10,7 @@ interface TagPillsProps {
 
 export const TagPills = ({
   tags,
-  max = 3,
+  max = 2,
   className = '',
   pillClassName = '',
 }: TagPillsProps) => {

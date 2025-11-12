@@ -89,6 +89,7 @@ export const RecruitmentModalOutlet = ({
           <div className="min-h-[44px] p-2">
             <TagPills
               tags={tags}
+              max={tags.length}
               pillClassName="border-amber-300 bg-amber-300 px-2 py-2 text-white"
             />
           </div>
