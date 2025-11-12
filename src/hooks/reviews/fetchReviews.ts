@@ -15,10 +15,13 @@ export type FetchReviewsReturn = {
 export const fetchReviews = async (
   queryParams: Record<string, string | number>
 ): Promise<FetchReviewsReturn> => {
-  const { data } = await api.get<ReviewListDTO>('/v1/studies/admin/reviews', {
-    params: queryParams,
-  })
-  
+  const { data } = await api.get<ReviewListDTO>(
+    '/v1/admin/studies/admin/reviews',
+    {
+      params: queryParams,
+    }
+  )
+
   return {
     // 서버 응답 데이털르 내부 타입으로 포맷팅
     items: data.results.map(mapDtoToReview),
