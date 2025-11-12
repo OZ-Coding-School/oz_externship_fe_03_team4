@@ -137,23 +137,33 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
   }
 
 // api응답을 프론트에서 사용하는 걸로 변환해주는 매핑 함수
-export const mapApplicationApiToUi = (a: ApplicationApi): Application => ({
-  aid: a.id,
-  id: `#${a.id}`,
-  uuid: a.uuid,
-  postingTitle: a.recruitment?.title ?? '',
-  applicant: {
-    name: a.user?.nickname ?? '',
-    email: a.user?.email ?? '',
-  },
-  status: apiStatusToUi[a.status],
-  appliedAt: new Date(a.created_at).toLocaleString('ko-KR', {
-    timeZone: 'Asia/Seoul',
-  }), // 대한민국 시간으로 포맷팅
-  updatedAt: new Date(a.updated_at).toLocaleString('ko-KR', {
-    timeZone: 'Asia/Seoul',
-  }), // 대한민국 시간으로 포맷팅
-})
+export const mapApplicationApiToUi = (a: ApplicationApi): Application => {
+  const withCompat = a as ApplicationApi & {
+    applied_at?: string
+    nickname?: string
+    email?: string
+  }
+  const nickname = a.user?.nickname ?? withCompat.nickname ?? ''
+  const email = a.user?.email ?? withCompat.email ?? ''
+
+  return {
+    aid: a.id,
+    id: `#${a.id}`,
+    uuid: a.uuid,
+    postingTitle: a.recruitment?.title ?? '',
+    applicant: { name: nickname, email },
+    status: apiStatusToUi[a.status],
+    appliedAt: new Date(withCompat.applied_at ?? a.created_at).toLocaleString(
+      'ko-KR',
+      {
+        timeZone: 'Asia/Seoul',
+      }
+    ), // 대한민국 시간으로 포맷팅
+    updatedAt: new Date(a.updated_at).toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+    }), // 대한민국 시간으로 포맷팅
+  }
+}
 
 export const mapAdminApiToUi = mapApplicationApiToUi
 

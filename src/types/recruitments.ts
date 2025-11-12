@@ -108,8 +108,16 @@ export interface RecruitmentDetail extends Recruitment {
 export const mapRecruitmentDetailDTO = (
   detailDto: RecruitmentDetailDTO
 ): RecruitmentDetail => {
+  const statusFallback =
+    detailDto.status && detailDto.status.trim().length > 0
+      ? detailDto.status
+      : detailDto.is_closed
+        ? '마감'
+        : '모집중'
+
   const baseUi: Recruitment = mapRecruitmentDTO({
     ...detailDto,
+    status: statusFallback,
     tags: detailDto.tags.map((tag) => tag.name),
   })
   const attachments = detailDto.attachments.map((attachment) => ({
