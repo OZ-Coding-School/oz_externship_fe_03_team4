@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDebouncedValue } from "../hooks/useDebouncedValue" // hook 추가
+import { useState, useCallback } from "react";
+import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import { Table } from "../components/Data-Indicate/Table";
 import { Badge } from "../components/Badge";
 import type { MappedUser } from "../types/user";
@@ -19,7 +19,7 @@ const UserListPage = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [page, setPage] = useState(1);
 
-  const debouncedSearch = useDebouncedValue(search, 500); // 500ms 디바운스
+  const debouncedSearch = useDebouncedValue(search, 500);
 
   // React Query 훅으로 API 데이터 가져오기
   const { users, pagination, loading, error } = useUsers({
@@ -36,6 +36,49 @@ const UserListPage = () => {
   const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  // 🧠 핸들러들 안정화
+  const handleUserChange = useCallback((next: MappedUser) => {
+    setSelectedUser(next);
+  }, []);
+
+  const handleEditToggle = useCallback(() => {
+    setIsEditing((prev) => !prev);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setSelectedUser(null);
+  }, []);
+
+  const handleDelete = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
+  // 유저 클릭 시 모달 열기
+  const handleRowClick = useCallback((user: MappedUser) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+    setIsEditing(false);
+  }, []);
+
+  // 권한 변경 핸들러
+  const handleRoleChange = useCallback(
+    (role: "admin" | "staff" | "user") => {
+      if (!selectedUser) return;
+      const roleMap: Record<
+        "admin" | "staff" | "user",
+        "관리자" | "스태프" | "일반회원"
+      > = {
+        admin: "관리자",
+        staff: "스태프",
+        user: "일반회원",
+      };
+      setSelectedUser({ ...selectedUser, role: roleMap[role] });
+    },
+    [selectedUser]
+  );
 
   // 테이블 컬럼 정의
   const columns = [
@@ -70,24 +113,6 @@ const UserListPage = () => {
     { key: "withdrawAt", label: "탈퇴요청일" },
   ];
 
-  // 유저 클릭 시 모달 열기
-  const handleRowClick = (user: MappedUser) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-    setIsEditing(false);
-  };
-
-  // 권한 변경 핸들러
-  const handleRoleChange = (role: "admin" | "staff" | "user") => {
-    if (!selectedUser) return;
-    const roleMap: Record<"admin" | "staff" | "user", "관리자" | "스태프" | "일반회원"> = {
-      admin: "관리자",
-      staff: "스태프",
-      user: "일반회원",
-    };
-    setSelectedUser({ ...selectedUser, role: roleMap[role] });
-  };
-
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <main className="flex-1 p-8">
@@ -110,7 +135,7 @@ const UserListPage = () => {
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
-                setPage(1); // 필터 변경 시 페이지 1로 초기화
+                setPage(1);
               }}
             >
               <option value="">전체</option>
@@ -125,7 +150,7 @@ const UserListPage = () => {
               value={roleFilter}
               onChange={(e) => {
                 setRoleFilter(e.target.value);
-                setPage(1); // 필터 변경 시 페이지 1로 초기화
+                setPage(1);
               }}
             >
               <option value="">전체 권한</option>
@@ -152,28 +177,28 @@ const UserListPage = () => {
           <Pagination
             currentPage={page}
             totalPages={totalPages}
-            onPageChange={setPage} // 간단하게 수정
+            onPageChange={setPage}
             showFirstLast
           />
         </div>
 
         {/* 모달 */}
-        {selectedUser && (
-          <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
+        {isModalOpen && selectedUser && (
+          <Modal isOn={isModalOpen} onBackgroundClick={handleCloseModal}>
             <div className="p-6 w-[700px]">
-              <ModalHeader title="회원 상세 정보" onClose={() => setIsModalOpen(false)} />
+              <ModalHeader title="회원 상세 정보" onClose={handleCloseModal} />
               <UserModalOutlet
                 userId={selectedUser.id}
                 isEditing={isEditing}
-                onUserChange={setSelectedUser}
+                onUserChange={handleUserChange}
               />
               <UserModalFooter
                 user={selectedUser}
                 isEditing={isEditing}
-                onEditToggle={() => setIsEditing(!isEditing)}
-                onClose={() => setIsModalOpen(false)}
+                onEditToggle={handleEditToggle}
+                onClose={handleCloseModal}
                 onRoleChange={handleRoleChange}
-                onDelete={() => setIsModalOpen(false)}
+                onDelete={handleDelete}
               />
             </div>
           </Modal>
