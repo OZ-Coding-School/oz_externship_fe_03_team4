@@ -13,7 +13,6 @@ import { useUsers } from "../hooks/UserList/useUsers";
 import { Pagination } from "../components/pagination/Pagination";
 
 const UserListPage = () => {
-  // 검색 및 필터 상태
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
@@ -32,12 +31,11 @@ const UserListPage = () => {
 
   const totalPages = pagination?.total_pages ?? 1;
 
-  // 모달 상태
   const [selectedUser, setSelectedUser] = useState<MappedUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // 🧠 핸들러들 안정화
+  // 핸들러들 안정화
   const handleUserChange = useCallback((next: MappedUser) => {
     setSelectedUser(next);
   }, []);
@@ -56,7 +54,6 @@ const UserListPage = () => {
     setIsModalOpen(false);
   }, []);
 
-  // 유저 클릭 시 모달 열기
   const handleRowClick = useCallback((user: MappedUser) => {
     setSelectedUser(user);
     setIsModalOpen(true);
@@ -162,7 +159,7 @@ const UserListPage = () => {
         </div>
 
         {/* 테이블 */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 whitespace-nowrap">
           {loading ? (
             <p className="p-6 text-center text-gray-500">회원 목록 불러오는 중...</p>
           ) : error ? (
