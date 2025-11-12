@@ -8,7 +8,7 @@ export const useReviewDetailQuery = (reviewId: number | null) => {
     enabled: !!reviewId,
     queryFn: async () => {
       const { data } = await api.get<ReviewDTO>(
-        `/v1/studies/admin/reviews/${reviewId}`
+        `/v1/admin/studies/admin/reviews/${reviewId}`
       )
       return mapDtoToReviewDetail(data)
     },
