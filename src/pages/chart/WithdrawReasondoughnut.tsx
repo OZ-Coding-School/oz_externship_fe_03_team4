@@ -1,57 +1,13 @@
 import { Pie, PieChart, Cell, Tooltip, Sector } from 'recharts'
 import {
   mapDtoToWithdrawalReasonDistribution,
-  type WithdrawalReasonDistributionDTO,
   type WithdrawalReasonChartData,
 } from '../../types/Chart/WithdrawReasondoughnutChart/types'
-import { useEffect, useState } from 'react' //api나오면 삭제
-//api 나오면 주석 삭제 import { useWithdrawalReasons } from '../../hooks/chart/fetchWithdrawReasondoughnut';
-
-//일단 api명세서 보고 수정
-const MOCK_DATA: WithdrawalReasonDistributionDTO = {
-  detail: '회원 탈퇴 사유 분포 조회에 성공하였습니다.',
-  data: {
-    scope: 'all_time',
-    total_withdrawals: 1200,
-    items: [
-      {
-        reason_code: 'service',
-        reason_label: '서비스 불만족',
-        count: 450,
-        percentage: 37.5,
-      },
-      {
-        reason_code: 'privacy',
-        reason_label: '개인정보 우려',
-        count: 300,
-        percentage: 25.0,
-      },
-      {
-        reason_code: 'low_usage',
-        reason_label: '사용 빈도 낮음',
-        count: 240,
-        percentage: 20.0,
-      },
-      {
-        reason_code: 'competitor',
-        reason_label: '경쟁 서비스 이용',
-        count: 120,
-        percentage: 10.0,
-      },
-      {
-        reason_code: 'other',
-        reason_label: '기타',
-        count: 90,
-        percentage: 7.5,
-      },
-    ],
-  },
-}
+import { useWithdrawalReasons } from '../../hooks/chart/fetchWithdrawReasondoughnut';
 
 interface WithdrawReasondoughnutChartProps {
   isAnimationActive: boolean
 }
-//api나오면 여기까지 삭제
 
 const REASON_COLORS: Record<string, string> = {
   '서비스 불만족': '#0088FE',
@@ -159,105 +115,48 @@ const renderActiveShape = (props: unknown) => {
 const ReasonDistributionChart = ({
   isAnimationActive,
 }: WithdrawReasondoughnutChartProps) => {
-  const [data, setData] = useState<
-    (WithdrawalReasonChartData & { color: string })[]
-  >([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data: responseData, isLoading, error: queryError } = useWithdrawalReasons();
 
-  // api연동 하면 주석삭제
-  // const { data: responseData, isLoading, error: queryError } = useWithdrawalReasons();
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-  //       <div className="flex items-center justify-center h-[500px]">
-  //         <p className="text-gray-500">로딩 중...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // if (queryError) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-  //       <div className="flex items-center justify-center h-[500px]">
-  //         <p className="text-red-500">
-  //           {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // if (!responseData) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-  //       <div className="flex items-center justify-center h-[500px]">
-  //         <p className="text-gray-500">데이터가 없습니다.</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // const statistics = mapDtoToWithdrawalReasonDistribution(responseData);
-  // const chartDataWithColors = statistics.chartData.map(item => ({
-  //   ...item,
-  //   color: REASON_COLORS[item.reason] || '#CCCCCC'
-  // }));
-  // api연동 하면 주석삭제
-
-  useEffect(() => {
-    const fetchReasonData = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        // API 연동 되면 목업을 실제 API 응답으로 교체하면 끝
-        const statistics = mapDtoToWithdrawalReasonDistribution(MOCK_DATA)
-        const chartDataWithColors = statistics.chartData.map((item) => ({
-          ...item,
-          color: REASON_COLORS[item.reason] || '#CCCCCC',
-        }))
-        setData(chartDataWithColors)
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : '데이터를 불러오는데 실패했습니다.'
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchReasonData()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold">탈퇴 사유 분포</h3>
-        <div className="flex h-[500px] items-center justify-center">
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center h-[500px]">
           <p className="text-gray-500">로딩 중...</p>
         </div>
       </div>
-    )
+    );
   }
 
-  if (error) {
+  if (queryError) {
     return (
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold">탈퇴 사유 분포</h3>
-        <div className="flex h-[500px] items-center justify-center">
-          <p className="text-red-500">{error}</p>
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center h-[500px]">
+          <p className="text-red-500">
+            {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+          </p>
         </div>
       </div>
-    )
+    );
   }
+
+  if (!responseData) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center h-[500px]">
+          <p className="text-gray-500">데이터가 없습니다.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const statistics = mapDtoToWithdrawalReasonDistribution(responseData);
+  const data = statistics.chartData.map(item => ({
+    ...item,
+    color: REASON_COLORS[item.reason] || '#CCCCCC'
+  }));
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-sm">
@@ -272,7 +171,7 @@ const ReasonDistributionChart = ({
             <Pie
               data={data}
               dataKey="count"
-              cx="50%" //피드백 반영
+              cx="50%"
               cy="50%"
               innerRadius="40%"
               outerRadius="75%"
