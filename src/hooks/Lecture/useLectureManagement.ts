@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useLectureSearch } from './useLectureSearch'
 import { useLecturePagination } from './useLecturePagination'
 import { useLectureModal } from './useLectureModal'
@@ -12,12 +11,8 @@ export const useLectureManagement = () => {
     useLectureSearch()
 
   // 페이지네이션 로직
-  const {
-    currentPage,
-    handlePageChange,
-    resetToFirstPage,
-    calculateTotalPages,
-  } = useLecturePagination({ pageSize: PAGE_SIZE })
+  const { currentPage, handlePageChange, calculateTotalPages } =
+    useLecturePagination({ pageSize: PAGE_SIZE })
 
   // 모달 로직
   const { isModalOpen, selectedLectureId, openModal, closeModal } =
@@ -41,11 +36,6 @@ export const useLectureManagement = () => {
   // 계산된 값들
   const totalPages = calculateTotalPages(totalCount)
   const showPagination = totalPages > 1
-
-  // 검색어 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [debouncedSearch, resetToFirstPage])
 
   // 통합된 핸들러 함수들
   const handleSearch = (keyword: string) => {
