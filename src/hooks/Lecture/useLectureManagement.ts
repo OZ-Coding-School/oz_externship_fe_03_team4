@@ -3,7 +3,6 @@ import { useLectureSearch } from './useLectureSearch'
 import { useLecturePagination } from './useLecturePagination'
 import { useLectureModal } from './useLectureModal'
 import { useLectureData } from './useLectureData'
-import type { Lecture } from '../../types/lectureManagement/types'
 
 const PAGE_SIZE = 10
 
@@ -21,7 +20,7 @@ export const useLectureManagement = () => {
   } = useLecturePagination({ pageSize: PAGE_SIZE })
 
   // 모달 로직
-  const { isModalOpen, selectedLecture, openModal, closeModal } =
+  const { isModalOpen, selectedLectureId, openModal, closeModal } =
     useLectureModal()
 
   // 데이터 조회
@@ -53,8 +52,8 @@ export const useLectureManagement = () => {
     handleSearchChange(keyword)
   }
 
-  const handleLectureClick = (lecture: Lecture) => {
-    openModal(lecture)
+  const handleLectureClick = (lectureId: number) => {
+    openModal(lectureId)
   }
 
   return {
@@ -80,7 +79,7 @@ export const useLectureManagement = () => {
 
     // 모달 관련
     isModalOpen,
-    selectedLecture,
+    selectedLectureId,
     handleLectureClick,
     closeModal,
 

@@ -1,23 +1,23 @@
 import { useState } from 'react'
-import type { Lecture } from '../../types/lectureManagement/types'
 
 export const useLectureModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedLecture, setSelectedLecture] = useState<Lecture | null>(null)
-
-  const openModal = (lecture: Lecture) => {
-    setSelectedLecture(lecture)
+  const [selectedLectureId, setSelectedLectureId] = useState<number | null>(
+    null
+  )
+  const openModal = (lectureId: number) => {
+    setSelectedLectureId(lectureId)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
-    setSelectedLecture(null)
+    setSelectedLectureId(null)
   }
 
   return {
     isModalOpen,
-    selectedLecture,
+    selectedLectureId,
     openModal,
     closeModal,
   }

@@ -9,7 +9,21 @@ export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD'
 
 export type Platform = 'INFLEARN' | 'UDEMY'
 
+// 목록 조회용
 export type LectureDTO = {
+  id: number
+  title: string
+  instructor: string
+  thumbnail_img_url: string
+  platform: Platform
+  url_link: string
+  categories: CategoryDTO[]
+  created_at: string
+  updated_at: string
+}
+
+// 상세 조회 UI용
+export type LectureDetailDTO = {
   id: number
   uuid: string
   title: string
@@ -28,14 +42,26 @@ export type LectureDTO = {
   duration: number
 }
 
-// UI용
+// UI용 통합 타입
 export type Lecture = {
+  id: number
+  thumbnail: string
+  title: string
+  instructor: string
+  platform: 'Udemy' | 'Inflearn'
+  categories: string[]
+  urlLink: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type LectureDetail = {
   id: number
   uuid: string
   thumbnail: string
   title: string
   instructor: string
-  description: string
+  description?: string
   platform: 'Udemy' | 'Inflearn'
   categories: string[]
   difficulty: '쉬움' | '보통' | '어려움'
@@ -70,6 +96,24 @@ export const DIFFICULTY_MAP: Record<Difficulty, '쉬움' | '보통' | '어려움
 
 // API → UI 타입으로 변환
 export const mapLectureDTO = (dto: LectureDTO): Lecture => ({
+  id: dto.id,
+  // uuid: undefined,
+  thumbnail: dto.thumbnail_img_url,
+  title: dto.title,
+  instructor: dto.instructor,
+  // description: undefined,
+  platform: PLATFORM_MAP[dto.platform],
+  categories: (dto.categories ?? []).map((categories) => categories.name),
+  // difficulty: undefined,
+  // duration: undefined,
+  // originalPrice: undefined,
+  // discountPrice: undefined,
+  urlLink: dto.url_link,
+  createdAt: formatDate(dto.created_at),
+  updatedAt: formatDate(dto.updated_at),
+})
+
+export const mapLectureDetail = (dto: LectureDetailDTO): LectureDetail => ({
   id: dto.id,
   uuid: dto.uuid,
   thumbnail: dto.thumbnail_img_url,
