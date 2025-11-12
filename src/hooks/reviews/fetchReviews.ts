@@ -19,11 +19,14 @@ export const fetchReviews = async (
     params: queryParams,
   })
 
+  const pageSize = Number(queryParams.page_size) || 10
+  const page = Number(queryParams.page) || 1
+
   return {
     // 서버 응답 데이털르 내부 타입으로 포맷팅
     items: data.results.map(mapDtoToReview),
     totalCount: data.count,
-    pageSize: Number(queryParams.limit),
-    offset: Number(queryParams.offset),
+    pageSize,
+    offset: (page - 1) * pageSize,
   }
 }
