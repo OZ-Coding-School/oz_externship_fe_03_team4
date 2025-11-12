@@ -18,7 +18,12 @@ export const fetchRecruitments = async (
   params: RecruitmentRequestParams // 페이지 번호, 검색어 등등
 ): Promise<FetchRecruitmentsReturn> => {
   const url = '/v1/admin/recruitments'
-  const { data } = await api.get<RecruitmentListResponseDTO>(url, { params })
+  const { data } = await api.get<RecruitmentListResponseDTO>(url, {
+    params,
+    paramsSerializer: {
+      indexes: null,
+    },
+  })
   // 서버에서 받은 results 배열을 UI 형식으로 모두 변환해요.
   const items = data.results.map(
     (dto: RecruitmentDTO) => mapRecruitmentDTO(dto) // dto -> ui 매핑
