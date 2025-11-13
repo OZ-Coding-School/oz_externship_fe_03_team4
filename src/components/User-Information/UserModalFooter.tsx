@@ -11,6 +11,11 @@ import { ToastContainer } from "../../components/toast/toastContainer";
 import { useUpdateUser } from "../../hooks/UserList/useUpdateUser";
 import { useDeleteUser } from "../../hooks/UserList/useDeleteUser";
 
+// 타입 가드 함수
+function isFileType(value: unknown): value is File {
+  return value instanceof File;
+}
+
 interface ModalFooterProps {
   onClose: () => void;
   isEditing: boolean;
@@ -51,25 +56,28 @@ export const UserModalFooter = ({
   // 회원 정보 저장
   const handleSave = async () => {
     try {
-      const token = getAccessToken();
-      if (!token) throw new Error("토큰이 없습니다.");
+      const formData = new FormData();
+      formData.append("name", user.name);
+      formData.append("nickname", user.nickname);
+      formData.append("phone_number", user.phone);
+      formData.append("gender", user.gender || "M");
+      formData.append(
+        "status",
+        user.status === "활성"
+          ? "active"
+          : user.status === "비활성"
+          ? "inactive"
+          : "withdraw_requested"
+      );
+      formData.append("birthday", user.birthday || "");
+
+      if (user.avatar && isFileType(user.avatar)) {
+        formData.append("profile_img", user.avatar);
+      }
 
       await updateUserMutation.mutateAsync({
         userId: user.id,
-        data: {
-          name: user.name,
-          nickname: user.nickname,
-          phone_number: user.phone,
-          gender: user.gender || "M",
-          status:
-            user.status === "활성"
-              ? "active"
-              : user.status === "비활성"
-              ? "inactive"
-              : "withdraw_requested",
-          profile_img_url: user.avatar || "",
-          birthday: user.birthday || undefined,
-        },
+        data: formData,
       });
 
       await queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -119,7 +127,8 @@ export const UserModalFooter = ({
         typeof error === "object" &&
         error !== null &&
         "response" in error &&
-        typeof (error as { response?: { data?: { error?: string; detail?: string } } }).response?.data?.error === "string"
+        typeof (error as { response?: { data?: { error?: string; detail?: string } } })
+          .response?.data?.error === "string"
       ) {
         message =
           (error as { response: { data: { error?: string; detail?: string } } })
