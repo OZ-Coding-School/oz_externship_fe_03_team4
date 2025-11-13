@@ -53,10 +53,15 @@ export const useStudyGroupManagement = () => {
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
   const isEmpty = paginatedStudyGroups.length === 0 && !isLoading
 
+  const resetToFirstPage = () => {
+    setCurrentPage(1)
+  }
+
   // 핸들러
   const handleSearch = (keyword: string) => {
     setSearchKeyword(keyword)
     setCurrentPage(1)
+    resetToFirstPage()
   }
 
   const handleFilterChange = (status: typeof selectedStatus) => {
@@ -73,8 +78,8 @@ export const useStudyGroupManagement = () => {
     setCurrentPage(page)
   }
 
-  const handleStudyGroupClick = async (studyGroup: StudyGroup) => {
-    await openModal(studyGroup)
+  const handleStudyGroupClick = (studyGroup: StudyGroup) => {
+    openModal(studyGroup)
   }
 
   return {

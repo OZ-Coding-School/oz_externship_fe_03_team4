@@ -11,8 +11,12 @@ export const useLectureManagement = () => {
     useLectureSearch()
 
   // 페이지네이션 로직
-  const { currentPage, handlePageChange, calculateTotalPages } =
-    useLecturePagination({ pageSize: PAGE_SIZE })
+  const {
+    currentPage,
+    handlePageChange,
+    calculateTotalPages,
+    resetToFirstPage,
+  } = useLecturePagination({ pageSize: PAGE_SIZE })
 
   // 모달 로직
   const { isModalOpen, selectedLectureId, openModal, closeModal } =
@@ -40,6 +44,7 @@ export const useLectureManagement = () => {
   // 통합된 핸들러 함수들
   const handleSearch = (keyword: string) => {
     handleSearchChange(keyword)
+    resetToFirstPage()
   }
 
   const handleLectureClick = (lectureId: number) => {

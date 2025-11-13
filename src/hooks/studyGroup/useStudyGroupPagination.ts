@@ -24,10 +24,15 @@ export const useStudyGroupPagination = <T>({
     setCurrentPage(page)
   }
 
+  const resetToFirstPage = () => {
+    setCurrentPage(1)
+  }
+
   return {
     currentPage,
     totalPages,
     paginatedItems,
     handlePageChange,
+    resetToFirstPage,
   }
 }
