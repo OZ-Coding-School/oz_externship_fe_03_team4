@@ -6,6 +6,7 @@ export interface FetchWithdrawalsParams {
   page_size?: number
   keyword?: string
   role?: 'user' | 'staff' | 'admin'
+  reason?: string
   ordering?: string
 }
 
@@ -14,6 +15,7 @@ export const fetchWithdrawals = async ({
   page_size = 20,
   keyword = '',
   role,
+  reason,
   ordering,
 }: FetchWithdrawalsParams) => {
   const accessToken = getAccessToken()
@@ -27,6 +29,7 @@ export const fetchWithdrawals = async ({
       page_size,
       keyword,
       role,
+      reason,
       ordering,
     },
   })

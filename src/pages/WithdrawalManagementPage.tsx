@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { type WithdrawalRow } from '../types/withdraw/types'
-import { ROLE_CODE_TO_LABEL } from '../constants/withdrawal'
+import {
+  ROLE_LABEL_TO_CODE,
+  WITHDRAW_REASON_LABEL_TO_CODE,
+} from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
@@ -12,12 +15,6 @@ import { UserX } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { WithdrawalSearchAndFilterSection } from '../components/withdrawal/WithdrawalSearchAndFilterSection'
 import { WithdrawalTable } from '../components/withdrawal/WithdrawalTable'
-
-const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
-  관리자: 'admin',
-  스태프: 'staff',
-  일반회원: 'user',
-}
 
 type SortKey = 'id' | '-id' | 'name' | '-name' | 'created_at' | '-created_at'
 
@@ -58,11 +55,16 @@ const WithdrawalManagementPage = () => {
     ? ROLE_LABEL_TO_CODE[withdrawRoleFilter]
     : undefined
 
+  const reasonCode = withdrawReasonFilter
+    ? WITHDRAW_REASON_LABEL_TO_CODE[withdrawReasonFilter]
+    : undefined
+
   const { data, isLoading, error } = useWithdrawalQuery({
     page,
     page_size: pageSize,
     keyword: debouncedSearch,
     role: roleCode,
+    reason: reasonCode,
     ordering: sortKey,
   })
 
