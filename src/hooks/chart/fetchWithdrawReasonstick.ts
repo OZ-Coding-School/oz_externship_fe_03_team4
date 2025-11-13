@@ -7,6 +7,6 @@ export const useWithdrawalReasonTrend = (reasonCode: string) => {
     queryFn: () => fetchWithdrawalReasonTrend(reasonCode),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled: !!reasonCode, // reasonCode가 있을 때만 쿼리 실행
+    enabled: !!reasonCode,
   });
 };

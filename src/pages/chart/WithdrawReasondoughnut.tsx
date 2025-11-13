@@ -11,21 +11,21 @@ interface WithdrawReasondoughnutChartProps {
 }
 
 const REASON_COLORS: Record<string, string> = {
-  '원하는 콘텐츠나 기능의 부족': '#ff0000ff',
-  '관심이 사라짐': '#ff5e00ff',
-  '서비스를 이용하기가 너무 어려움': '#08f500ff',
+  '원하는 콘텐츠나 기능의 부족': '#cc1f1fff',
+  '관심이 사라짐': '#635f5fff',
+  '서비스를 이용하기가 너무 어려움': '#4ab6e9ff',
   '서비스 품질 불만': '#0025f8ff',
-  '기타' : '#e5ff00ff',
+  '기타' : 'hsla(135, 44%, 47%, 1.00)',
   '개인정보/보안 우려' : '#9000adff',
   '더 좋은 대안을 찾음' : '#e100ffff',
   '기술적 문제(버그 등)' : '#ff6ac1ff',
-  '서비스 이용할 시간이 없음' : '#250e0fc2'
+  '서비스 이용할 시간이 없음' : '#ff86f9c2'
 }
 
 const renderActiveShape = (props: unknown) => {
   const {
     cx,
-    cy,
+    cy ,
     midAngle,
     innerRadius,
     outerRadius,

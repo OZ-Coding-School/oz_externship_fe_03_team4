@@ -7,9 +7,9 @@ export type WithdrawalReasonStatisticsDTO = {
   detail: string
   data: {
     interval: string
-    from: string
-    to: string
-    total_signups: number
+    from_date: string
+    to_date: string
+    total_withdrawals: number
     items: WithdrawalReasonstickItemDTO[]
   }
 }
@@ -19,7 +19,6 @@ export type WithdrawalReasonChartData = {
   count: number
 }
 
-// 화면에 표시할 때 쓰는거
 export type WithdrawalReasonStatistics = {
   interval: string
   fromDate: string
@@ -28,14 +27,13 @@ export type WithdrawalReasonStatistics = {
   chartData: WithdrawalReasonChartData[]
 }
 
-// 서버에서 받은 데이터를 화면에서 쓰기 편한 형태로 바꿔주는 거
 export const mapDtoToWithdrawalReasonStatistics = (
   dto: WithdrawalReasonStatisticsDTO
 ): WithdrawalReasonStatistics => ({
   interval: dto.data.interval,
-  fromDate: dto.data.from,
-  toDate: dto.data.to,
-  totalWithdrawals: dto.data.total_signups,
+  fromDate: dto.data.from_date,
+  toDate: dto.data.to_date,
+  totalWithdrawals: dto.data.total_withdrawals,
   chartData: dto.data.items.map((item) => ({
     period: item.period,
     count: item.count,
