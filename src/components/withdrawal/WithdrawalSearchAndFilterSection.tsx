@@ -29,7 +29,7 @@ export const WithdrawalSearchAndFilterSection = ({
 
   return (
     <div className="my-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-start">
-      <div className="max-w-full min-w-[200px] flex-1">
+      <div className="relative w-full flex-1 sm:min-w-[200px]">
         <SearchInput
           placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
           value={search}
@@ -40,7 +40,7 @@ export const WithdrawalSearchAndFilterSection = ({
       </div>
 
       {/* 탈퇴 사유 필터 */}
-      <div className="relative w-40">
+      <div className="relative w-full flex-1 sm:min-w-[200px]">
         <Accordion
           value={reasonAccordion}
           onValueChange={setReasonAccordion}
@@ -79,7 +79,7 @@ export const WithdrawalSearchAndFilterSection = ({
       </div>
 
       {/* 탈퇴 권한 필터 */}
-      <div className="relative w-40">
+      <div className="relative w-full flex-1 sm:min-w-[200px]">
         <Accordion
           value={roleAccordion}
           onValueChange={setRoleAccordion}
