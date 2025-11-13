@@ -52,13 +52,15 @@ const UserModalOutletComponent = ({
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setPreviewAvatar(reader.result);
-        const updated = { ...localUser, avatar: reader.result };
-        setLocalUser(updated);
-        onUserChange(updated);
+        setPreviewAvatar(reader.result); // 미리보기 전용
       }
     };
     reader.readAsDataURL(file);
+
+    // 실제 업로드용 File은 avatar에 저장
+    const updated = { ...localUser, avatar: file };
+    setLocalUser(updated);
+    onUserChange(updated);
   };
 
   return (
@@ -66,9 +68,21 @@ const UserModalOutletComponent = ({
       {/* 프로필 영역 */}
       <div className="flex items-center gap-4 mb-6">
         <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
-          {previewAvatar || localUser.avatar ? (
+          {previewAvatar ? (
             <img
-              src={previewAvatar || localUser.avatar || ""}
+              src={previewAvatar}
+              alt="avatar"
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) : localUser.avatar instanceof File ? (
+            <img
+              src={URL.createObjectURL(localUser.avatar)}
+              alt="avatar"
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) : typeof localUser.avatar === "string" ? (
+            <img
+              src={localUser.avatar}
               alt="avatar"
               className="w-full h-full object-cover rounded-full"
             />

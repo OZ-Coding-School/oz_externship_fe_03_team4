@@ -8,7 +8,7 @@ export const mapUserResponse = (user: ApiUser): MappedUser => {
 
   let status: "활성" | "비활성" | "탈퇴요청" = "활성";
   if (user.status === "inactive") status = "비활성";
-  else if (user.status === "withdraw") status = "탈퇴요청";
+  else if (user.status === "withdraw_requested") status = "탈퇴요청";
 
   return {
     id: user.id,
@@ -21,6 +21,7 @@ export const mapUserResponse = (user: ApiUser): MappedUser => {
     status,
     joinedAt: new Date(user.created_at).toLocaleDateString(),
     withdrawAt: "-",
-    avatar: user.profile_img_url ?? null,
+    avatar: null,
+    profileUrl: user.profile_img_url ?? "",
   };
 };
