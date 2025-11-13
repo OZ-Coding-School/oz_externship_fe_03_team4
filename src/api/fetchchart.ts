@@ -19,7 +19,7 @@ export const fetchWithdrawalStatistics = async (interval: 'month' | 'year'): Pro
 };
 
 export const fetchWithdrawalReasons = async (): Promise<WithdrawalReasonDistributionDTO> => {
-  const response = await api.get('/v1/admin/dashboard/withdrawal-reasons');
+  const response = await api.get('/v1/admin/dashboard/withdrawals/reasons');
   return response.data;
 };
 

@@ -1,4 +1,4 @@
-import { Pie, PieChart, Cell, Tooltip, Sector } from 'recharts'
+import { Pie, PieChart, Cell, Tooltip, Sector, ResponsiveContainer } from 'recharts'
 import {
   mapDtoToWithdrawalReasonDistribution,
   type WithdrawalReasonChartData,
@@ -121,7 +121,7 @@ const ReasonDistributionChart = ({
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-gray-500">로딩 중...</p>
         </div>
       </div>
@@ -132,7 +132,7 @@ const ReasonDistributionChart = ({
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-red-500">
             {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
           </p>
@@ -145,7 +145,7 @@ const ReasonDistributionChart = ({
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-gray-500">데이터가 없습니다.</p>
         </div>
       </div>
@@ -153,6 +153,18 @@ const ReasonDistributionChart = ({
   }
 
   const statistics = mapDtoToWithdrawalReasonDistribution(responseData);
+  
+  if (!statistics.chartData || statistics.chartData.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
+          <p className="text-gray-500">탈퇴 사유 데이터가 없습니다.</p>
+        </div>
+      </div>
+    );
+  }
+
   const data = statistics.chartData.map(item => ({
     ...item,
     color: REASON_COLORS[item.reason] || '#CCCCCC'
@@ -162,34 +174,29 @@ const ReasonDistributionChart = ({
     <div className="rounded-2xl bg-white p-6 shadow-sm">
       <h3 className="mb-4 text-lg font-semibold">탈퇴 사유 분포</h3>
       <div className="flex items-center justify-center gap-4">
-        <div className="flex items-center justify-center">
-          <PieChart
-            width={600}
-            height={500}
-            margin={{ top: 10, right: 40, bottom: 10, left: 40 }}
-          >
-            <Pie
-              data={data}
-              dataKey="count"
-              cx="50%"
-              cy="50%"
-              innerRadius="40%"
-              outerRadius="75%"
-              activeShape={renderActiveShape}
-              isAnimationActive={isAnimationActive}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip content={() => null} />
-          </PieChart>
+        <div style={{ width: '600px', height: '500px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="count"
+                cx="50%"
+                cy="50%"
+                innerRadius="40%"
+                outerRadius="70%"
+                activeShape={renderActiveShape}
+                isAnimationActive={isAnimationActive}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip content={() => null} />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
 
-        <div
-          className="flex flex-col justify-center"
-          style={{ minWidth: '180px' }}
-        >
+        <div className="flex flex-col justify-center" style={{ minWidth: '180px' }}>
           {data.map((item) => (
             <div key={item.reason} className="mb-2 flex items-center text-sm">
               <div className="flex flex-1 items-center">
