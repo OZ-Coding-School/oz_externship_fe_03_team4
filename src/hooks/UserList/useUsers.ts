@@ -24,7 +24,7 @@ export const useUsers = ({
     queryKey: ["users", { page, limit, search, status, role }],
     queryFn: async () => {
       const res = await api.get("/v1/admin/users", {
-        params: { page, limit, search, status, role },
+        params: { page, limit, q: search, status, role },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
