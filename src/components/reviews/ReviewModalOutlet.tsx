@@ -10,6 +10,7 @@ export const ReviewModalOutlet = ({ review }: { review: ReviewDetail }) => (
       <h3 className="mb-5 text-base font-semibold text-neutral-700">
         스터디 그룹 정보
       </h3>
+      <ModalPair label="스터디 UUID" value={review.uuid || '-'} />
       <ModalPair label="스터디 그룹명" value={review.studyTitle} />
 
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">

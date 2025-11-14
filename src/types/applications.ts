@@ -8,18 +8,27 @@ export type ApplicationStatusServer =
   | 'REVIEWING' // 검토중
   | 'REJECTED' // 거절
   | 'PENDING' // 대기
+  | 'CANCELED' // 거절
 
 export type AdminApplicationStatus = ApplicationStatusServer
 
 // 서버에서 제공해주는 지원 내역 데이터들
 export interface ApplicationApi {
   id: number // ui표시용, 고유id
-  recruitment_title: string // 공고명
-  applicant_nickname: string // 지원자이름
-  applicant_email: string // 이메일
-  status: AdminApplicationStatus // 지원 상태
-  created_at: string // 지원일
-  updated_at: string // 수정일
+  uuid?: string
+  user: {
+    id: number
+    nickname: string
+    email: string
+  }
+  recruitment: {
+    id: number
+    title: string
+  }
+  status: 'PENDING' | 'APPROVED' | 'CANCELED' | 'REJECTED'
+  status_display: string
+  created_at: string
+  updated_at: string
 }
 
 export type AdminApplicationApi = ApplicationApi
@@ -40,6 +49,7 @@ export interface ApplicationDetailApi extends ApplicationApi {
     courses: Array<{ name: string; instructor: string }> // 강의목록 [강의이름 / 강사명]
     tags: string[] // 태그 목록
     deadline: string // 모집마감일
+    close_at?: string
   }
   applicant: {
     id: number // 지원자고유 id
@@ -70,6 +80,7 @@ export interface Applicant {
 export interface Application {
   aid: number
   id: string
+  uuid?: string
   postingTitle: string // 공고명
   applicant: Applicant
   status: ApplicationStatus
@@ -113,6 +124,7 @@ export const apiStatusToUi: Record<AdminApplicationStatus, ApplicationStatus> =
     APPLYING: '대기',
     APPLIED: '대기',
     REJECTED: '거절',
+    CANCELED: '거절',
   }
 
 export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
@@ -125,32 +137,56 @@ export const uiStatusToApi: Record<ApplicationStatus, AdminApplicationStatus> =
   }
 
 // api응답을 프론트에서 사용하는 걸로 변환해주는 매핑 함수
-export const mapApplicationApiToUi = (a: ApplicationApi): Application => ({
-  aid: a.id,
-  id: `#${a.id}`,
-  postingTitle: a.recruitment_title,
-  applicant: {
-    name: a.applicant_nickname,
-    email: a.applicant_email,
-  },
-  status: apiStatusToUi[a.status],
-  appliedAt: new Date(a.created_at).toLocaleString('ko-KR', {
-    timeZone: 'Asia/Seoul',
-  }), // 대한민국 시간으로 포맷팅
-  updatedAt: new Date(a.updated_at).toLocaleString('ko-KR', {
-    timeZone: 'Asia/Seoul',
-  }), // 대한민국 시간으로 포맷팅
-})
+export const mapApplicationApiToUi = (a: ApplicationApi): Application => {
+  const withCompat = a as ApplicationApi & {
+    applied_at?: string
+    nickname?: string
+    email?: string
+  }
+  const nickname = a.user?.nickname ?? withCompat.nickname ?? ''
+  const email = a.user?.email ?? withCompat.email ?? ''
+
+  return {
+    aid: a.id,
+    id: `#${a.id}`,
+    uuid: a.uuid,
+    postingTitle: a.recruitment?.title ?? '',
+    applicant: { name: nickname, email },
+    status: apiStatusToUi[a.status],
+    appliedAt: new Date(withCompat.applied_at ?? a.created_at).toLocaleString(
+      'ko-KR',
+      {
+        timeZone: 'Asia/Seoul',
+      }
+    ), // 대한민국 시간으로 포맷팅
+    updatedAt: new Date(a.updated_at).toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+    }), // 대한민국 시간으로 포맷팅
+  }
+}
 
 export const mapAdminApiToUi = mapApplicationApiToUi
+
+type ApplicantLike = {
+  id: number
+  gender?: string | null
+  profile_image?: string | null
+  profile_img_url?: string | null
+}
 
 export const mapApplicationDetailApiToUi = (
   detail: ApplicationDetailApi,
   base?: Application
 ): ApplicationDetail => {
-  const baseUi = base ?? mapApplicationApiToUi(detail)
+  const baseUi: Application = base ?? mapApplicationApiToUi(detail)
+
+  const applicantSource: ApplicantLike = detail.applicant ??
+    (detail as unknown as { user?: ApplicantLike }).user ?? {
+      id: baseUi.aid,
+    }
   return {
     ...baseUi, // 목록의 공통 필드들을 복사합니당
+    applicationCode: detail.uuid,
     selfIntroduction: detail.self_introduction,
     motivation: detail.motivation,
     objective: detail.objective,
@@ -164,13 +200,17 @@ export const mapApplicationDetailApiToUi = (
       expectedHeadcount: detail.recruitment.expected_headcount,
       courses: detail.recruitment.courses,
       tags: detail.recruitment.tags,
-      deadline: detail.recruitment.deadline,
+      deadline:
+        detail.recruitment.deadline ?? detail.recruitment.close_at ?? '',
     },
     applicantExtra: {
       // 지원자 정보
-      id: detail.applicant.id,
-      gender: detail.applicant.gender,
-      profileImage: detail.applicant.profile_image,
+      id: applicantSource.id ?? baseUi.aid,
+      gender: applicantSource.gender ?? null,
+      profileImage:
+        applicantSource.profile_image ??
+        applicantSource.profile_img_url ??
+        null,
     },
   }
 }

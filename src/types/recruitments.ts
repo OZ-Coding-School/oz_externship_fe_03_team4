@@ -12,34 +12,38 @@ import {
 
 import type { LectureDTO } from './lectureManagement/types'
 
-export type RecruitmentStatusApi = '모집중' | '마감' // API에서 내려오는 값
+export type RecruitmentStatusApi = string // API에서 내려오는 값
 export type RecruitmentOrderingApi = 'latest' | 'oldest' | 'views' | 'bookmarks' // 정렬 키값
 
 // 서버 응답
 export interface RecruitmentDTO {
   id: number
+  uuid: string
   title: string
   tags: string[]
+  is_closed: boolean
   close_at: string
-  status: RecruitmentStatusApi
+  status: string
   views_count: number
-  bookmarks_count: number
+  bookmark_count: number
   created_at: string
   updated_at: string | null
 }
 export interface RecruitmentListResponseDTO {
+  count: number
+  next: string | null
+  previous: string | null
   results: RecruitmentDTO[]
-  page: number
-  page_size: number
-  total_count: number
 }
 // ui에서 사용할 값들
 export interface Recruitment {
   id: number
+  uuid: string
   title: string
   tags: string[]
+  isClosed: boolean
   closeAt: string
-  status: RecruitmentStatusApi
+  status: string
   viewsCount: number
   bookmarksCount: number
   createdAt: string
@@ -48,12 +52,14 @@ export interface Recruitment {
 
 export const mapRecruitmentDTO = (dto: RecruitmentDTO): Recruitment => ({
   id: dto.id,
+  uuid: dto.uuid,
   title: dto.title,
   tags: dto.tags,
+  isClosed: dto.is_closed,
   closeAt: dto.close_at,
   status: dto.status,
   viewsCount: dto.views_count,
-  bookmarksCount: dto.bookmarks_count,
+  bookmarksCount: dto.bookmark_count,
   createdAt: dto.created_at,
   updatedAt: dto.updated_at,
 })
@@ -75,7 +81,7 @@ export interface RecruitmentDetailDTO extends Omit<RecruitmentDTO, 'tags'> {
   attachments: RecruitmentAttachmentDTO[]
   expected_headcount: number
   estimated_fee: number
-  study_lectures: RecruitmentLectureDTO[]
+  study_lectures?: RecruitmentLectureDTO[]
   tags: RecruitmentTagDTO[]
   is_closed: boolean
   applications: ApplicationApi[]
@@ -102,15 +108,23 @@ export interface RecruitmentDetail extends Recruitment {
 export const mapRecruitmentDetailDTO = (
   detailDto: RecruitmentDetailDTO
 ): RecruitmentDetail => {
+  const statusFallback =
+    detailDto.status && detailDto.status.trim().length > 0
+      ? detailDto.status
+      : detailDto.is_closed
+        ? '마감'
+        : '모집중'
+
   const baseUi: Recruitment = mapRecruitmentDTO({
     ...detailDto,
+    status: statusFallback,
     tags: detailDto.tags.map((tag) => tag.name),
   })
   const attachments = detailDto.attachments.map((attachment) => ({
     fileName: attachment.file_name,
     fileUrl: attachment.file_url,
   }))
-  const lectures = detailDto.study_lectures.map((lecture) => ({
+  const lectures = (detailDto.study_lectures ?? []).map((lecture) => ({
     thumbnail: lecture.thumbnail_img_url ?? '',
     title: lecture.title,
     instructor: lecture.instructor,

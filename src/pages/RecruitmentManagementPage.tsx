@@ -18,6 +18,8 @@ import { useRecruitmentDetailQuery } from '../hooks/recruitments/useRecruitmentD
 import { useDeleteRecruitment } from '../hooks/recruitments/useDeleteRecruitment'
 import { ToastContainer } from '../components/toast/toastContainer'
 import type { RecruitmentOrdering } from '../hooks/recruitments/types.local'
+import { useRecruitmentTagsQuery } from '../hooks/recruitments/useRecruitmentTagsQuery'
+
 const PAGE_SIZE = 10
 
 const RecruitmentManagementPage = () => {
@@ -62,6 +64,29 @@ const RecruitmentManagementPage = () => {
     setSelectedRecruitment(row)
   }
 
+  const fallbackDetail: RecruitmentDetail | null = selectedRecruitment
+    ? ({
+        ...selectedRecruitment,
+        // 목록 응답에 이미 uuid 있으니까 그대로 사용
+        uuid: selectedRecruitment.uuid,
+        content: isRecruitmentDetailLoading
+          ? '상세정보를 불러오는 중...'
+          : isRecruitmentDetailError
+            ? '공고 상세정보를 불러오지 못했어요.'
+            : '',
+        expectedHeadcount: 0,
+        estimatedFee: 0,
+        attachments: [],
+        lectures: [],
+        applications: [],
+        studyGroup: null,
+        isClosed: selectedRecruitment.isClosed,
+      } as RecruitmentDetail)
+    : null
+
+  const effectiveDetail: RecruitmentDetail | null =
+    recruitmentDetail ?? fallbackDetail
+
   const filteredRecruitments = data?.items ?? []
   const totalCount = data?.totalCount ?? 0
 
@@ -70,6 +95,9 @@ const RecruitmentManagementPage = () => {
   const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE))
 
   const paginatedRecruitments = filteredRecruitments
+
+  const { data: tagData } = useRecruitmentTagsQuery({ page_size: 100 })
+  const availableTags = tagData?.tags ?? []
 
   const resetFilters = () => {
     setSearchText('')
@@ -109,7 +137,7 @@ const RecruitmentManagementPage = () => {
           setSelectedTags(nextSelectedTags)
           setCurrentPage(1)
         }}
-        availableTags={[]}
+        availableTags={availableTags}
       />
 
       <div className="mb-3 text-sm text-neutral-600">
@@ -161,7 +189,7 @@ const RecruitmentManagementPage = () => {
         </>
       )}
 
-      {selectedRecruitment && (
+      {selectedRecruitment && effectiveDetail && (
         <RecruitmentModal
           open
           onClose={() => {
@@ -169,29 +197,10 @@ const RecruitmentManagementPage = () => {
           }}
           onDelete={() => {
             if (!selectedRecruitment || isDeleting) return
-            const targetId = selectedRecruitment.id
+            deleteRecruitment(selectedRecruitment.uuid)
             setSelectedRecruitment(null)
-            deleteRecruitment(targetId)
           }}
-          detail={
-            recruitmentDetail ??
-            ({
-              ...selectedRecruitment,
-              uuid: '',
-              content: isRecruitmentDetailLoading
-                ? '불러오는 중...'
-                : isRecruitmentDetailError
-                  ? '공고 상세정보를 불러오지 못했어요.'
-                  : '',
-              expectedHeadcount: 0,
-              estimatedFee: 0,
-              attachments: [],
-              lectures: [],
-              applications: [],
-              studyGroup: null,
-              isClosed: selectedRecruitment.status === '마감',
-            } as RecruitmentDetail)
-          }
+          detail={effectiveDetail}
         />
       )}
       <ToastContainer />

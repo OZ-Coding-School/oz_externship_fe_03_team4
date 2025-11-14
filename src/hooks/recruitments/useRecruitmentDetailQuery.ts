@@ -20,20 +20,13 @@ export const useRecruitmentDetailQuery = (recruitment: Recruitment | null) => {
       : ['admin', 'recruitments', 'detail', 'idle'],
     staleTime: DETAIL_STALE_TIME_MILLISECONDS,
     queryFn: async () => {
-      if (!recruitment) {
+      if (!recruitment?.uuid) {
         throw new Error('선택된 공고가 없습니다.')
       }
-      try {
-        const response = await api.get<RecruitmentDetailDTO>(
-          `/v1/admin/recruitments/${recruitment.id}`
-        )
-        return mapRecruitmentDetailDTO(response.data)
-      } catch {
-        const response = await api.get<RecruitmentDetailDTO>(
-          `/v1/admin/recruitments/${recruitment.id}/`
-        )
-        return mapRecruitmentDetailDTO(response.data)
-      }
+      const { data } = await api.get<RecruitmentDetailDTO>(
+        `/v1/admin/recruitments/${recruitment.uuid}`
+      )
+      return mapRecruitmentDetailDTO(data)
     },
   })
 }
