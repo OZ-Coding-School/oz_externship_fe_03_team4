@@ -1,7 +1,7 @@
 import { formatDate } from '../../utils/formatDate'
 
 // API용 상태 타입
-export type StudyGroupStatus = 'PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'
+export type StudyGroupStatus = 'PENDING' | 'ONGOING' | 'ENDED'
 
 export type StudyGroupLectureDTO = {
   id: number
@@ -10,6 +10,7 @@ export type StudyGroupLectureDTO = {
 }
 
 export type StudyGroupLectureDetailDTO = {
+  uuid: string
   thumbnail_img_url: string
   title: string
   instructor: string
@@ -17,21 +18,21 @@ export type StudyGroupLectureDetailDTO = {
 }
 
 export type StudyGroupMemberDTO = {
+  uuid: string
   nickname: string
   is_leader: boolean
 }
 
 export type StudyGroupDTO = {
   id: number
+  uuid: string
   name: string
-  profile_img_url: string
+  current_headcount: number
   max_headcount: number
+  profile_img_url: string
   start_at: string
   end_at: string
-  status: StudyGroupStatus
-  current_headcount: number
-  is_leader: boolean
-  lectures: StudyGroupLectureDTO[]
+  status: StudyGroupUiStatus
   created_at: string
   updated_at: string
 }
@@ -46,31 +47,31 @@ export type StudyGroupDetailDTO = {
   profile_img_url: string
   start_at: string
   end_at: string
-  status: StudyGroupStatus
+  status: StudyGroupUiStatus
   lectures: StudyGroupLectureDetailDTO[]
   created_at: string
   updated_at: string
 }
 
 export type StudyGroupListResponse = {
-  count?: number
-  next?: string | null
-  previous?: string | null
+  count: number
+  next: string | null
+  previous: string | null
   results: StudyGroupDTO[]
 }
 
 export type StudyGroupDetailResponse = {
-  status: number
   message: string
   data: StudyGroupDetailDTO
 }
 
 // UI용 상태 타입
-export type StudyGroupUiStatus = '대기중' | '진행중' | '완료' | '취소됨'
+export type StudyGroupUiStatus = '대기중' | '진행중' | '완료'
 
 // UI용 타입
 export type StudyGroup = {
   id: number
+  uuid: string
   name: string
   profileImg: string
   maxHeadcount: number
@@ -78,8 +79,6 @@ export type StudyGroup = {
   startAt: string
   endAt: string
   status: StudyGroupUiStatus
-  isLeader: boolean
-  lectures: StudyGroupLectureDTO[]
   createdAt: string
   updatedAt: string
 }
@@ -103,12 +102,14 @@ export type StudyGroupDetail = {
 
 // UI용 멤버
 export type StudyGroupMember = {
+  uuid: string
   nickname: string
   isLeader: boolean
 }
 
 // UI용 상세 모달창
 export type StudyGroupLectureDetail = {
+  uuid: string
   thumbnailImgUrl: string
   title: string
   instructor: string
@@ -121,9 +122,8 @@ export const STUDY_GROUP_STATUS_MAP: Record<
   StudyGroupUiStatus
 > = {
   PENDING: '대기중',
-  ACTIVE: '진행중',
-  COMPLETED: '완료',
-  CANCELLED: '취소됨',
+  ONGOING: '진행중',
+  ENDED: '완료',
 } as const // 지정한 리터럴 타입으로 고정
 
 // UI -> API (검색필터용)
@@ -132,20 +132,18 @@ export const STUDY_GROUP_STATUS_REVERSE_MAP: Record<
   StudyGroupStatus
 > = {
   대기중: 'PENDING',
-  진행중: 'ACTIVE',
-  완료: 'COMPLETED',
-  취소됨: 'CANCELLED',
+  진행중: 'ONGOING',
+  완료: 'ENDED',
 } as const
 
 // 상태 Badge variant 매핑
 export const STUDY_GROUP_STATUS_BADGE: Record<
   StudyGroupUiStatus,
-  'success' | 'info' | 'warning' | 'danger'
+  'success' | 'info' | 'warning'
 > = {
   완료: 'success',
   대기중: 'info',
   진행중: 'warning',
-  취소됨: 'danger',
 } as const
 
 export const STUDY_GROUP_STATUS_OPTIONS: Array<{
@@ -156,22 +154,20 @@ export const STUDY_GROUP_STATUS_OPTIONS: Array<{
   { value: '대기중', label: '대기중' },
   { value: '진행중', label: '진행중' },
   { value: '완료', label: '완료' },
-  { value: '취소됨', label: '취소됨' },
 ] as const
 
 // API-> UI
 export const mapStudyGroupDTO = (dto: StudyGroupDTO): StudyGroup => {
   return {
     id: dto.id,
+    uuid: dto.uuid,
     name: dto.name,
     profileImg: dto.profile_img_url,
     maxHeadcount: dto.max_headcount,
     currentHeadcount: dto.current_headcount,
-    startAt: dto.start_at,
-    endAt: dto.end_at,
-    status: STUDY_GROUP_STATUS_MAP[dto.status],
-    isLeader: dto.is_leader,
-    lectures: dto.lectures,
+    startAt: formatDate(dto.start_at),
+    endAt: formatDate(dto.end_at),
+    status: dto.status,
     createdAt: formatDate(dto.created_at),
     updatedAt: formatDate(dto.updated_at),
   }
@@ -188,14 +184,16 @@ export const mapStudyGroupDetailDTO = (
     currentHeadcount: dto.current_headcount,
     maxHeadcount: dto.max_headcount,
     members: dto.members.map((member) => ({
+      uuid: member.uuid,
       nickname: member.nickname,
       isLeader: member.is_leader,
     })),
     profileImg: dto.profile_img_url,
-    startAt: dto.start_at,
-    endAt: dto.end_at,
-    status: STUDY_GROUP_STATUS_MAP[dto.status],
+    startAt: formatDate(dto.start_at),
+    endAt: formatDate(dto.end_at),
+    status: dto.status,
     lectures: dto.lectures.map((lecture) => ({
+      uuid: lecture.uuid,
       thumbnailImgUrl: lecture.thumbnail_img_url,
       title: lecture.title,
       instructor: lecture.instructor,

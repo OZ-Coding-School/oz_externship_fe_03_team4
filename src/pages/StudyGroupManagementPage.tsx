@@ -91,7 +91,7 @@ const StudyGroupManagementPage = () => {
       <StudyGroupModal
         open={isModalOpen}
         onClose={closeModal}
-        studyGroup={selectedStudyGroup}
+        studyGroup={selectedStudyGroup ?? null}
         isLoading={isLoadingDetail}
       />
     </div>

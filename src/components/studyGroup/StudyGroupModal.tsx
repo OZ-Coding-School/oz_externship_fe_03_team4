@@ -1,8 +1,9 @@
 import type { StudyGroupDetail } from '../../types/studyGroup/types'
 import { CloseModalFooter } from '../modal/CloseModalFooter'
 import Modal from '../modal/Modal'
-import { ModalHeader } from '../modal/ModalHeader'
 import { StudyGroupModalOutlet } from './StudyGroupModalOutlet'
+import { ModalHeader } from '../modal/ModalHeader'
+import { ClipboardList } from 'lucide-react'
 
 interface StudyGroupModalProps {
   open: boolean
@@ -20,7 +21,12 @@ export const StudyGroupModal = ({
 }: StudyGroupModalProps) => {
   return (
     <Modal isOn={open} onBackgroundClick={onClose}>
-      <ModalHeader title="스터디 그룹 상세 정보" onClose={onClose} />
+      <ModalHeader
+        title="스터디 그룹 상세 정보"
+        subtitle="STUDY GROUP DETAIL"
+        iconComponent={ClipboardList}
+        onClose={onClose}
+      />
       {isLoading ? (
         <div className="flex items-center justify-center p-8">
           <div className="text-center">

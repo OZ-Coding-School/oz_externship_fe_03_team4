@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import { useLectureSearch } from './useLectureSearch'
 import { useLecturePagination } from './useLecturePagination'
 import { useLectureModal } from './useLectureModal'
 import { useLectureData } from './useLectureData'
-import type { Lecture } from '../../types/lectureManagement/types'
 
 const PAGE_SIZE = 10
 
@@ -16,12 +14,12 @@ export const useLectureManagement = () => {
   const {
     currentPage,
     handlePageChange,
-    resetToFirstPage,
     calculateTotalPages,
+    resetToFirstPage,
   } = useLecturePagination({ pageSize: PAGE_SIZE })
 
   // 모달 로직
-  const { isModalOpen, selectedLecture, openModal, closeModal } =
+  const { isModalOpen, selectedLectureId, openModal, closeModal } =
     useLectureModal()
 
   // 데이터 조회
@@ -43,18 +41,14 @@ export const useLectureManagement = () => {
   const totalPages = calculateTotalPages(totalCount)
   const showPagination = totalPages > 1
 
-  // 검색어 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [debouncedSearch, resetToFirstPage])
-
   // 통합된 핸들러 함수들
   const handleSearch = (keyword: string) => {
     handleSearchChange(keyword)
+    resetToFirstPage()
   }
 
-  const handleLectureClick = (lecture: Lecture) => {
-    openModal(lecture)
+  const handleLectureClick = (lectureId: number) => {
+    openModal(lectureId)
   }
 
   return {
@@ -80,7 +74,7 @@ export const useLectureManagement = () => {
 
     // 모달 관련
     isModalOpen,
-    selectedLecture,
+    selectedLectureId,
     handleLectureClick,
     closeModal,
 

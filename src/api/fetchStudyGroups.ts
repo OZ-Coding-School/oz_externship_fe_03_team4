@@ -1,21 +1,20 @@
 import api from '../lib/axios'
 import {
+  mapStudyGroupDetailDTO,
   mapStudyGroupDTO,
   type StudyGroup,
+  type StudyGroupDetail,
   type StudyGroupDetailDTO,
-  type StudyGroupDetailResponse,
   type StudyGroupListResponse,
 } from '../types/studyGroup/types'
-import { buildQueryParams } from '../hooks/studyGroup/buildQueryParams'
 import type { StudyGroupsParams } from '../hooks/studyGroup/types.local'
+import { buildQueryParams } from '../utils/studyGroup/buildQueryParams'
 
 export type FetchStudyGroupsParams = Record<string, string | number>
 
 export type FetchStudyGroupsReturn = {
   items: StudyGroup[]
   totalCount: number
-  pageSize: number
-  offset: number
   hasNext: boolean
   hasPrevious: boolean
 }
@@ -25,28 +24,28 @@ export const fetchStudyGroups = async (
 ): Promise<FetchStudyGroupsReturn> => {
   const queryParams = buildQueryParams(params)
   const response = await api.get<StudyGroupListResponse>(
-    '/v1/studies/admin/groups/',
+    '/v1/admin/studies/groups',
     {
       params: queryParams,
     }
   )
 
   const data = response.data
+
   return {
     items: data.results.map(mapStudyGroupDTO),
-    totalCount: data.count ?? 0,
-    pageSize: Number(queryParams.limit),
-    offset: Number(queryParams.offset),
+    totalCount: data.count,
     hasNext: !!data.next,
     hasPrevious: !!data.previous,
   }
 }
 
 export const fetchStudyGroupDetail = async (
-  uuid: number
-): Promise<StudyGroupDetailDTO> => {
-  const response = await api.get<StudyGroupDetailResponse>(
-    `/v1/studies/admin/groups/${uuid}`
+  uuid: string
+): Promise<StudyGroupDetail> => {
+  const response = await api.get<StudyGroupDetailDTO>(
+    `/v1/admin/studies/groups/${uuid}`
   )
-  return response.data.data
+
+  return mapStudyGroupDetailDTO(response.data)
 }

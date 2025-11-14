@@ -1,52 +1,41 @@
-import { useEffect } from 'react'
-import { useStudyGroupSearch } from './useStudyGroupSearch'
+import { useState, useMemo } from 'react'
 import { useStudyGroupFilter } from './useStudyGroupFilter'
-import { useStudyGroupSort } from './useStudyGroupSort'
-import { useStudyGroupPagination } from './useStudyGroupPagination'
-import { useStudyGroupData } from './useStudyGroupData'
+import { useStudyGroups } from './useStudyGroupQuery'
+import {
+  STUDY_GROUP_STATUS_REVERSE_MAP,
+  type StudyGroup,
+} from '../../types/studyGroup/types'
 import { useStudyGroupModal } from './useStudyGroupModal'
-import type { StudyGroup } from '../../types/studyGroup/types'
 
 const PAGE_SIZE = 10
 
 export const useStudyGroupManagement = () => {
-  // 검색 로직
-  const { searchKeyword, debouncedSearch, handleSearchChange, clearSearch } =
-    useStudyGroupSearch()
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sortKey, setSortKey] = useState('-created_at')
 
-  // 필터 로직
+  // 필터 hook
   const {
     selectedStatus,
     accordionValue,
     selectedStatusLabel,
     handleStatusChange,
     setAccordionValue,
-    resetFilter,
   } = useStudyGroupFilter()
 
-  // 데이터 조회 및 필터링
-  const { filteredStudyGroups } = useStudyGroupData({
-    searchText: debouncedSearch,
-    selectedStatus,
-  })
-
-  // 정렬 로직
-  const { sortKey, sortedStudyGroups, handleSortChange } =
-    useStudyGroupSort(filteredStudyGroups)
-
-  // 페이지네이션 로직
-  const {
-    currentPage,
-    totalPages,
-    paginatedItems: paginatedStudyGroups,
-    handlePageChange,
-    resetToFirstPage,
-  } = useStudyGroupPagination({
+  // API 호출
+  const { data, isLoading, isFetching } = useStudyGroups({
+    searchText: searchKeyword,
+    status:
+      selectedStatus === 'ALL'
+        ? undefined
+        : STUDY_GROUP_STATUS_REVERSE_MAP[selectedStatus],
+    sortKey: sortKey,
     pageSize: PAGE_SIZE,
-    items: sortedStudyGroups,
+    pageNumber: currentPage,
   })
 
-  // 모달 로직
+  // 모달
   const {
     isModalOpen,
     selectedStudyGroup,
@@ -55,32 +44,38 @@ export const useStudyGroupManagement = () => {
     closeModal,
   } = useStudyGroupModal()
 
-  // 검색/필터 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [debouncedSearch, selectedStatus, resetToFirstPage])
+  // 계산된 값
+  const paginatedStudyGroups = useMemo(() => {
+    return data?.items ?? []
+  }, [data])
 
-  // 정렬 변경 시 첫 페이지로
-  useEffect(() => {
-    resetToFirstPage()
-  }, [sortKey, resetToFirstPage])
+  const totalCount = data?.totalCount ?? 0
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+  const isEmpty = paginatedStudyGroups.length === 0 && !isLoading
 
-  // 계산된 값들
-  const totalCount = sortedStudyGroups.length
-  const isEmpty = paginatedStudyGroups.length === 0
-  const showPagination = totalPages > 1
+  const resetToFirstPage = () => {
+    setCurrentPage(1)
+  }
 
-  // 통합된 핸들러 함수들
+  // 핸들러
   const handleSearch = (keyword: string) => {
-    handleSearchChange(keyword)
+    setSearchKeyword(keyword)
+    setCurrentPage(1)
+    resetToFirstPage()
   }
 
   const handleFilterChange = (status: typeof selectedStatus) => {
     handleStatusChange(status)
+    setCurrentPage(1)
   }
 
   const handleSort = (key: string) => {
-    handleSortChange(key)
+    setSortKey(key)
+    setCurrentPage(1)
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
   }
 
   const handleStudyGroupClick = (studyGroup: StudyGroup) => {
@@ -88,42 +83,38 @@ export const useStudyGroupManagement = () => {
   }
 
   return {
-    // 검색 관련
+    // 검색
     searchKeyword,
     handleSearch,
-    clearSearch,
 
-    // 필터 관련
+    // 필터
     selectedStatus,
     accordionValue,
     selectedStatusLabel,
     handleFilterChange,
     setAccordionValue,
-    resetFilter,
 
-    // 정렬 관련
+    // 정렬
     sortKey,
     handleSort,
 
-    // 페이지네이션 관련
+    // 페이지네이션
     currentPage,
     totalPages,
-    showPagination,
+    showPagination: totalPages > 1,
     handlePageChange,
 
-    // 데이터 관련
+    // 데이터
     paginatedStudyGroups,
     totalCount,
     isEmpty,
+    isLoading: isLoading || isFetching,
 
-    // 모달 관련
+    // 모달
     isModalOpen,
     selectedStudyGroup,
     isLoadingDetail,
     handleStudyGroupClick,
     closeModal,
-
-    // 상수
-    pageSize: PAGE_SIZE,
   }
 }

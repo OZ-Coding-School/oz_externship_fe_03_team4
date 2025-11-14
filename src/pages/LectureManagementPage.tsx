@@ -4,6 +4,7 @@ import { PageHeader } from '../components/PageHeader'
 import { BookOpen } from 'lucide-react'
 import { SearchSection } from '../components/Lecture/SearchSection'
 import { ContentArea } from '../components/Lecture/ContentArea'
+import { type Lecture } from '../types/lectureManagement/types'
 
 const LectureManagementPage = () => {
   const {
@@ -28,13 +29,17 @@ const LectureManagementPage = () => {
 
     // 모달
     isModalOpen,
-    selectedLecture,
+    selectedLectureId,
     handleLectureClick,
     closeModal,
 
     // 상수
     pageSize,
   } = useLectureManagement()
+
+  const onLectureClick = (lecture: Lecture) => {
+    handleLectureClick(lecture.id)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -58,7 +63,7 @@ const LectureManagementPage = () => {
         isEmpty={isEmpty}
         hasResults={hasResults}
         lectures={lectures}
-        onLectureClick={handleLectureClick}
+        onLectureClick={onLectureClick}
         currentPage={currentPage}
         pageSize={pageSize}
         showPagination={showPagination}
@@ -66,13 +71,11 @@ const LectureManagementPage = () => {
         onPageChange={handlePageChange}
       />
 
-      {selectedLecture && (
-        <LectureModal
-          open={isModalOpen}
-          onClose={closeModal}
-          lecture={selectedLecture}
-        />
-      )}
+      <LectureModal
+        open={isModalOpen}
+        onClose={closeModal}
+        lectureId={selectedLectureId}
+      />
     </div>
   )
 }

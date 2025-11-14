@@ -1,7 +1,10 @@
 import api from '../lib/axios'
 import {
+  mapLectureDetail,
   mapLectureDTO,
   type Lecture,
+  type LectureDetail,
+  type LectureDetailDTO,
   type LectureListResponse,
 } from '../types/lectureManagement/types'
 
@@ -31,4 +34,13 @@ export const fetchLectures = async (
     userNickname: data?.user_nickname,
     recommendedLectures: (data?.recommended_lectures ?? []).map(mapLectureDTO),
   }
+}
+
+export const fetchLectureDetail = async (
+  lectureId: number
+): Promise<LectureDetail> => {
+  const response = await api.get<LectureDetailDTO>(
+    `/v1/admin/lectures/${lectureId}`
+  )
+  return mapLectureDetail(response.data)
 }
