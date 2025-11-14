@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import React, { useEffect, useState, type ChangeEvent } from "react";
 import { useUserDetail } from "../../hooks/UserList/useUserDeatil";
 import type { MappedUser } from "../../types/user";
 import { formatPhone } from "../../utils/formatPhone";
@@ -9,7 +9,7 @@ interface UserModalOutletProps {
   onUserChange: (user: MappedUser) => void;
 }
 
-export const UserModalOutlet = ({
+const UserModalOutletComponent = ({
   userId,
   isEditing,
   onUserChange,
@@ -18,24 +18,33 @@ export const UserModalOutlet = ({
   const [localUser, setLocalUser] = useState<MappedUser | null>(null);
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
 
-  // 서버에서 데이터 받아오면 로컬 상태에 저장
   useEffect(() => {
-    if (user) setLocalUser(user);
-  }, [user]);
+    if (user && !isEditing) {
+      setLocalUser(user);
+      onUserChange(user);
+    }
+  }, [user, isEditing, onUserChange]);
 
   if (isLoading)
-    return <p className="p-6 text-center text-gray-500">회원 정보를 불러오는 중...</p>;
+    return (
+      <p className="p-6 text-center text-gray-500">회원 정보를 불러오는 중...</p>
+    );
   if (error)
-    return <p className="p-6 text-center text-red-500">회원 정보를 불러오지 못했습니다.</p>;
+    return (
+      <p className="p-6 text-center text-red-500">
+        회원 정보를 불러오지 못했습니다.
+      </p>
+    );
   if (!localUser) return null;
 
-  // 변경 핸들러 (로컬 + 부모 동기화)
+  // 입력 변경 시 로컬 + 부모 상태 동기화
   const handleChange = (field: keyof MappedUser, value: string) => {
     const updated = { ...localUser, [field]: value };
     setLocalUser(updated);
     onUserChange(updated);
   };
 
+  // 프로필 이미지 변경 처리
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -192,6 +201,27 @@ export const UserModalOutlet = ({
           )}
         </div>
 
+        {/* 성별 */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1">성별</p>
+          {isEditing ? (
+            <select
+              className="p-3 rounded-lg w-full border border-gray-300"
+              value={localUser.gender ?? "M"}
+              onChange={(e) => handleChange("gender", e.target.value)}
+            >
+              <option value="M">남성</option>
+              <option value="F">여성</option>
+            </select>
+          ) : (
+            <div className="p-3 rounded-lg bg-gray-50 border-none">
+              <p className="font-medium">
+                {localUser.gender === "F" ? "여성" : "남성"}
+              </p>
+            </div>
+          )}
+        </div>
+
         {/* 권한 (읽기 전용) */}
         <div>
           <p className="text-xs text-gray-500 mb-1">권한</p>
@@ -211,3 +241,6 @@ export const UserModalOutlet = ({
     </div>
   );
 };
+
+//불필요한 리렌더 방지
+export const UserModalOutlet = React.memo(UserModalOutletComponent);
