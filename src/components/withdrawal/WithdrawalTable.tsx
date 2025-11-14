@@ -2,7 +2,10 @@ import { useMemo } from 'react'
 import { Table } from '../Data-Indicate/Table'
 import { Badge } from '../Badge'
 import { type WithdrawalRow } from '../../types/withdraw/types'
-import { ROLE_CODE_TO_LABEL } from '../../constants/withdrawal'
+import {
+  ROLE_CODE_TO_LABEL,
+  WITHDRAW_REASON_CODE_TO_LABEL,
+} from '../../constants/withdrawal'
 import { formatDate } from '../../utils/formatDate'
 import { ArrowUpDown } from 'lucide-react'
 
@@ -25,29 +28,6 @@ export const WithdrawalTable = ({
   onSortChange,
   onRowClick,
 }: WithdrawalTableProps) => {
-  // 정렬된 데이터
-  const sortedData = useMemo(() => {
-    const desc = sortKey.startsWith('-')
-    const target = (desc ? sortKey.slice(1) : sortKey) as
-      | 'id'
-      | 'name'
-      | 'created_at'
-    const dir = desc ? -1 : 1
-
-    return [...data].sort((a, b) => {
-      if (target === 'id') {
-        return (Number(a.id) - Number(b.id)) * dir
-      }
-      if (target === 'name') {
-        return a.name.localeCompare(b.name, 'ko') * dir
-      }
-      return (
-        (new Date(a.created_at).getTime() - new Date(b.created_at).getTime()) *
-        dir
-      )
-    })
-  }, [data, sortKey])
-
   const columns = useMemo(
     () => [
       {
@@ -131,14 +111,18 @@ export const WithdrawalTable = ({
       {
         key: 'reason',
         label: <span className="block w-60 truncate text-left">탈퇴 사유</span>,
-        render: (value: unknown) => (
-          <span className="block w-60 truncate text-left text-sm font-medium">
-            {String(value)}
-          </span>
-        ),
+        render: (value: unknown) => {
+          const code = String(value)
+          const label = WITHDRAW_REASON_CODE_TO_LABEL[code] || code // ✅ 코드를 한글로 변환
+          return (
+            <span className="block w-60 truncate text-left text-sm font-medium">
+              {label}
+            </span>
+          )
+        },
       },
       {
-        key: 'created_at',
+        key: 'withdrawn_at',
         label: (
           <button
             type="button"
@@ -154,10 +138,9 @@ export const WithdrawalTable = ({
           </button>
         ),
         render: (value: unknown) => {
-          const v = value as WithdrawalRow['created_at']
           return (
             <span className="block w-36 text-left text-sm font-medium">
-              {formatDate(String(v))}
+              {formatDate(String(value))}
             </span>
           )
         },
@@ -176,7 +159,7 @@ export const WithdrawalTable = ({
         <div className="bg-red-50 p-6 text-sm text-red-700">{error}</div>
       ) : (
         <Table<WithdrawalRow>
-          data={sortedData}
+          data={data}
           columns={columns}
           className="rounded-none border-t border-gray-200"
           onRowClick={onRowClick}

@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { type WithdrawalRow } from '../types/withdraw/types'
-import { ROLE_CODE_TO_LABEL } from '../constants/withdrawal'
+import {
+  ROLE_LABEL_TO_CODE,
+  WITHDRAW_REASON_LABEL_TO_CODE,
+} from '../constants/withdrawal'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { WithdrawalModal } from '../components/withdrawal/WithdrawalModal'
 import { useWithdrawalQuery } from '../hooks/withdrawal/useWithdrawalQuery'
@@ -12,12 +15,6 @@ import { UserX } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { WithdrawalSearchAndFilterSection } from '../components/withdrawal/WithdrawalSearchAndFilterSection'
 import { WithdrawalTable } from '../components/withdrawal/WithdrawalTable'
-
-const ROLE_LABEL_TO_CODE: Record<string, keyof typeof ROLE_CODE_TO_LABEL> = {
-  관리자: 'admin',
-  스태프: 'staff',
-  일반회원: 'user',
-}
 
 type SortKey = 'id' | '-id' | 'name' | '-name' | 'created_at' | '-created_at'
 
@@ -54,24 +51,25 @@ const WithdrawalManagementPage = () => {
 
   const pageSize = 10
 
+  const roleCode = withdrawRoleFilter
+    ? ROLE_LABEL_TO_CODE[withdrawRoleFilter]
+    : undefined
+
+  const reasonCode = withdrawReasonFilter
+    ? WITHDRAW_REASON_LABEL_TO_CODE[withdrawReasonFilter]
+    : undefined
+
   const { data, isLoading, error } = useWithdrawalQuery({
     page,
-    limit: 10,
+    page_size: pageSize,
     keyword: debouncedSearch,
-    reason: withdrawReasonFilter || undefined,
+    role: roleCode,
+    reason: reasonCode,
+    ordering: sortKey,
   })
 
-  const rows = data?.result ?? []
-  const filteredRows = withdrawRoleFilter
-    ? rows.filter((user: WithdrawalRow) => {
-        const targetCode = ROLE_LABEL_TO_CODE[withdrawRoleFilter]
-        return user.role === targetCode
-      })
-    : rows
-  const totalPages =
-    withdrawRoleFilter && filteredRows.length === 0
-      ? 1 // 현재 페이지에 필터링된 데이터가 없으면 1페이지만 표시
-      : Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
+  const rows = data?.results ?? []
+  const totalPages = Math.max(1, Math.ceil((data?.count ?? 0) / pageSize))
 
   const getErrorMessage = (err: unknown): string => {
     if (axios.isAxiosError(err)) {
@@ -102,7 +100,7 @@ const WithdrawalManagementPage = () => {
     isLoading: detailLoading,
     error: detailError,
   } = useWithdrawalDetailQuery({
-    userId: selectedUserId,
+    withdrawal_id: selectedUserId,
     enabled: isWithdrawModalOpen && !isRestored,
   })
 
@@ -140,7 +138,7 @@ const WithdrawalManagementPage = () => {
       />
 
       <WithdrawalTable
-        data={filteredRows}
+        data={rows}
         isLoading={isLoading}
         error={listErrorMessage}
         sortKey={sortKey}
@@ -176,4 +174,4 @@ const WithdrawalManagementPage = () => {
   )
 }
 
-export default WithdrawalManagementPage;
+export default WithdrawalManagementPage
