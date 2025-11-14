@@ -9,6 +9,12 @@ import { getAccessToken } from "../../lib/token";
 import { useQueryClient } from "@tanstack/react-query";
 import { ToastContainer } from "../../components/toast/toastContainer";
 import { useUpdateUser } from "../../hooks/UserList/useUpdateUser";
+import { useDeleteUser } from "../../hooks/UserList/useDeleteUser";
+
+// 타입 가드 함수
+function isFileType(value: unknown): value is File {
+  return value instanceof File;
+}
 
 interface ModalFooterProps {
   onClose: () => void;
@@ -28,16 +34,18 @@ export const UserModalFooter = ({
 }: ModalFooterProps) => {
   const queryClient = useQueryClient();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
   const [selectedRole, setSelectedRole] = useState<"admin" | "staff" | "user">(
     user.role === "관리자" ? "admin" : user.role === "스태프" ? "staff" : "user"
   );
 
   const { showSuccess } = useToastStore();
 
-  // 회원정보 수정 mutation
   const updateUserMutation = useUpdateUser();
+  const deleteUserMutation = useDeleteUser();
 
   const roles = [
     { key: "admin", label: "관리자" },
@@ -45,29 +53,31 @@ export const UserModalFooter = ({
     { key: "user", label: "일반회원" },
   ];
 
-  // 수정 저장 버튼
+  // 회원 정보 저장
   const handleSave = async () => {
     try {
-      const token = getAccessToken();
-      if (!token) throw new Error("토큰이 없습니다.");
+      const formData = new FormData();
+      formData.append("name", user.name);
+      formData.append("nickname", user.nickname);
+      formData.append("phone_number", user.phone);
+      formData.append("gender", user.gender || "M");
+      formData.append(
+        "status",
+        user.status === "활성"
+          ? "active"
+          : user.status === "비활성"
+          ? "inactive"
+          : "withdraw_requested"
+      );
+      formData.append("birthday", user.birthday || "");
 
-      // PATCH 요청: 수정된 user 데이터 전달
+      if (user.avatar && isFileType(user.avatar)) {
+        formData.append("profile_img", user.avatar);
+      }
+
       await updateUserMutation.mutateAsync({
         userId: user.id,
-        data: {
-          name: user.name,
-          nickname: user.nickname,
-          phone_number: user.phone,
-          gender: user.gender || 'M',
-          status:
-            user.status === '활성'
-              ? 'active'
-              : user.status === '비활성'
-                ? 'inactive'
-                : 'withdraw_requested',
-          profile_img_url: user.avatar || '',
-          birthday: user.birthday || undefined,
-        },
+        data: formData,
       });
 
       await queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -77,15 +87,18 @@ export const UserModalFooter = ({
       onEditToggle();
     } catch {
       setIsAlertOpen(true);
+      setErrorMessage("회원 정보 수정 중 오류가 발생했습니다.");
     }
   };
 
+  // 권한 변경
   const handleRoleChangeConfirm = async () => {
     try {
       const token = getAccessToken();
       if (!token) throw new Error("토큰이 없습니다.");
 
       await updateUserRole(Number(user.id), selectedRole, token);
+
       await queryClient.invalidateQueries({ queryKey: ["users"], exact: false });
       await queryClient.invalidateQueries({ queryKey: ["userDetail", user.id] });
 
@@ -95,13 +108,40 @@ export const UserModalFooter = ({
     } catch {
       setIsRoleModalOpen(false);
       setIsAlertOpen(true);
+      setErrorMessage("회원 권한 변경 중 오류가 발생했습니다.");
     }
   };
 
-  const handleDeleteConfirm = () => {
-    onDelete(String(user.id));
-    setIsDeleteConfirmOpen(false);
-    setIsAlertOpen(true);
+  // 회원 삭제
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteUserMutation.mutateAsync(user.id);
+      showSuccess("회원 삭제 완료", "해당 회원이 성공적으로 삭제되었습니다.");
+      onDelete(String(user.id));
+      setIsDeleteConfirmOpen(false);
+    } catch (error: unknown) {
+      let message = "회원 삭제 중 오류가 발생했습니다.";
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as { response?: { data?: { error?: string; detail?: string } } })
+          .response?.data?.error === "string"
+      ) {
+        message =
+          (error as { response: { data: { error?: string; detail?: string } } })
+            .response.data.error ||
+          (error as { response: { data: { error?: string; detail?: string } } })
+            .response.data.detail ||
+          message;
+      }
+
+      setErrorMessage(message);
+      setIsAlertOpen(true);
+      setIsDeleteConfirmOpen(false);
+    }
   };
 
   return (
@@ -163,9 +203,7 @@ export const UserModalFooter = ({
               >
                 <p
                   className={`font-light text-left ${
-                    selectedRole === role.key
-                      ? "text-green-600"
-                      : "text-gray-800"
+                    selectedRole === role.key ? "text-green-600" : "text-gray-800"
                   }`}
                 >
                   {role.label}
@@ -181,11 +219,7 @@ export const UserModalFooter = ({
             >
               취소
             </Button>
-            <Button
-              color="success"
-              size="medium"
-              onClick={handleRoleChangeConfirm}
-            >
+            <Button color="success" size="medium" onClick={handleRoleChangeConfirm}>
               변경하기
             </Button>
           </div>
@@ -229,7 +263,7 @@ export const UserModalFooter = ({
             <AlertTriangle className="w-6 h-6 text-red-500" />
             알림
           </h2>
-          <p className="mb-6">요청 처리 중 오류가 발생했습니다.</p>
+          <p className="mb-6">{errorMessage}</p>
           <Button
             color="danger"
             size="medium"
