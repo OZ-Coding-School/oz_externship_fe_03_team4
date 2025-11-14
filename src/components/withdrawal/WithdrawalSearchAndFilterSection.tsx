@@ -27,9 +27,25 @@ export const WithdrawalSearchAndFilterSection = ({
   const [reasonAccordion, setReasonAccordion] = useState<string>('')
   const [roleAccordion, setRoleAccordion] = useState<string>('')
 
+  // ✅ 탈퇴 사유 아코디언 변경 핸들러 - 열릴 때 권한 아코디언 닫기
+  const handleReasonAccordionChange = (value: string) => {
+    setReasonAccordion(value)
+    if (value === '0') {
+      setRoleAccordion('') // 권한 아코디언 닫기
+    }
+  }
+
+  // ✅ 권한 아코디언 변경 핸들러 - 열릴 때 탈퇴 사유 아코디언 닫기
+  const handleRoleAccordionChange = (value: string) => {
+    setRoleAccordion(value)
+    if (value === '0') {
+      setReasonAccordion('') // 탈퇴 사유 아코디언 닫기
+    }
+  }
+
   return (
     <div className="my-6 flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-start">
-      <div className="relative w-full flex-1 sm:min-w-[200px]">
+      <div className="relative w-full flex-2 sm:min-w-[200px]">
         <SearchInput
           placeholder="탈퇴요청 ID, 이메일, 이름 검색..."
           value={search}
@@ -43,7 +59,7 @@ export const WithdrawalSearchAndFilterSection = ({
       <div className="relative w-full flex-1 sm:min-w-[200px]">
         <Accordion
           value={reasonAccordion}
-          onValueChange={setReasonAccordion}
+          onValueChange={handleReasonAccordionChange}
           selectedLabels={{ '0': withdrawReasonFilter || '전체 탈퇴 사유' }}
         >
           <AccordionItem title="탈퇴 사유">
@@ -82,7 +98,7 @@ export const WithdrawalSearchAndFilterSection = ({
       <div className="relative w-full flex-1 sm:min-w-[200px]">
         <Accordion
           value={roleAccordion}
-          onValueChange={setRoleAccordion}
+          onValueChange={handleRoleAccordionChange}
           selectedLabels={{ '0': withdrawRoleFilter || '전체 권한' }}
         >
           <AccordionItem title="탈퇴 권한">

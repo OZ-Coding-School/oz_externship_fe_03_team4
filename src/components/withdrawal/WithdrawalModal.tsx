@@ -39,7 +39,7 @@ export const WithdrawalModal = ({
           iconComponent={UserX}
         />
 
-        <div className="grow overflow-y-auto">
+        <div className="scrollbar-hide grow overflow-y-auto">
           {loading ? (
             <div className="p-6 text-center text-sm text-gray-500">
               불러오는 중…
