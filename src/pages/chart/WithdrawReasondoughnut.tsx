@@ -1,26 +1,31 @@
-import { Pie, PieChart, Cell, Tooltip, Sector } from 'recharts'
+import { Pie, PieChart, Cell, Tooltip, Sector, ResponsiveContainer } from 'recharts'
 import {
   mapDtoToWithdrawalReasonDistribution,
   type WithdrawalReasonChartData,
 } from '../../types/Chart/WithdrawReasondoughnutChart/types'
 import { useWithdrawalReasons } from '../../hooks/chart/fetchWithdrawReasondoughnut';
+import { useState } from 'react';
 
 interface WithdrawReasondoughnutChartProps {
   isAnimationActive: boolean
 }
 
 const REASON_COLORS: Record<string, string> = {
-  '서비스 불만족': '#0088FE',
-  '개인정보 우려': '#00C49F',
-  '사용 빈도 낮음': '#FFBB28',
-  '경쟁 서비스 이용': '#8884D8',
-  기타: '#FF8042',
+  '원하는 콘텐츠나 기능의 부족': '#cc1f1fff',
+  '관심이 사라짐': '#635f5fff',
+  '서비스를 이용하기가 너무 어려움': '#4ab6e9ff',
+  '서비스 품질 불만': '#0025f8ff',
+  '기타' : 'hsla(135, 44%, 47%, 1.00)',
+  '개인정보/보안 우려' : '#9000adff',
+  '더 좋은 대안을 찾음' : '#e100ffff',
+  '기술적 문제(버그 등)' : '#ff6ac1ff',
+  '서비스 이용할 시간이 없음' : '#ff86f9c2'
 }
 
 const renderActiveShape = (props: unknown) => {
   const {
     cx,
-    cy,
+    cy ,
     midAngle,
     innerRadius,
     outerRadius,
@@ -54,17 +59,6 @@ const renderActiveShape = (props: unknown) => {
 
   return (
     <g>
-      <text
-        x={cx}
-        y={cy}
-        dy={8}
-        textAnchor="middle"
-        fill={fill}
-        fontSize={20}
-        style={{ fontWeight: 600 }}
-      >
-        {payload.reason}
-      </text>
       <Sector
         cx={cx}
         cy={cy}
@@ -116,12 +110,13 @@ const ReasonDistributionChart = ({
   isAnimationActive,
 }: WithdrawReasondoughnutChartProps) => {
   const { data: responseData, isLoading, error: queryError } = useWithdrawalReasons();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   if (isLoading) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-gray-500">로딩 중...</p>
         </div>
       </div>
@@ -132,7 +127,7 @@ const ReasonDistributionChart = ({
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-red-500">
             {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
           </p>
@@ -145,7 +140,7 @@ const ReasonDistributionChart = ({
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
           <p className="text-gray-500">데이터가 없습니다.</p>
         </div>
       </div>
@@ -153,6 +148,18 @@ const ReasonDistributionChart = ({
   }
 
   const statistics = mapDtoToWithdrawalReasonDistribution(responseData);
+  
+  if (!statistics.chartData || statistics.chartData.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">탈퇴 사유 분포</h3>
+        <div className="flex items-center justify-center" style={{ height: '500px' }}>
+          <p className="text-gray-500">탈퇴 사유 데이터가 없습니다.</p>
+        </div>
+      </div>
+    );
+  }
+
   const data = statistics.chartData.map(item => ({
     ...item,
     color: REASON_COLORS[item.reason] || '#CCCCCC'
@@ -162,36 +169,56 @@ const ReasonDistributionChart = ({
     <div className="rounded-2xl bg-white p-6 shadow-sm">
       <h3 className="mb-4 text-lg font-semibold">탈퇴 사유 분포</h3>
       <div className="flex items-center justify-center gap-4">
-        <div className="flex items-center justify-center">
-          <PieChart
-            width={600}
-            height={500}
-            margin={{ top: 10, right: 40, bottom: 10, left: 40 }}
-          >
-            <Pie
-              data={data}
-              dataKey="count"
-              cx="50%"
-              cy="50%"
-              innerRadius="40%"
-              outerRadius="75%"
-              activeShape={renderActiveShape}
-              isAnimationActive={isAnimationActive}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip content={() => null} />
-          </PieChart>
+        <div>
+          <div style={{ width: '600px', height: '450px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data}
+                  dataKey="count"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="40%"
+                  outerRadius="70%"
+                  activeShape={renderActiveShape}
+                  onMouseEnter={(_, index) => setActiveIndex(index)}
+                  onMouseLeave={() => setActiveIndex(null)}
+                  isAnimationActive={isAnimationActive}
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip content={() => null} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          {/* 차트 아래에 텍스트 표시 - 마우스 오버 시에만 */}
+          <div className="text-center mt-4" style={{ minHeight: '100px' }}>
+            {activeIndex !== null && (
+              <>
+                <p className="text-xl font-semibold" style={{ color: data[activeIndex].color }}>
+                  {data[activeIndex].reason}
+                </p>
+                <p className="text-2xl font-bold mt-2">
+                  {data[activeIndex].count}명
+                </p>
+                <p className="text-lg text-gray-600">
+                  {data[activeIndex].percentage.toFixed(1)}%
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
-        <div
-          className="flex flex-col justify-center"
-          style={{ minWidth: '180px' }}
-        >
-          {data.map((item) => (
-            <div key={item.reason} className="mb-2 flex items-center text-sm">
+        <div className="flex flex-col justify-center" style={{ minWidth: '180px' }}>
+          {data.map((item, index) => (
+            <div 
+              key={item.reason} 
+              className="mb-2 flex items-center text-sm cursor-pointer hover:bg-gray-50 p-1 rounded"
+              onMouseEnter={() => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
+            >
               <div className="flex flex-1 items-center">
                 <div
                   className="mr-2 h-3.5 w-3.5 flex-shrink-0 rounded-full"

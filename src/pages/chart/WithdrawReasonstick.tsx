@@ -1,90 +1,37 @@
 import {BarChart,Bar,XAxis,YAxis,CartesianGrid,ResponsiveContainer,Tooltip,type TooltipContentProps,} from 'recharts';
 import { Select } from '../../components/FormUI/Select';
-import { useEffect, useState } from 'react'; //api나오면 삭제
-//api 나오면 주석 삭제 import { useMonthlyWithdrawalTrends } from '../../hooks/chart/fetchWithdrawReasonstick';
-
-// API 나오면 삭제
-const MOCK_DATA = {
-  '서비스 불만족': [
-    { month: '1월', count: 1 },
-    { month: '2월', count: 0.8 },
-    { month: '3월', count: 2 },
-    { month: '4월', count: 1 },
-    { month: '5월', count: 1 },
-    { month: '6월', count: 0.7 },
-    { month: '7월', count: 0.9 },
-    { month: '8월', count: 1 },
-    { month: '9월', count: 2 },
-    { month: '10월', count: 1 },
-    { month: '11월', count: 1 },
-    { month: '12월', count: 0.8 },
-  ],
-  '개인정보 우려': [
-    { month: '1월', count: 0.5 },
-    { month: '2월', count: 1.2 },
-    { month: '3월', count: 0.7 },
-    { month: '4월', count: 0.9 },
-    { month: '5월', count: 1.1 },
-    { month: '6월', count: 0.5 },
-    { month: '7월', count: 0.8 },
-    { month: '8월', count: 1 },
-    { month: '9월', count: 1.2 },
-    { month: '10월', count: 0.9 },
-    { month: '11월', count: 1.1 },
-    { month: '12월', count: 0.7 },
-  ],
-  '사용 빈도 낮음': [
-    { month: '1월', count: 0.8 },
-    { month: '2월', count: 0.6 },
-    { month: '3월', count: 1 },
-    { month: '4월', count: 0.7 },
-    { month: '5월', count: 0.9 },
-    { month: '6월', count: 0.5 },
-    { month: '7월', count: 0.7 },
-    { month: '8월', count: 0.8 },
-    { month: '9월', count: 1.1 },
-    { month: '10월', count: 0.8 },
-    { month: '11월', count: 0.9 },
-    { month: '12월', count: 0.6 },
-  ],
-  '기타': [
-    { month: '1월', count: 0.6 },
-    { month: '2월', count: 0.5 },
-    { month: '3월', count: 0.8 },
-    { month: '4월', count: 0.6 },
-    { month: '5월', count: 0.7 },
-    { month: '6월', count: 0.4 },
-    { month: '7월', count: 0.6 },
-    { month: '8월', count: 0.7 },
-    { month: '9월', count: 0.9 },
-    { month: '10월', count: 0.6 },
-    { month: '11월', count: 0.7 },
-    { month: '12월', count: 0.5 },
-  ],
-  '경쟁 서비스 이용': [
-    { month: '1월', count: 0.2 },
-    { month: '2월', count: 0.3 },
-    { month: '3월', count: 0.4 },
-    { month: '4월', count: 0.2 },
-    { month: '5월', count: 0.3 },
-    { month: '6월', count: 0.2 },
-    { month: '7월', count: 0.3 },
-    { month: '8월', count: 0.3 },
-    { month: '9월', count: 0.4 },
-    { month: '10월', count: 0.3 },
-    { month: '11월', count: 0.3 },
-    { month: '12월', count: 0.2 },
-  ],
-};
-
-const REASON_LIST = ['서비스 불만족', '개인정보 우려', '사용 빈도 낮음', '기타', '경쟁 서비스 이용'];
+import { useWithdrawalReasonTrend } from '../../hooks/chart/fetchWithdrawReasonstick';
+import { mapDtoToWithdrawalReasonStatistics } from '../../types/Chart/WithdrawReasonstick/types';
 
 interface WithdrawReasonstickChartProps {
   selectedReason: string;
   onReasonChange: (reason: string) => void;
   isAnimationActive: boolean;
 }
-// API 나오면 여기까지 삭제
+
+const REASON_LABEL_TO_CODE: Record<string, string> = {
+  '원하는 콘텐츠나 기능의 부족': 'LACK_OF_CONTENT',
+  '관심이 사라짐': 'LACK_OF_INTEREST',
+  '기타': 'OTHER',
+  '서비스를 이용하기가 너무 어려움': 'TOO_DIFFICULT',
+  '서비스 품질 불만': 'POOR_SERVICE_QUALITY',
+  '개인정보/보안 우려': 'PRIVACY_CONCERNS',
+  '더 좋은 대안을 찾음': 'FOUND_BETTER_SERVICE',
+  '기술적 문제(버그 등)': 'TECHNICAL_ISSUES',
+  '서비스 이용할 시간이 없음': 'NO_LONGER_NEEDED',
+};
+
+const REASON_LIST = [
+  '원하는 콘텐츠나 기능의 부족',
+  '관심이 사라짐',
+  '기타',
+  '서비스를 이용하기가 너무 어려움',
+  '서비스 품질 불만',
+  '개인정보/보안 우려',
+  '더 좋은 대안을 찾음',
+  '기술적 문제(버그 등)',
+  '서비스 이용할 시간이 없음',
+];
 
 const CustomTooltip = ({
   active,
@@ -106,73 +53,11 @@ export default function MonthlyTrendChart({
   onReasonChange,
   isAnimationActive,
 }: WithdrawReasonstickChartProps) {
-  const [monthlyData, setMonthlyData] = useState<Record<string, Array<{ month: string; count: number }>>>({});
-  const [reasons, setReasons] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // API 연동하면 주석 삭제
-  // const { data: responseData, isLoading, error: queryError } = useMonthlyWithdrawalTrends();
+  const reasonCode = REASON_LABEL_TO_CODE[selectedReason] || 'OTHER';
   
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
-  //       <div className="h-[300px] flex items-center justify-center">
-  //         <p className="text-gray-500">로딩 중...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  const { data: responseData, isLoading, error: queryError } = useWithdrawalReasonTrend(reasonCode);
 
-  // if (queryError) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
-  //       <div className="h-[300px] flex items-center justify-center">
-  //         <p className="text-red-500">
-  //           {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // if (!responseData) {
-  //   return (
-  //     <div className="bg-white rounded-2xl p-6 shadow-sm">
-  //       <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
-  //       <div className="h-[300px] flex items-center justify-center">
-  //         <p className="text-gray-500">데이터가 없습니다.</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // setMonthlyData(responseData.monthly_data);
-  // setReasons(responseData.reasons);
-  // API 연동하면 주석 삭제
-
-  useEffect(() => {
-    const fetchMonthlyData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // API 연동되면 실제 API 응답으로 교체
-        setMonthlyData(MOCK_DATA);
-        setReasons(REASON_LIST);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMonthlyData();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
@@ -183,24 +68,39 @@ export default function MonthlyTrendChart({
     );
   }
 
-  if (error) {
+  if (queryError) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
         <div className="h-[300px] flex items-center justify-center">
-          <p className="text-red-500">{error}</p>
+          <p className="text-red-500">
+            {queryError instanceof Error ? queryError.message : '데이터를 불러오는데 실패했습니다.'}
+          </p>
         </div>
       </div>
     );
   }
 
+  if (!responseData) {
+    return (
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
+        <div className="h-[300px] flex items-center justify-center">
+          <p className="text-gray-500">데이터가 없습니다.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const statistics = mapDtoToWithdrawalReasonStatistics(responseData);
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold">탈퇴 사유별 월별 추세</h3>
-        <div className="w-40">
+        <div className="w-60">
           <Select value={selectedReason} onChange={(e) => onReasonChange(e.target.value)}>
-            {reasons.map((reason) => (
+            {REASON_LIST.map((reason) => (
               <option key={reason} value={reason}>
                 {reason}
               </option>
@@ -211,9 +111,9 @@ export default function MonthlyTrendChart({
 
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={monthlyData[selectedReason] || []}>
+          <BarChart data={statistics.chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="period" />
             <YAxis />
             <Tooltip content={CustomTooltip} />
             <Bar
