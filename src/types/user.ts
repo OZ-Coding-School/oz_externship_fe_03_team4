@@ -15,7 +15,7 @@ export interface MappedUser {
     | 'withdraw_requested'
   joinedAt: string
   withdrawAt: string
-  avatar?: string | null
+  avatar?: File | string | null
   [key: string]: unknown
   gender?: 'M' | 'F'
 }
