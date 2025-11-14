@@ -30,19 +30,19 @@ export const useUsers = ({
         },
       });
 
-      // 응답이 배열인 경우 처리
-      const raw = Array.isArray(res.data)
-        ? { users: res.data, pagination: null }
-        : res.data.data || res.data;
+      const raw = res.data.data;
 
-      const users = (raw.users ?? []).map(mapUserResponse);
+      const users = raw.users.map(mapUserResponse);
 
       return {
         users,
-        pagination: raw.pagination ?? {
-          total_pages: 1,
-          total_items: users.length,
-          current_page: page,
+        pagination: {
+          total_items: raw.pagination.total,
+          total_pages: raw.pagination.pages,
+          current_page: raw.pagination.page,
+          limit: raw.pagination.limit,
+          next: raw.pagination.next,
+          previous: raw.pagination.previous,
         },
       };
     },
