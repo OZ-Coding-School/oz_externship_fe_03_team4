@@ -47,6 +47,7 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
         ? '스태프'
         : '일반회원',
 <<<<<<< HEAD
+<<<<<<< HEAD
   avatar: data.profile_img_url || '',
   gender: data.gender ?? 'M',
 =======
@@ -54,6 +55,10 @@ const mapUserDetail = (data: ApiUserDetail): MappedUser => ({
   gender: data.gender ?? 'M',
   profileUrl: data.profile_img_url ?? '',
 >>>>>>> 93724da (fix(git):깃 문제 수정)
+=======
+  avatar: data.profile_img_url || '',
+  gender: data.gender ?? 'M',
+>>>>>>> eb9de85 (fix(타입 수정):일부 파일들의 타입 문제 수정)
 });
 
 export const useUserDetail = (userId?: string | number) => {

@@ -21,7 +21,6 @@ export const mapUserResponse = (user: ApiUser): MappedUser => {
     status,
     joinedAt: new Date(user.created_at).toLocaleDateString(),
     withdrawAt: "-",
-    avatar: null,
-    profileUrl: user.profile_img_url ?? "",
+    avatar: user.profile_img_url ?? null
   };
 };
