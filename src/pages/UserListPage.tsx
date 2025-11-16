@@ -11,6 +11,8 @@ import { UserModalOutlet } from "../components/User-Information/UserModalOutlet"
 import { UserModalFooter } from "../components/User-Information/UserModalFooter";
 import { useUsers } from "../hooks/UserList/useUsers";
 import { Pagination } from "../components/pagination/Pagination";
+import { PageHeader } from "../components/PageHeader";
+import { User } from "lucide-react";
 
 const UserListPage = () => {
   const [search, setSearch] = useState("");
@@ -113,7 +115,12 @@ const UserListPage = () => {
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-semibold mb-6">유저 관리</h1>
+        <PageHeader
+        className="mb-6"
+        iconComponent={User}
+        koreanTitle="유저 목록"
+        englishSubtitle="UserList"
+      />
 
         {/* 검색 / 필터 */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
