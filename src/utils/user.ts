@@ -8,7 +8,7 @@ export const mapUserResponse = (user: ApiUser): MappedUser => {
 
   let status: "활성" | "비활성" | "탈퇴요청" = "활성";
   if (user.status === "inactive") status = "비활성";
-  else if (user.status === "withdraw_requested") status = "탈퇴요청";
+  else if (user.status === "withdrawal_pending") status = "탈퇴요청";
 
   return {
     id: user.id,

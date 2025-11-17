@@ -145,7 +145,7 @@ const UserListPage = () => {
               <option value="">전체</option>
               <option value="active">활성</option>
               <option value="inactive">비활성</option>
-              <option value="withdrawn">탈퇴요청</option>
+              <option value="withdrawal_pending">탈퇴요청</option>
             </Select>
           </div>
 

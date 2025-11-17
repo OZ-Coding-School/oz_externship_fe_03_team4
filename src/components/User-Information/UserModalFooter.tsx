@@ -67,7 +67,7 @@ export const UserModalFooter = ({
           ? "active"
           : user.status === "비활성"
           ? "inactive"
-          : "withdraw_requested"
+          : "withdrawal_pending"
       );
       formData.append("birthday", user.birthday || "");
 
