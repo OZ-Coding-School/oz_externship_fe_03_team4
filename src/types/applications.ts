@@ -66,6 +66,8 @@ export type SortKeyApi =
   | 'created_at'
   | '-updated_at'
   | 'updated_at'
+  | '-applied_at'
+  | 'applied_at'
 
 export type AdminSortKey = SortKeyApi
 // ui용

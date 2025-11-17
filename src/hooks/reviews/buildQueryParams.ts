@@ -19,7 +19,7 @@ export const buildQueryParams = (reviewsParams: ReviewsParams) => {
   }
 
   if (reviewsParams.sortKey) {
-    queryParams.sort = reviewsParams.sortKey
+    // queryParams.sort = reviewsParams.sortKey
     queryParams.ordering = reviewsParams.sortKey
   }
 

@@ -1,6 +1,7 @@
 import { ReviewSearchField } from './ReviewSearchField'
 import { ReviewSortSelect } from './ReviewSortSelect'
 import type { ReviewsParams } from '../../../hooks/reviews/useReviewsQuery'
+import { useState } from 'react'
 
 type SortKey = NonNullable<ReviewsParams['sortKey']>
 
@@ -23,6 +24,7 @@ export const ReviewFilterSection = ({
   sortKey,
   onSortKeyChange,
 }: ReviewFilterSectionProps) => {
+  const [sortOpen, setSortOpen] = useState(false)
   return (
     <section className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -40,6 +42,8 @@ export const ReviewFilterSection = ({
           <ReviewSortSelect
             value={sortKey}
             onChange={onSortKeyChange}
+            open={sortOpen}
+            setOpen={setSortOpen}
             className="h-10 w-60"
           />
         </div>
