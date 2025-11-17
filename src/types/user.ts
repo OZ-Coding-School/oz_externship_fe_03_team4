@@ -12,7 +12,7 @@ export interface MappedUser {
     | '탈퇴요청'
     | 'active'
     | 'inactive'
-    | 'withdraw_requested'
+    | 'withdrawal_pending'
   joinedAt: string
   withdrawAt: string
   avatar?: File | string | null

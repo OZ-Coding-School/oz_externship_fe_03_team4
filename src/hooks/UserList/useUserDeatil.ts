@@ -11,7 +11,7 @@ interface ApiUserDetail {
   nickname: string
   phone_number: string
   is_active: boolean
-  status: 'active' | 'inactive' | 'withdraw_requested'
+  status: 'active' | 'inactive' | 'withdrawal_pending'
   created_at: string
   profile_img_url: string
   birthday?: string
