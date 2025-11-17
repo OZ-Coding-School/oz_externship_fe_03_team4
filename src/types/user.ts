@@ -31,5 +31,5 @@ export interface ApiUser {
   status: string;
   role: string;
   created_at: string;
-  profile_img_url?: string | null;
+  profile_img_url?: File | null;
 }
