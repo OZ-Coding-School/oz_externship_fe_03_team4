@@ -6,6 +6,7 @@ import { FileAttachList } from '../../file-attach/FileAttachList'
 import { ApplyList } from '../../apply-list/ApplyList'
 import { formatDate } from '../../../utils/formatDate'
 import { TagPills } from '../table/TagPills'
+import { markdownToHtml } from '../../../utils/markdown'
 
 interface RecruitmentModalOutletProps {
   detail: RecruitmentDetail
@@ -107,7 +108,7 @@ export const RecruitmentModalOutlet = ({
               dangerouslySetInnerHTML={{
                 __html:
                   content && content.trim().length > 0
-                    ? content
+                    ? markdownToHtml(content)
                     : '<p class="text-neutral-500">내용이 없습니다.</p>',
               }}
             />
